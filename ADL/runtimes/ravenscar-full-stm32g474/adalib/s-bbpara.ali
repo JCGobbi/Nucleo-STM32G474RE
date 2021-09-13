@@ -1,0 +1,91 @@
+V "GNAT Lib v2021"
+A -nostdinc
+A -O2
+A -gnatA
+A --RTS=/run/media/julio/Dados/Workspace/Nucleo-STM32G474RE/bb-runtimes/runtimes/ravenscar-full-stm32g474/
+A -mlittle-endian
+A -mfloat-abi=hard
+A -mcpu=cortex-m4
+A -mfpu=fpv4-sp-d16
+A -mthumb
+A -gnatg
+A -fno-delete-null-pointer-checks
+A -gnatp
+A -gnatn2
+A -fcallgraph-info=su,da
+A -ffunction-sections
+A -fdata-sections
+A -march=armv7e-m+fp
+P DB ZX
+
+RN
+RV NO_IMPLEMENTATION_PRAGMAS
+RR NO_ELABORATION_CODE
+
+U system.bb.parameters%s  s-bbpara.ads		aa585eb2 NE OL PR PK
+W system%s		system.ads		system.ali
+W system.bb%s		s-bb.ads		s-bb.ali
+W system.bb.board_parameters%s  s-bbbopa.ads	s-bbbopa.ali
+W system.bb.mcu_parameters%s  s-bbmcpa.adb	s-bbmcpa.ali
+W system.stm32%s	s-stm32.adb		s-stm32.ali
+
+D interfac.ads		20210828210331 edec285f interfaces%s
+D i-stm32.ads		20210828210331 5bbe95b1 interfaces.stm32%s
+D i-stm32-pwr.ads	20210828210331 8637904f interfaces.stm32.pwr%s
+D system.ads		20210828210331 5ad4ef55 system%s
+D s-bb.ads		20210828210331 09e072ae system.bb%s
+D s-bbbopa.ads		20210828210331 dd1a5884 system.bb.board_parameters%s
+D s-bbmcpa.ads		20210828210331 42270bc8 system.bb.mcu_parameters%s
+D s-bbpara.ads		20210828210331 3c453148 system.bb.parameters%s
+D s-stm32.ads		20210828210331 00c04e18 system.stm32%s
+D s-unstyp.ads		20210828210331 2b077493 system.unsigned_types%s
+G a e
+X 4 system.ads
+50K9*System 164e11 8|41r6 42r6 43r6 45r9 47r25 51r30 62r24 62r54 63r24 64r45
+. 65r24 66r45 158r5
+X 5 s-bb.ads
+40K16*BB 4|50k9 5|95e14 8|42r13 43r13 45r16 47r32 158r12
+X 6 s-bbbopa.ads
+37K19*Board_Parameters 62e31 8|42w16 49r34 77r28 78r28 80r30 81r30 82r30
+45N4*Main_Clock_Frequency 8|49r51
+51N4*HSE_Clock_Frequency 8|77r45
+53N4*LSE_Clock_Frequency 8|78r45
+55N4*HSI_Clock_Frequency 8|80r47
+57N4*HSI48_Clock_Frequency 8|81r47
+59N4*LSI_Clock_Frequency 8|82r47
+X 7 s-bbmcpa.ads
+40K19*MCU_Parameters 54e29 8|43w16 106r18
+45N4*Number_Of_Interrupts 8|106r33
+X 8 s-bbpara.ads
+45K19*Parameters 5|40k16 8|47r35 158l15 158e25
+49N4*Clock_Frequency 51r7 53r35
+53N4*Ticks_Per_Second
+62r4*AHB_PRE{9|114R9}
+63r4*APB1_PRE{9|130R9}
+65r4*APB2_PRE{9|130R9}
+77N4*HSE_Clock
+78N4*LSE_Clock
+80N4*HSI_Clock
+81N4*HSI48_Clock
+82N4*LSI_Clock
+84b4*Has_FPU{boolean}
+87b4*Has_VTOR{boolean}
+91b4*Has_OS_Extensions{boolean}
+95b4*Is_ARMv6m{boolean}
+105I12*Interrupt_Range{integer}
+109N4*Trap_Vectors
+132N4*Context_Buffer_Capacity
+140N4*Interrupt_Stack_Size
+145N4*Interrupt_Sec_Stack_Size
+152N4*Max_Number_Of_CPUs 155r41
+155b4*Multiprocessor{boolean}
+X 9 s-stm32.ads
+33K16*STM32 8|41w13 51r37 62r31 62r61 63r31 64r52 65r31 66r52 9|241e17
+114R9*AHB_Prescaler 8|62r37 9|117e15
+124r4*AHBPRE_DIV1{114R9} 8|62r67
+127n7*DIV2{126E9} 8|64r58 66r58
+130R9*APB_Prescaler 8|63r37 65r37 9|133e15
+131b7*Enabled{boolean} 8|64m18 66m18
+132e7*Value{126E9} 8|64m36 66m36
+196I12*SYSCLK_Range{integer} 8|51r43
+
