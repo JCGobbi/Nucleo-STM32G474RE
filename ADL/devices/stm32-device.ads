@@ -42,11 +42,12 @@
 --  This file provides declarations for devices on the STM32G474xx MCUs
 --  manufactured by ST Microelectronics.  For example, an STM32G474RE.
 
---  with System.Storage_Elements; use System.Storage_Elements;
---  with System;         use System;
+--  with System;         use System; --  Enable for COMP and OPAMP
 
 with STM32_SVD;      use STM32_SVD;
---  with STM32_SVD.SAI;
+--  with STM32_SVD.COMP; --  Enable for COMP
+--  with STM32_SVD.OPAMP; --  Enable for OPAMP
+--  with STM32_SVD.SAI; --  Enable for SAI
 
 with STM32.GPIO;     use STM32.GPIO;
 with STM32.ADC;      use STM32.ADC;
@@ -668,7 +669,8 @@ package STM32.Device is
    -- LPTimer --
    -------------
 
-   --  LPTimer_1 : aliased LPTimer with Import, Volatile, Address => LPTIMER1_Base;
+   --  LPTimer_1 : aliased LPTimer
+   --    with Import, Volatile, Address => LPTIMER1_Base;
    --
    --  procedure Enable_Clock (This : LPTimer);
    --
@@ -735,55 +737,50 @@ package STM32.Device is
    -- Comparator --
    ----------------
 
-   --  Comp_1_Base : constant System.Address := COMP_Base;
-   --  Comp_2_Base : constant System.Address :=
-   --    System'To_Address (To_Integer (COMP_Base) + 16#00000004#);
-   --  Comp_3_Base : constant System.Address :=
-   --    System'To_Address (To_Integer (COMP_Base) + 16#00000008#);
-   --  Comp_4_Base : constant System.Address :=
-   --    System'To_Address (To_Integer (COMP_Base) + 16#0000000C#);
-   --  Comp_5_Base : constant System.Address :=
-   --    System'To_Address (To_Integer (COMP_Base) + 16#00000010#);
-   --  Comp_6_Base : constant System.Address :=
-   --    System'To_Address (To_Integer (COMP_Base) + 16#00000014#);
-   --  Comp_7_Base : constant System.Address :=
-   --    System'To_Address (To_Integer (COMP_Base) + 16#00000018#);
-   --
-   --  Comp_1 : aliased Comparator with Import, Volatile, Address => Comp_1_Base;
-   --  Comp_2 : aliased Comparator with Import, Volatile, Address => Comp_2_Base;
-   --  Comp_3 : aliased Comparator with Import, Volatile, Address => Comp_2_Base;
-   --  Comp_4 : aliased Comparator with Import, Volatile, Address => Comp_4_Base;
-   --  Comp_5 : aliased Comparator with Import, Volatile, Address => Comp_2_Base;
-   --  Comp_6 : aliased Comparator with Import, Volatile, Address => Comp_6_Base;
-   --  Comp_7 : aliased Comparator with Import, Volatile, Address => Comp_2_Base;
+   --  Comp_1 : aliased Comparator
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.COMP.COMP_Periph.C1CSR'Address;
+   --  Comp_2 : aliased Comparator
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.COMP.COMP_Periph.C2CSR'Address;
+   --  Comp_3 : aliased Comparator
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.COMP.COMP_Periph.C3CSR'Address;
+   --  Comp_4 : aliased Comparator
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.COMP.COMP_Periph.C4CSR'Address;
+   --  Comp_5 : aliased Comparator
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.COMP.COMP_Periph.C5CSR'Address;
+   --  Comp_6 : aliased Comparator
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.COMP.COMP_Periph.C6CSR'Address;
+   --  Comp_7 : aliased Comparator
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.COMP.COMP_Periph.C7CSR'Address;
 
    -----------
    -- OpAmp --
    -----------
 
-   --  Opamp_2_Base : constant System.Address :=
-   --    System'To_Address (To_Integer (OPAMP_Base) + 16#00000004#);
-   --  Opamp_3_Base : constant System.Address :=
-   --    System'To_Address (To_Integer (OPAMP_Base) + 16#00000008#);
-   --  Opamp_4_Base : constant System.Address :=
-   --    System'To_Address (To_Integer (OPAMP_Base) + 16#0000000C#);
-   --  Opamp_5_Base : constant System.Address :=
-   --    System'To_Address (To_Integer (OPAMP_Base) + 16#00000010#);
-   --  Opamp_6_Base : constant System.Address :=
-   --    System'To_Address (To_Integer (OPAMP_Base) + 16#00000014#);
-   --
    --  Opamp_1 : aliased Operational_Amplifier
-   --    with Import, Volatile, Address => OPAMP_Base;
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.OPAMP.OPAMP_Periph.OPAMP1_CSR'Address;
    --  Opamp_2 : aliased Operational_Amplifier
-   --    with Import, Volatile, Address => Opamp_2_Base;
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.OPAMP.OPAMP_Periph.OPAMP2_CSR'Address;
    --  Opamp_3 : aliased Operational_Amplifier
-   --    with Import, Volatile, Address => Opamp_3_Base;
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.OPAMP.OPAMP_Periph.OPAMP3_CSR'Address;
    --  Opamp_4 : aliased Operational_Amplifier
-   --    with Import, Volatile, Address => Opamp_4_Base;
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.OPAMP.OPAMP_Periph.OPAMP4_CSR'Address;
    --  Opamp_5 : aliased Operational_Amplifier
-   --    with Import, Volatile, Address => Opamp_5_Base;
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.OPAMP.OPAMP_Periph.OPAMP5_CSR'Address;
    --  Opamp_6 : aliased Operational_Amplifier
-   --    with Import, Volatile, Address => Opamp_6_Base;
+   --    with Import, Volatile,
+   --    Address => STM32_SVD.OPAMP.OPAMP_Periph.OPAMP6_CSR'Address;
 
    -----------------------------
    -- Reset and Clock Control --
