@@ -66,7 +66,7 @@ library project Ada_Drivers_Library is
 
    package Device_Configuration is
       for CPU_Name use "ARM Cortex-M4F";
-      for Number_Of_Interrupts use "125";
+      for Number_Of_Interrupts use "102";
       for Interrupt ("0") use "adl_irq";
       for Interrupt ("1") use "adl_irq";
       for Interrupt ("2") use "adl_irq";
