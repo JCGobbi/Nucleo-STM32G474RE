@@ -32,8 +32,6 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
---  This package defines MCU parameters for the STM32F40x family
-
 with Interfaces.STM32;
 with Interfaces.STM32.PWR;
 

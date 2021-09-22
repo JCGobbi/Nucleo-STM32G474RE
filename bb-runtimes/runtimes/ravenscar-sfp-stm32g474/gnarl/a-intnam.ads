@@ -83,11 +83,11 @@ package Ada.Interrupts.Names is
    --  USB_LP
    USB_LP_Interrupt              : constant Interrupt_ID := 20;
 
-   --  fdcan1_intr1_it
-   fdcan1_intr1_it_Interrupt     : constant Interrupt_ID := 21;
+   --  FDCAN1_intr1_it
+   FDCAN1_intr1_it_Interrupt     : constant Interrupt_ID := 21;
 
-   --  fdcan1_intr0_it
-   fdcan1_intr0_it_Interrupt     : constant Interrupt_ID := 22;
+   --  FDCAN1_intr0_it
+   FDCAN1_intr0_it_Interrupt     : constant Interrupt_ID := 22;
 
    --  EXTI9_5
    EXTI9_5_Interrupt             : constant Interrupt_ID := 23;

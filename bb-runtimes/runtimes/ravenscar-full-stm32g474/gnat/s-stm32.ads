@@ -25,9 +25,6 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
---  This file provides register definitions for the STM32Fx (ARM Cortex M4/7)
---  microcontrollers from ST Microelectronics.
-
 with Interfaces.STM32;
 
 package System.STM32 is
