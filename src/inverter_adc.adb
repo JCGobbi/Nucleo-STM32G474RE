@@ -18,11 +18,11 @@ package body Inverter_ADC is
 
       All_Regular_Conversions : constant Regular_Channel_Conversions :=
         (1 => (Channel     => ADC_Battery_V_Point.Channel,
-               Sample_Time => Sample_194_Cycles),
+               Sample_Time => Sample_92P5_Cycles),
          2 => (Channel     => ADC_Battery_I_Point.Channel,
-               Sample_Time => Sample_194_Cycles),
+               Sample_Time => Sample_92P5_Cycles),
          3 => (Channel     => ADC_Output_V_Point.Channel,
-               Sample_Time => Sample_194_Cycles));
+               Sample_Time => Sample_92P5_Cycles));
 
    begin
 

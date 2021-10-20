@@ -142,15 +142,19 @@ package STM32.ADC is
       return Data_Alignment;
 
    type Channel_Sampling_Times is
-     (Sample_14_Cycles,
-      Sample_15_Cycles,
-      Sample_17_Cycles,
-      Sample_20_Cycles,
-      Sample_32_Cycles,
-      Sample_74_Cycles,
-      Sample_194_Cycles,
-      Sample_614_Cycles)
+     (Sample_2P5_Cycles,
+      Sample_6P5_Cycles,
+      Sample_12P5_Cycles,
+      Sample_24P5_Cycles,
+      Sample_47P5_Cycles,
+      Sample_92P5_Cycles,
+      Sample_247P5_Cycles,
+      Sample_640P5_Cycles)
      with Size => 3;
+   --  The elapsed time between the start of a conversion and the end of
+   --  conversion is the sum of the configured sampling time plus the
+   --  successive approximation time (SAR = 12.5 for 12 bit) depending on data
+   --  resolution. See RM0440 rev 6 chapter 21.4.16 Timing.
 
    type External_Trigger is
      (Trigger_Disabled,
