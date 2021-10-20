@@ -16,12 +16,8 @@ TARGET=stm32g474
 # Path for the new run-times
 RUNTIMES_DIR=runtimes
 
-# Delete old runtimes directory
-rm -r $BB_RUNTIMES_DIR/$RUNTIMES_DIR
-echo "Old runtimes directory deleted."
-
 # Add cross-compiler path. Change to your actual path.
 export PATH=/opt/GNAT/gcc-arm-eabi/bin:$PATH
 
-# Run the command to generate the run-times
-$BB_RUNTIMES_DIR/build_rts.py --output=$BB_RUNTIMES_DIR/$RUNTIMES_DIR --build $TARGET
+# Run the command to generate the run-times overwriting any pre-existing runtime
+$BB_RUNTIMES_DIR/build_rts.py --force --output=$BB_RUNTIMES_DIR/$RUNTIMES_DIR --build $TARGET
