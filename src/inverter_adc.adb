@@ -18,11 +18,11 @@ package body Inverter_ADC is
 
       All_Regular_Conversions : constant Regular_Channel_Conversions :=
         (1 => (Channel     => ADC_Battery_V_Point.Channel,
-               Sample_Time => Sample_92P5_Cycles),
+               Sample_Time => Sample_24P5_Cycles),
          2 => (Channel     => ADC_Battery_I_Point.Channel,
-               Sample_Time => Sample_92P5_Cycles),
+               Sample_Time => Sample_24P5_Cycles),
          3 => (Channel     => ADC_Output_V_Point.Channel,
-               Sample_Time => Sample_92P5_Cycles));
+               Sample_Time => Sample_24P5_Cycles));
 
    begin
 
@@ -41,7 +41,8 @@ package body Inverter_ADC is
       Configure_Common_Properties
         (Sensor_ADC.all,
          Mode           => Independent,
-         Prescalar      => PCLK2_Div_2,
+         Prescaler      => Div_2,
+         Clock_Mode     => PCLK2_Div_2,
          DMA_Mode       => Disabled,
          Sampling_Delay => Sampling_Delay_5_Cycles);  -- arbitrary
 

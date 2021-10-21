@@ -710,7 +710,22 @@ package STM32.ADC is
 
    --  Common Properties ------------------------------------------------------
 
-   type ADC_Prescalars is
+   type ADC_Prescaler is
+     (Div_1,
+      Div_2,
+      Div_4,
+      Div_6,
+      Div_8,
+      Div_10,
+      Div_12,
+      Div_16,
+      Div_32,
+      Div_64,
+      Div_128,
+      Div_256)
+     with Size => 4;
+
+   type ADC_Clock_Mode is
      (CLK_ADC,
       PCLK2_Div_1,
       PCLK2_Div_2,
@@ -770,7 +785,8 @@ package STM32.ADC is
    procedure Configure_Common_Properties
      (This           : Analog_To_Digital_Converter;
       Mode           : Multi_ADC_Mode_Selections;
-      Prescalar      : ADC_Prescalars;
+      Prescaler      : ADC_Prescaler;
+      Clock_Mode     : ADC_Clock_Mode;
       DMA_Mode       : Dual_ADC_DMA_Modes;
       Sampling_Delay : Sampling_Delay_Selections);
    --  These properties are common to all the ADC units on the board.
