@@ -501,8 +501,9 @@ package body STM32.ADC is
          return;
       end if;
 
-      if This'Address = ADC1_Base or
-         This'Address = ADC3_Base --  master channels
+      if This'Address = ADC1_Base or --  master channel
+         This'Address = ADC3_Base or  --  master channel
+         This'Address = ADC5_Base --  independent channel
       then
          This.CR.ADSTART := True;
       elsif This'Address = ADC2_Base then --  slave channel
