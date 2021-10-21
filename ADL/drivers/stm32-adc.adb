@@ -408,8 +408,10 @@ package body STM32.ADC is
          This'Address = ADC2_Base
       then
          ADC12_Common_Periph.CCR.VREFEN := True;
+         ADC12_Common_Periph.CCR.VSENSESEL := True;
       else
          ADC345_Common_Periph.CCR.VREFEN := True;
+         ADC345_Common_Periph.CCR.VSENSESEL := True;
       end if;
       delay until (Clock + Temperature_Sensor_Stabilization);
    end Enable_VRef_TemperatureSensor_Connection;
@@ -425,9 +427,11 @@ package body STM32.ADC is
       if This'Address = ADC1_Base or
         This'Address = ADC2_Base
       then
-         return ADC12_Common_Periph.CCR.VREFEN;
+         return ADC12_Common_Periph.CCR.VREFEN and
+           ADC12_Common_Periph.CCR.VSENSESEL;
       else
-         return ADC345_Common_Periph.CCR.VREFEN;
+         return ADC345_Common_Periph.CCR.VREFEN and
+           ADC345_Common_Periph.CCR.VSENSESEL;
       end if;
    end VRef_TemperatureSensor_Enabled;
 
