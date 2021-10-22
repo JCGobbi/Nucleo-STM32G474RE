@@ -601,6 +601,7 @@ package STM32.ADC is
    --  watchdog so do not call the other enabler routine (for a single channel)
    --  while this configuration is active. You must first disable the watchdog
    --  if you want to enable the watchdog for a single channel.
+   --  see RM0440 rev 6 Chapter 21.4.28, pg 659, Table 169.
 
    subtype Single_Channel_Watchdog is Analog_Watchdog_Modes
      range Watchdog_Single_Regular_Channel .. Watchdog_Single_Both_Kinds;
@@ -620,6 +621,7 @@ package STM32.ADC is
    --  (for all channels) while this configuration is active. You must
    --  first disable the watchdog if you want to enable the watchdog for
    --  all channels.
+   --  see RM0440 rev 6 Chapter 21.4.28, pg 659, Table 169.
 
    procedure Watchdog_Disable (This : in out Analog_To_Digital_Converter)
      with Post => not Watchdog_Enabled (This);
@@ -628,6 +630,58 @@ package STM32.ADC is
 
    function Watchdog_Enabled (This : Analog_To_Digital_Converter)
       return Boolean;
+
+   type Analog_Watchdog_Filtering is
+     (No_Filtering,
+      Two_Detections,
+      Three_Detections,
+      Four_Detections,
+      Five_Detections,
+      Six_Detections,
+      Seven_Detections,
+      Eight_Detections);
+   --   Consecutive detection generates an AWDx flag or an interrupt.
+
+   procedure Watchdog_Enable_Filtering
+     (This   : in out Analog_To_Digital_Converter;
+      Filter : Analog_Watchdog_Filtering);
+
+   type Analog_Window_Watchdog is (Watchdog_2, Watchdog_3);
+
+   type Analog_Input_Channels is
+     array (Analog_Input_Channel range <>) of Analog_Input_Channel;
+
+   procedure Watchdog_Enable_Channels
+     (This     : in out Analog_To_Digital_Converter;
+      Watchdog : Analog_Window_Watchdog;
+      Channels : Analog_Input_Channels;
+      Low      : Watchdog_Threshold;
+      High     : Watchdog_Threshold)
+     with
+       Pre  => not Conversion_Started (This),
+       Post => Watchdog_Enabled (This, Watchdog);
+   --  Enable the watchdog 2 or 3 for any selected channel. The channels
+   --  selected by AWDxCH must be also selected into the ADC regular or injected
+   --  sequence registers SQRi or JSQRi registers. The watchdog is disabled when
+   --  none channel is selected.
+
+   procedure Watchdog_Disable_Channels
+     (This     : in out Analog_To_Digital_Converter;
+      Watchdog : Analog_Window_Watchdog;
+      Channels : Analog_Input_Channels)
+     with
+       Pre  => not Conversion_Started (This);
+
+   procedure Watchdog_Disable
+     (This     : in out Analog_To_Digital_Converter;
+      Watchdog : Analog_Window_Watchdog)
+     with Post => not Watchdog_Enabled (This, Watchdog);
+   --  The watchdog is disabled when none channel is selected.
+
+   function Watchdog_Enabled
+     (This     : Analog_To_Digital_Converter;
+      Watchdog : Analog_Window_Watchdog) return Boolean;
+   --  The watchdog is enabled when any channel is selected.
 
    --  Status Management  -----------------------------------------------------
 
