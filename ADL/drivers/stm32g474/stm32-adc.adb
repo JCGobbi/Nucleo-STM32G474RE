@@ -65,9 +65,10 @@ package body STM32.ADC is
      with Inline;
 
    procedure Set_Injected_Channel_Offset
-     (This   : in out Analog_To_Digital_Converter;
-      Rank   : Injected_Channel_Rank;
-      Offset : Injected_Data_Offset)
+     (This    : in out Analog_To_Digital_Converter;
+      Channel : Analog_Input_Channel;
+      Rank    : Injected_Channel_Rank;
+      Offset  : Injected_Data_Offset)
      with Inline;
 
    ------------
@@ -109,98 +110,6 @@ package body STM32.ADC is
    function Disabled (This : Analog_To_Digital_Converter) return Boolean is
      (This.CR.ADEN = False);
 
-   ----------------------
-   -- Conversion_Value --
-   ----------------------
-
-   function Conversion_Value
-     (This : Analog_To_Digital_Converter)
-      return UInt16
-   is
-   begin
-      return This.DR.RDATA;
-   end Conversion_Value;
-
-   ---------------------------
-   -- Data_Register_Address --
-   ---------------------------
-
-   function Data_Register_Address
-     (This : Analog_To_Digital_Converter)
-      return System.Address
-   is
-      (This.DR'Address);
-
-   -------------------------------
-   -- Injected_Conversion_Value --
-   -------------------------------
-
-   function Injected_Conversion_Value
-     (This : Analog_To_Digital_Converter;
-      Rank : Injected_Channel_Rank)
-      return UInt16
-   is
-   begin
-      case Rank is
-         when 1 =>
-            return This.JDR1.JDATA1;
-         when 2 =>
-            return This.JDR2.JDATA2;
-         when 3 =>
-            return This.JDR3.JDATA3;
-         when 4 =>
-            return This.JDR4.JDATA4;
-      end case;
-   end Injected_Conversion_Value;
-
-   --------------------------------
-   -- Multimode_Conversion_Value --
-   --------------------------------
-
-   function Multimode_Conversion_Value
-     (This  : Analog_To_Digital_Converter;
-      Value : CDR_Data) return UInt16
-   is
-   begin
-      case Value is
-         when Master =>
-            if This'Address = ADC1_Base or
-               This'Address = ADC2_Base
-            then
-               return ADC12_Common_Periph.CDR.RDATA_MST;
-            else
-               return ADC345_Common_Periph.CDR.RDATA_MST;
-            end if;
-         when Slave =>
-            if This'Address = ADC1_Base or
-               This'Address = ADC2_Base
-            then
-               return ADC12_Common_Periph.CDR.RDATA_SLV;
-            else
-               return ADC345_Common_Periph.CDR.RDATA_SLV;
-            end if;
-      end case;
-   end Multimode_Conversion_Value;
-
-   --------------------------------
-   -- Multimode_Conversion_Value --
-   --------------------------------
-
-   function Multimode_Conversion_Value
-     (This : Analog_To_Digital_Converter) return UInt32
-   is
-   begin
-      if This'Address = ADC1_Base or
-         This'Address = ADC2_Base
-      then
-         return Shift_Left (UInt32 (ADC12_Common_Periph.CDR.RDATA_MST), 16) or
-              UInt32 (ADC12_Common_Periph.CDR.RDATA_SLV);
-      else
-         return Shift_Left (UInt32 (ADC345_Common_Periph.CDR.RDATA_MST), 16) or
-              UInt32 (ADC345_Common_Periph.CDR.RDATA_SLV);
-      end if;
-   end Multimode_Conversion_Value;
-
    --------------------
    -- Configure_Unit --
    --------------------
@@ -232,36 +141,6 @@ package body STM32.ADC is
      (This : Analog_To_Digital_Converter)
       return Data_Alignment
    is ((if This.CFGR.ALIGN then Left_Aligned else Right_Aligned));
-
-   ---------------------------------
-   -- Configure_Common_Properties --
-   ---------------------------------
-
-   procedure Configure_Common_Properties
-     (This           : Analog_To_Digital_Converter;
-      Mode           : Multi_ADC_Mode_Selections;
-      Prescaler      : ADC_Prescaler;
-      Clock_Mode     : ADC_Clock_Mode;
-      DMA_Mode       : Dual_ADC_DMA_Modes;
-      Sampling_Delay : Sampling_Delay_Selections)
-   is
-   begin
-      if This'Address = ADC1_Base or
-         This'Address = ADC2_Base
-      then
-         ADC12_Common_Periph.CCR.DUAL := Mode'Enum_Rep;
-         ADC12_Common_Periph.CCR.PRESC := Prescaler'Enum_Rep;
-         ADC12_Common_Periph.CCR.CKMODE := Clock_Mode'Enum_Rep;
-         ADC12_Common_Periph.CCR.MDMA := DMA_Mode'Enum_Rep;
-         ADC12_Common_Periph.CCR.DELAY_k := Sampling_Delay'Enum_Rep;
-      else
-         ADC345_Common_Periph.CCR.DUAL    := Mode'Enum_Rep;
-         ADC345_Common_Periph.CCR.PRESC := Prescaler'Enum_Rep;
-         ADC345_Common_Periph.CCR.CKMODE := Clock_Mode'Enum_Rep;
-         ADC345_Common_Periph.CCR.MDMA    := DMA_Mode'Enum_Rep;
-         ADC345_Common_Periph.CCR.DELAY_k := Sampling_Delay'Enum_Rep;
-      end if;
-   end Configure_Common_Properties;
 
    -----------------------------------
    -- Configure_Regular_Conversions --
@@ -309,6 +188,22 @@ package body STM32.ADC is
 
       This.SQR1.L := UInt4 (Conversions'Length - 1);  -- biased rep
    end Configure_Regular_Conversions;
+
+   ----------------------------------
+   -- Regular_Conversions_Expected --
+   ----------------------------------
+
+   function Regular_Conversions_Expected (This : Analog_To_Digital_Converter)
+     return Natural is
+     (Natural (This.SQR1.L) + 1);
+
+   -----------------------
+   -- Scan_Mode_Enabled --
+   -----------------------
+
+   function Scan_Mode_Enabled (This : Analog_To_Digital_Converter)
+                               return Boolean
+     is (This.SQR1.L /= UInt4 (0));
 
    ------------------------------------
    -- Configure_Injected_Conversions --
@@ -365,6 +260,14 @@ package body STM32.ADC is
 
       This.JSQR.JL := UInt2 (Conversions'Length - 1);  -- biased rep
    end Configure_Injected_Conversions;
+
+   -----------------------------------
+   -- Injected_Conversions_Expected --
+   -----------------------------------
+
+   function Injected_Conversions_Expected (This : Analog_To_Digital_Converter)
+     return Natural is
+     (Natural (This.JSQR.JL) + 1);
 
    ----------------------------
    -- Enable_VBat_Connection --
@@ -435,29 +338,35 @@ package body STM32.ADC is
       end if;
    end VRef_TemperatureSensor_Enabled;
 
-   ----------------------------------
-   -- Regular_Conversions_Expected --
-   ----------------------------------
+   ---------------------------------
+   -- Configure_Common_Properties --
+   ---------------------------------
 
-   function Regular_Conversions_Expected (This : Analog_To_Digital_Converter)
-     return Natural is
-     (Natural (This.SQR1.L) + 1);
-
-   -----------------------------------
-   -- Injected_Conversions_Expected --
-   -----------------------------------
-
-   function Injected_Conversions_Expected (This : Analog_To_Digital_Converter)
-     return Natural is
-     (Natural (This.JSQR.JL) + 1);
-
-   -----------------------
-   -- Scan_Mode_Enabled --
-   -----------------------
-
-   function Scan_Mode_Enabled (This : Analog_To_Digital_Converter)
-                               return Boolean
-     is (This.SQR1.L /= UInt4 (0));
+   procedure Configure_Common_Properties
+     (This           : Analog_To_Digital_Converter;
+      Mode           : Multi_ADC_Mode_Selections;
+      Prescaler      : ADC_Prescaler;
+      Clock_Mode     : ADC_Clock_Mode;
+      DMA_Mode       : Dual_ADC_DMA_Modes;
+      Sampling_Delay : Sampling_Delay_Selections)
+   is
+   begin
+      if This'Address = ADC1_Base or
+         This'Address = ADC2_Base
+      then
+         ADC12_Common_Periph.CCR.DUAL := Mode'Enum_Rep;
+         ADC12_Common_Periph.CCR.PRESC := Prescaler'Enum_Rep;
+         ADC12_Common_Periph.CCR.CKMODE := Clock_Mode'Enum_Rep;
+         ADC12_Common_Periph.CCR.MDMA := DMA_Mode'Enum_Rep;
+         ADC12_Common_Periph.CCR.DELAY_k := Sampling_Delay'Enum_Rep;
+      else
+         ADC345_Common_Periph.CCR.DUAL    := Mode'Enum_Rep;
+         ADC345_Common_Periph.CCR.PRESC := Prescaler'Enum_Rep;
+         ADC345_Common_Periph.CCR.CKMODE := Clock_Mode'Enum_Rep;
+         ADC345_Common_Periph.CCR.MDMA    := DMA_Mode'Enum_Rep;
+         ADC345_Common_Periph.CCR.DELAY_k := Sampling_Delay'Enum_Rep;
+      end if;
+   end Configure_Common_Properties;
 
    -------------------------------
    -- Configure_Regular_Channel --
@@ -488,7 +397,7 @@ package body STM32.ADC is
    begin
       Set_Sampling_Time (This, Channel, Sample_Time);
       Set_Injected_Channel_Sequence_Position (This, Channel, Rank);
-      Set_Injected_Channel_Offset (This, Rank, Offset);
+      Set_Injected_Channel_Offset (This, Channel, Rank, Offset);
    end Configure_Injected_Channel;
 
    ----------------------
@@ -537,6 +446,28 @@ package body STM32.ADC is
    is
       (This.CR.ADSTART);
 
+   ----------------------
+   -- Conversion_Value --
+   ----------------------
+
+   function Conversion_Value
+     (This : Analog_To_Digital_Converter)
+      return UInt16
+   is
+   begin
+      return This.DR.RDATA;
+   end Conversion_Value;
+
+   ---------------------------
+   -- Data_Register_Address --
+   ---------------------------
+
+   function Data_Register_Address
+     (This : Analog_To_Digital_Converter)
+      return System.Address
+   is
+      (This.DR'Address);
+
    -------------------------------
    -- Start_Injected_Conversion --
    -------------------------------
@@ -557,181 +488,75 @@ package body STM32.ADC is
    is
      (This.CR.JADSTART);
 
-   ------------------------------
-   -- Watchdog_Enable_Channels --
-   ------------------------------
-
-   procedure Watchdog_Enable_Channels
-     (This : in out Analog_To_Digital_Converter;
-      Mode : Multiple_Channels_Watchdog;
-      Low  : Watchdog_Threshold;
-      High : Watchdog_Threshold)
-   is
-   begin
-      This.TR1.HT1 := High;
-      This.TR1.LT1 := Low;
-      --  see RM 13.3.28, pg 258, table 45
-
-      --  Enable all channel mode
-      This.CFGR.AWD1SGL := False;
-      case Mode is
-         when Watchdog_All_Regular_Channels =>
-            This.CFGR.AWD1EN := True;
-         when Watchdog_All_Injected_Channels =>
-            This.CFGR.JAWD1EN := True;
-         when Watchdog_All_Both_Kinds =>
-            This.CFGR.AWD1EN := True;
-            This.CFGR.JAWD1EN := True;
-      end case;
-   end Watchdog_Enable_Channels;
-
-   -----------------------------
-   -- Watchdog_Enable_Channel --
-   -----------------------------
-
-   procedure Watchdog_Enable_Channel
-     (This    : in out Analog_To_Digital_Converter;
-      Mode    : Single_Channel_Watchdog;
-      Channel : Analog_Input_Channel;
-      Low     : Watchdog_Threshold;
-      High    : Watchdog_Threshold)
-   is
-   begin
-      This.TR1.HT1 := High;
-      This.TR1.LT1 := Low;
-
-      --  Set then channel
-      This.CFGR.AWD1CH := Channel;
-      --  Enable single channel mode
-      This.CFGR.AWD1SGL := True;
-
-      case Mode is
-         when Watchdog_Single_Regular_Channel =>
-            This.CFGR.AWD1EN := True;
-         when Watchdog_Single_Injected_Channel =>
-            This.CFGR.JAWD1EN := True;
-         when Watchdog_Single_Both_Kinds =>
-            This.CFGR.AWD1EN := True;
-            This.CFGR.JAWD1EN := True;
-      end case;
-   end Watchdog_Enable_Channel;
-
-   ----------------------
-   -- Watchdog_Disable --
-   ----------------------
-
-   procedure Watchdog_Disable (This : in out Analog_To_Digital_Converter) is
-   begin
-      This.CFGR.AWD1EN := False;
-      This.CFGR.JAWD1EN := False;
-
-      --  clearing the single-channel bit (AWGSDL) is not required to disable,
-      --  per the RM table 66, section 13.3.7, pg 391, but seems cleanest
-      This.CFGR.AWD1SGL := False;
-   end Watchdog_Disable;
-
-   ----------------------
-   -- Watchdog_Enabled --
-   ----------------------
-
-   function Watchdog_Enabled (This : Analog_To_Digital_Converter)
-     return Boolean
-   is
-      (This.CFGR.AWD1EN or This.CFGR.JAWD1EN);
-
    -------------------------------
-   -- Watchdog_Enable_Filtering --
+   -- Injected_Conversion_Value --
    -------------------------------
 
-   procedure Watchdog_Enable_Filtering
-     (This   : in out Analog_To_Digital_Converter;
-      Filter : Analog_Watchdog_Filtering)
+   function Injected_Conversion_Value
+     (This : Analog_To_Digital_Converter;
+      Rank : Injected_Channel_Rank)
+      return UInt16
    is
    begin
-      This.TR1.AWDFILT := Filter'Enum_Rep;
-   end Watchdog_Enable_Filtering;
-
-   ------------------------------
-   -- Watchdog_Enable_Channels --
-   ------------------------------
-   procedure Watchdog_Enable_Channels
-     (This     : in out Analog_To_Digital_Converter;
-      Watchdog : Analog_Window_Watchdog;
-      Channels : Analog_Input_Channels;
-      Low      : Watchdog_Threshold;
-      High     : Watchdog_Threshold)
-   is
-   begin
-      case Watchdog is
-         when Watchdog_2 =>
-            This.TR2.HT2 := UInt8 (High);
-            This.TR2.LT2 := UInt8 (Low);
-            for Channel of Channels loop
-               This.AWD2CR.AWD2CH := This.AWD2CR.AWD2CH or (2 ** Natural (Channel));
-            end loop;
-         when Watchdog_3 =>
-            This.TR3.HT3 := UInt8 (High);
-            This.TR3.LT3 := UInt8 (Low);
-            for Channel of Channels loop
-               This.AWD3CR.AWD3CH := This.AWD3CR.AWD3CH or (2 ** Natural (Channel));
-            end loop;
+      case Rank is
+         when 1 =>
+            return This.JDR1.JDATA1;
+         when 2 =>
+            return This.JDR2.JDATA2;
+         when 3 =>
+            return This.JDR3.JDATA3;
+         when 4 =>
+            return This.JDR4.JDATA4;
       end case;
-   end Watchdog_Enable_Channels;
+   end Injected_Conversion_Value;
 
-   -------------------------------
-   -- Watchdog_Disable_Channels --
-   -------------------------------
-   procedure Watchdog_Disable_Channels
-     (This     : in out Analog_To_Digital_Converter;
-      Watchdog : Analog_Window_Watchdog;
-      Channels : Analog_Input_Channels)
+   --------------------------------
+   -- Multimode_Conversion_Value --
+   --------------------------------
+
+   function Multimode_Conversion_Value
+     (This  : Analog_To_Digital_Converter;
+      Value : CDR_Data) return UInt16
    is
    begin
-      case Watchdog is
-         when Watchdog_2 =>
-            for Channel of Channels loop
-               This.AWD2CR.AWD2CH := This.AWD2CR.AWD2CH and not (2 ** Natural (Channel));
-            end loop;
-         when Watchdog_3 =>
-            for Channel of Channels loop
-               This.AWD3CR.AWD3CH := This.AWD3CR.AWD3CH and not (2 ** Natural (Channel));
-            end loop;
+      case Value is
+         when Master =>
+            if This'Address = ADC1_Base or
+               This'Address = ADC2_Base
+            then
+               return ADC12_Common_Periph.CDR.RDATA_MST;
+            else
+               return ADC345_Common_Periph.CDR.RDATA_MST;
+            end if;
+         when Slave =>
+            if This'Address = ADC1_Base or
+               This'Address = ADC2_Base
+            then
+               return ADC12_Common_Periph.CDR.RDATA_SLV;
+            else
+               return ADC345_Common_Periph.CDR.RDATA_SLV;
+            end if;
       end case;
-   end Watchdog_Disable_Channels;
+   end Multimode_Conversion_Value;
 
-   ----------------------
-   -- Watchdog_Disable --
-   ----------------------
+   --------------------------------
+   -- Multimode_Conversion_Value --
+   --------------------------------
 
-   procedure Watchdog_Disable
-     (This     : in out Analog_To_Digital_Converter;
-      Watchdog : Analog_Window_Watchdog)
+   function Multimode_Conversion_Value
+     (This : Analog_To_Digital_Converter) return UInt32
    is
    begin
-      case Watchdog is
-         when Watchdog_2 =>
-            This.AWD2CR.AWD2CH := 16#000#;
-         when Watchdog_3 =>
-            This.AWD3CR.AWD3CH := 16#000#;
-      end case;
-   end Watchdog_Disable;
-
-   ----------------------
-   -- Watchdog_Enabled --
-   ----------------------
-
-   function Watchdog_Enabled
-     (This     : Analog_To_Digital_Converter;
-      Watchdog : Analog_Window_Watchdog) return Boolean
-   is
-   begin
-      case Watchdog is
-         when Watchdog_2 =>
-            return This.AWD2CR.AWD2CH /= 16#000#;
-         when Watchdog_3 =>
-            return This.AWD3CR.AWD3CH /= 16#000#;
-      end case;
-   end Watchdog_Enabled;
+      if This'Address = ADC1_Base or
+         This'Address = ADC2_Base
+      then
+         return Shift_Left (UInt32 (ADC12_Common_Periph.CDR.RDATA_MST), 16) or
+              UInt32 (ADC12_Common_Periph.CDR.RDATA_SLV);
+      else
+         return Shift_Left (UInt32 (ADC345_Common_Periph.CDR.RDATA_MST), 16) or
+              UInt32 (ADC345_Common_Periph.CDR.RDATA_SLV);
+      end if;
+   end Multimode_Conversion_Value;
 
    -------------------------------
    -- Enable_Discontinuous_Mode --
@@ -922,26 +747,181 @@ package body STM32.ADC is
       end if;
    end Multi_DMA_Enabled_After_Last_Transfer;
 
-   ---------------------
-   -- Poll_For_Status --
-   ---------------------
+   ------------------------------
+   -- Watchdog_Enable_Channels --
+   ------------------------------
 
-   procedure Poll_For_Status
-     (This    : in out Analog_To_Digital_Converter;
-      Flag    : ADC_Status_Flag;
-      Success : out Boolean;
-      Timeout : Time_Span := Time_Span_Last)
+   procedure Watchdog_Enable_Channels
+     (This : in out Analog_To_Digital_Converter;
+      Mode : Multiple_Channels_Watchdog;
+      Low  : Watchdog_Threshold;
+      High : Watchdog_Threshold)
    is
-      Deadline : constant Time := Clock + Timeout;
    begin
-      Success := False;
-      while Clock < Deadline loop
-         if Status (This, Flag) then
-            Success := True;
-            exit;
-         end if;
-      end loop;
-   end Poll_For_Status;
+      This.TR1.HT1 := High;
+      This.TR1.LT1 := Low;
+      --  see RM 13.3.28, pg 258, table 45
+
+      --  Enable all channel mode
+      This.CFGR.AWD1SGL := False;
+      case Mode is
+         when Watchdog_All_Regular_Channels =>
+            This.CFGR.AWD1EN := True;
+         when Watchdog_All_Injected_Channels =>
+            This.CFGR.JAWD1EN := True;
+         when Watchdog_All_Both_Kinds =>
+            This.CFGR.AWD1EN := True;
+            This.CFGR.JAWD1EN := True;
+      end case;
+   end Watchdog_Enable_Channels;
+
+   -----------------------------
+   -- Watchdog_Enable_Channel --
+   -----------------------------
+
+   procedure Watchdog_Enable_Channel
+     (This    : in out Analog_To_Digital_Converter;
+      Mode    : Single_Channel_Watchdog;
+      Channel : Analog_Input_Channel;
+      Low     : Watchdog_Threshold;
+      High    : Watchdog_Threshold)
+   is
+   begin
+      This.TR1.HT1 := High;
+      This.TR1.LT1 := Low;
+
+      --  Set then channel
+      This.CFGR.AWD1CH := Channel;
+      --  Enable single channel mode
+      This.CFGR.AWD1SGL := True;
+
+      case Mode is
+         when Watchdog_Single_Regular_Channel =>
+            This.CFGR.AWD1EN := True;
+         when Watchdog_Single_Injected_Channel =>
+            This.CFGR.JAWD1EN := True;
+         when Watchdog_Single_Both_Kinds =>
+            This.CFGR.AWD1EN := True;
+            This.CFGR.JAWD1EN := True;
+      end case;
+   end Watchdog_Enable_Channel;
+
+   ----------------------
+   -- Watchdog_Disable --
+   ----------------------
+
+   procedure Watchdog_Disable (This : in out Analog_To_Digital_Converter) is
+   begin
+      This.CFGR.AWD1EN := False;
+      This.CFGR.JAWD1EN := False;
+
+      --  clearing the single-channel bit (AWGSDL) is not required to disable,
+      --  per the RM table 66, section 13.3.7, pg 391, but seems cleanest
+      This.CFGR.AWD1SGL := False;
+   end Watchdog_Disable;
+
+   ----------------------
+   -- Watchdog_Enabled --
+   ----------------------
+
+   function Watchdog_Enabled (This : Analog_To_Digital_Converter)
+     return Boolean
+   is
+      (This.CFGR.AWD1EN or This.CFGR.JAWD1EN);
+
+   -------------------------------
+   -- Watchdog_Enable_Filtering --
+   -------------------------------
+
+   procedure Watchdog_Enable_Filtering
+     (This   : in out Analog_To_Digital_Converter;
+      Filter : Analog_Watchdog_Filtering)
+   is
+   begin
+      This.TR1.AWDFILT := Filter'Enum_Rep;
+   end Watchdog_Enable_Filtering;
+
+   ------------------------------
+   -- Watchdog_Enable_Channels --
+   ------------------------------
+   procedure Watchdog_Enable_Channels
+     (This     : in out Analog_To_Digital_Converter;
+      Watchdog : Analog_Window_Watchdog;
+      Channels : Analog_Input_Channels;
+      Low      : Watchdog_Threshold;
+      High     : Watchdog_Threshold)
+   is
+   begin
+      case Watchdog is
+         when Watchdog_2 =>
+            This.TR2.HT2 := UInt8 (High);
+            This.TR2.LT2 := UInt8 (Low);
+            for Channel of Channels loop
+               This.AWD2CR.AWD2CH := This.AWD2CR.AWD2CH or (2 ** Natural (Channel));
+            end loop;
+         when Watchdog_3 =>
+            This.TR3.HT3 := UInt8 (High);
+            This.TR3.LT3 := UInt8 (Low);
+            for Channel of Channels loop
+               This.AWD3CR.AWD3CH := This.AWD3CR.AWD3CH or (2 ** Natural (Channel));
+            end loop;
+      end case;
+   end Watchdog_Enable_Channels;
+
+   -------------------------------
+   -- Watchdog_Disable_Channels --
+   -------------------------------
+   procedure Watchdog_Disable_Channels
+     (This     : in out Analog_To_Digital_Converter;
+      Watchdog : Analog_Window_Watchdog;
+      Channels : Analog_Input_Channels)
+   is
+   begin
+      case Watchdog is
+         when Watchdog_2 =>
+            for Channel of Channels loop
+               This.AWD2CR.AWD2CH := This.AWD2CR.AWD2CH and not (2 ** Natural (Channel));
+            end loop;
+         when Watchdog_3 =>
+            for Channel of Channels loop
+               This.AWD3CR.AWD3CH := This.AWD3CR.AWD3CH and not (2 ** Natural (Channel));
+            end loop;
+      end case;
+   end Watchdog_Disable_Channels;
+
+   ----------------------
+   -- Watchdog_Disable --
+   ----------------------
+
+   procedure Watchdog_Disable
+     (This     : in out Analog_To_Digital_Converter;
+      Watchdog : Analog_Window_Watchdog)
+   is
+   begin
+      case Watchdog is
+         when Watchdog_2 =>
+            This.AWD2CR.AWD2CH := 16#000#;
+         when Watchdog_3 =>
+            This.AWD3CR.AWD3CH := 16#000#;
+      end case;
+   end Watchdog_Disable;
+
+   ----------------------
+   -- Watchdog_Enabled --
+   ----------------------
+
+   function Watchdog_Enabled
+     (This     : Analog_To_Digital_Converter;
+      Watchdog : Analog_Window_Watchdog) return Boolean
+   is
+   begin
+      case Watchdog is
+         when Watchdog_2 =>
+            return This.AWD2CR.AWD2CH /= 16#000#;
+         when Watchdog_3 =>
+            return This.AWD3CR.AWD3CH /= 16#000#;
+      end case;
+   end Watchdog_Enabled;
 
    ------------
    -- Status --
@@ -974,7 +954,7 @@ package body STM32.ADC is
             return This.ISR.EOSMP;
          when Overrun =>
             return This.ISR.OVR;
-         when Injected_Queue_Context_Overflow =>
+         when Injected_Context_Queue_Overflow =>
             return This.ISR.JQOVF;
       end case;
    end Status;
@@ -1009,10 +989,31 @@ package body STM32.ADC is
             This.ISR.EOSMP := True;
          when Overrun =>
             This.ISR.OVR := True;
-         when Injected_Queue_Context_Overflow =>
+         when Injected_Context_Queue_Overflow =>
             This.ISR.JQOVF := True;
       end case;
    end Clear_Status;
+
+   ---------------------
+   -- Poll_For_Status --
+   ---------------------
+
+   procedure Poll_For_Status
+     (This    : in out Analog_To_Digital_Converter;
+      Flag    : ADC_Status_Flag;
+      Success : out Boolean;
+      Timeout : Time_Span := Time_Span_Last)
+   is
+      Deadline : constant Time := Clock + Timeout;
+   begin
+      Success := False;
+      while Clock < Deadline loop
+         if Status (This, Flag) then
+            Success := True;
+            exit;
+         end if;
+      end loop;
+   end Poll_For_Status;
 
    -----------------------
    -- Enable_Interrupts --
@@ -1044,7 +1045,7 @@ package body STM32.ADC is
             This.IER.EOSMPIE := True;
          when Overrun =>
             This.IER.OVRIE := True;
-         when Injected_Queue_Context_Overflow =>
+         when Injected_Context_Queue_Overflow =>
             This.IER.JQOVFIE := True;
       end case;
    end Enable_Interrupts;
@@ -1080,7 +1081,7 @@ package body STM32.ADC is
             return This.IER.EOSMPIE;
          when Overrun =>
             return This.IER.OVRIE;
-         when Injected_Queue_Context_Overflow =>
+         when Injected_Context_Queue_Overflow =>
             return This.IER.JQOVFIE;
       end case;
    end Interrupt_Enabled;
@@ -1115,7 +1116,7 @@ package body STM32.ADC is
             This.IER.EOSMPIE := False;
          when Overrun =>
             This.IER.OVRIE := False;
-         when Injected_Queue_Context_Overflow =>
+         when Injected_Context_Queue_Overflow =>
             This.IER.JQOVFIE := False;
       end case;
    end Disable_Interrupts;
@@ -1150,7 +1151,7 @@ package body STM32.ADC is
             This.ISR.EOSMP := True;
          when Overrun =>
             This.ISR.OVR := True;
-         when Injected_Queue_Context_Overflow =>
+         when Injected_Context_Queue_Overflow =>
             This.ISR.JQOVF := True;
       end case;
    end Clear_Interrupt_Pending;
@@ -1247,16 +1248,29 @@ package body STM32.ADC is
    ---------------------------------
 
    procedure Set_Injected_Channel_Offset
-     (This   : in out Analog_To_Digital_Converter;
-      Rank   : Injected_Channel_Rank;
-      Offset : Injected_Data_Offset)
+     (This    : in out Analog_To_Digital_Converter;
+      Channel : Analog_Input_Channel;
+      Rank    : Injected_Channel_Rank;
+      Offset  : Injected_Data_Offset)
    is
    begin
       case Rank is
-         when 1 => This.OFR1.OFFSET1 := Offset;
-         when 2 => This.OFR2.OFFSET2 := Offset;
-         when 3 => This.OFR3.OFFSET3 := Offset;
-         when 4 => This.OFR4.OFFSET4 := Offset;
+         when 1 =>
+            This.OFR1.OFFSET1_CH := Channel;
+            This.OFR1.OFFSET1 := Offset;
+            This.OFR1.OFFSET1_EN := True;
+         when 2 =>
+            This.OFR2.OFFSET2_CH := Channel;
+            This.OFR2.OFFSET2 := Offset;
+            This.OFR2.OFFSET2_EN := True;
+         when 3 =>
+            This.OFR3.OFFSET3_CH := Channel;
+            This.OFR3.OFFSET3 := Offset;
+            This.OFR3.OFFSET3_EN := True;
+         when 4 =>
+            This.OFR4.OFFSET4_CH := Channel;
+            This.OFR4.OFFSET4 := Offset;
+            This.OFR4.OFFSET4_EN := True;
       end case;
    end Set_Injected_Channel_Offset;
 
