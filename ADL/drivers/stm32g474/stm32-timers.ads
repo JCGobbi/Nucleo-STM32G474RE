@@ -969,12 +969,15 @@ package STM32.Timers is
 
    type Timer_Slave_Mode is
      (Disabled,
-      Encoder_Mode_TI1,
-      --  Counter counts up/down on TI1 edge.
-      Encoder_Mode_TI2,
-      --  Counter counts up/down on TI2 edge.
-      Encoder_Mode_TI1_TI2,
-      --  Counter counts up/down on both TI1 & TI2 edges.
+      Quadrature_Encoder_Mode_1,
+      --  x2 mode, counting up/down on TI1FP1 edge depending on TI2FP2
+      --  level.
+      Quadrature_Encoder_Mode_2,
+      --  x2 mode, counting up/down on TI2FP2 edge depending on TI1FP1
+      --  level.
+      Quadrature_Encoder_Mode_3,
+      --  x4 mode, counting up/down on both TI1FP1 & TI2FP2 edges depending
+      --  on the level of the other input.
       Reset,
       --  Counter reinitialize and update registers on TRGI rising edge.
       Gated,
@@ -990,15 +993,16 @@ package STM32.Timers is
       Encoder_Mode_1,
       --  Clock plus direction, x2 mode.
       Encoder_Mode_2,
-      --  Clock plus direction, x1 mode.
+      --  Clock plus direction, x1 mode, TI2FP2 edge sensitivity is set by CC2P.
       Encoder_Mode_3,
       --  Directional clock, x2 mode.
       Encoder_Mode_4,
-      --  Directional clock, x1 mode.
-      Quadrature_Mode_1,
-      --  x1 mode, counting on tim_ti1fp1 edges only.
-      Quadrature_Mode_2)
-      --  x1 mode, counting on tim_ti2fp2 edges only.
+      --  Directional clock, x1 mode, TI1FP1 and TI2FP2 edge sensitivity is
+      --  set by CC1P and CC2P.
+      Quadrature_Encoder_Mode_4,
+      --  x1 mode, counting on TI1FP1 edges only, edge sensitivity is set by CC1P.
+      Quadrature_Encoder_Mode_5)
+      --  x1 mode, counting on TI2FP2 edges only, edge sensitivity is set by CC2P.
     with Size => 4;
 
    procedure Select_Slave_Mode
@@ -1093,8 +1097,41 @@ package STM32.Timers is
 
    ----------------------------------------------------------------------------
 
-   subtype Timer_Encoder_Mode is
-     Timer_Slave_Mode range Encoder_Mode_TI1 .. Encoder_Mode_TI1_TI2;
+   type Timer_Encoder_Mode is -- subtype of Timer_Slave_Mode
+     (Quadrature_Encoder_Mode_1,
+      --  x2 mode, counting up/down on TI1FP1 edge depending on TI2FP2
+      --  level.
+      Quadrature_Encoder_Mode_2,
+      --  x2 mode, counting up/down on TI2FP2 edge depending on TI1FP1
+      --  level.
+      Quadrature_Encoder_Mode_3,
+      --  x4 mode, counting up/down on both TI1FP1 & TI2FP2 edges depending
+      --  on the level of the other input.
+      Encoder_Mode_1,
+      --  Clock plus direction, x2 mode.
+      Encoder_Mode_2,
+      --  Clock plus direction, x1 mode, TI2FP2 edge sensitivity is set by CC2P.
+      Encoder_Mode_3,
+      --  Directional clock, x2 mode.
+      Encoder_Mode_4,
+      --  Directional clock, x1 mode, TI1FP1 and TI2FP2 edge sensitivity is
+      --  set by CC1P and CC2P.
+      Quadrature_Encoder_Mode_4,
+      --  x1 mode, counting on TI1FP1 edges only, edge sensitivity is set by CC1P.
+      Quadrature_Encoder_Mode_5)
+      --  x1 mode, counting on TI2FP2 edges only, edge sensitivity is set by CC2P.
+    with Size => 4;
+
+   for Timer_Encoder_Mode use
+     (Quadrature_Encoder_Mode_1 => 2#0001#,
+      Quadrature_Encoder_Mode_2 => 2#0010#,
+      Quadrature_Encoder_Mode_3 => 2#0011#,
+      Encoder_Mode_1            => 2#1010#,
+      Encoder_Mode_2            => 2#1011#,
+      Encoder_Mode_3            => 2#1100#,
+      Encoder_Mode_4            => 2#1101#,
+      Quadrature_Encoder_Mode_4 => 2#1110#,
+      Quadrature_Encoder_Mode_5 => 2#1111#);
 
    procedure Configure_Encoder_Interface
      (This         : in out Timer;
