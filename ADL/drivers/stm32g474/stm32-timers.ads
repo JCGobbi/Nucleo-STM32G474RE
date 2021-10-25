@@ -1180,14 +1180,6 @@ package STM32.Timers is
    function Has_32bit_CC_Values (This : Timer) return Boolean
       renames Has_32bit_Counter;
 
-   --  Timers 1 .. 3, 15
-   function Has_At_Least_2_CC_Channels (This : Timer) return Boolean
-   is
-     (This'Address = STM32_SVD.TIM1_Base or
-      This'Address = STM32_SVD.TIM2_Base or
-      This'Address = STM32_SVD.TIM3_Base or
-      This'Address = STM32_SVD.TIM15_Base);
-
    --  Timers 1 .. 5, 8, 15, 20
    function Clock_Management_Supported (This : Timer) return Boolean
    is
@@ -1199,6 +1191,14 @@ package STM32.Timers is
       This'Address = STM32_SVD.TIM8_Base or
       This'Address = STM32_SVD.TIM15_Base or
       This'Address = STM32_SVD.TIM20_Base);
+
+   --  Timers 1 .. 3, 15
+   function Has_At_Least_2_CC_Channels (This : Timer) return Boolean
+   is
+     (This'Address = STM32_SVD.TIM1_Base or
+      This'Address = STM32_SVD.TIM2_Base or
+      This'Address = STM32_SVD.TIM3_Base or
+      This'Address = STM32_SVD.TIM15_Base);
 
    --  Timers 1 .. 5, 8 and 20
    function Has_At_Least_3_CC_Channels (This : Timer) return Boolean
@@ -1249,7 +1249,7 @@ package STM32.Timers is
       This'Address = STM32_SVD.TIM8_Base or
       This'Address = STM32_SVD.TIM20_Base);
 
-   --  Timers 1 .. 5, 8, 15 .. 17 and 20
+   --  Timers 1 .. 5, 8, 15 and 20
    function Input_XOR_Supported (This : Timer) return Boolean
    is
      (This'Address = STM32_SVD.TIM1_Base or
@@ -1259,8 +1259,6 @@ package STM32.Timers is
       This'Address = STM32_SVD.TIM5_Base or
       This'Address = STM32_SVD.TIM8_Base or
       This'Address = STM32_SVD.TIM15_Base or
-      This'Address = STM32_SVD.TIM16_Base or
-      This'Address = STM32_SVD.TIM17_Base or
       This'Address = STM32_SVD.TIM20_Base);
 
    --  Timers 1 .. 5, 6, 7, 8, 15 ..17, 20
@@ -1679,8 +1677,8 @@ private
 
    --  The CCER register is composed of a logical grouping of four sets of
    --  bits, one per channel. The type Single_CCE describe these four bits.
-   --  Channels 1 through 3 have all four bits, but channel 4 does not have
-   --  the complementary state and polarity bits. We pretend that it does for
+   --  Channels 1 through 4 have all four bits, channels 5 and 6 don't have the
+   --  complementary enable and polarity bits. We pretend that it does for
    --  the type declaration and then treat it accordingly in the accessing
    --  subprograms.
 
