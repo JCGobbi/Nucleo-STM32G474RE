@@ -282,11 +282,14 @@ package STM32.DAC is
    --  DAC4).
 
    type DAC_Status_Flag is
-     (DMA_Underrun_Channel_1,
-      DMA_Underrun_Channel_2);
-   --  For the indicated channel, the currently selected trigger is driving the
-   --  channel conversion at a frequency higher than the DMA service capability
-   --  rate
+     (DORB_Output_Channel_1,
+      DORB_Output_Channel_2,
+      DMA_Underrun_Channel_1,
+      DMA_Underrun_Channel_2,
+      Calibration_EQGT_Offset_Channel_1,
+      Calibration_EQGT_Offset_Channel_2,
+      Write_Operation_Busy_Channel_1,
+      Write_Operation_Busy_Channel_2);
 
    function Status
      (This : Digital_To_Analog_Converter;
@@ -322,11 +325,6 @@ package STM32.DAC is
      (This   : Digital_To_Analog_Converter;
       Source : DAC_Interrupts)
       return Boolean
-     with Inline;
-
-   function Interrupt_Source
-     (This : Digital_To_Analog_Converter)
-      return DAC_Interrupts
      with Inline;
 
    procedure Clear_Interrupt_Pending

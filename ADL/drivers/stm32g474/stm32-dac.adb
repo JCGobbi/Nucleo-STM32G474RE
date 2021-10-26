@@ -534,10 +534,22 @@ package body STM32.DAC is
    is
    begin
       case Flag is
+         when DORB_Output_Channel_1 =>
+            return This.SR.DORSTAT1;
+         when DORB_Output_Channel_2 =>
+            return This.SR.DORSTAT2;
          when DMA_Underrun_Channel_1 =>
             return This.SR.DMAUDR1;
          when DMA_Underrun_Channel_2 =>
             return This.SR.DMAUDR2;
+         when Calibration_EQGT_Offset_Channel_1 =>
+            return This.SR.CAL_FLAG1;
+         when Calibration_EQGT_Offset_Channel_2 =>
+            return This.SR.CAL_FLAG2;
+         when Write_Operation_Busy_Channel_1 =>
+            return This.SR.BWST1;
+         when Write_Operation_Busy_Channel_2 =>
+            return This.SR.BWST2;
       end case;
    end Status;
 
@@ -551,10 +563,22 @@ package body STM32.DAC is
    is
    begin
       case Flag is
+         when DORB_Output_Channel_1 =>
+            This.SR.DORSTAT1 := True;
+         when DORB_Output_Channel_2 =>
+            This.SR.DORSTAT2 := True;
          when DMA_Underrun_Channel_1 =>
-            This.SR.DMAUDR1 := True; -- set to 1 to clear
+            This.SR.DMAUDR1 := True;
          when DMA_Underrun_Channel_2 =>
-            This.SR.DMAUDR2 := True; -- set to 1 to clear
+            This.SR.DMAUDR2 := True;
+         when Calibration_EQGT_Offset_Channel_1 =>
+            This.SR.CAL_FLAG1 := True;
+         when Calibration_EQGT_Offset_Channel_2 =>
+            This.SR.CAL_FLAG2 := True;
+         when Write_Operation_Busy_Channel_1 =>
+            This.SR.BWST1 := True;
+         when Write_Operation_Busy_Channel_2 =>
+            This.SR.BWST2 := True;
       end case;
    end Clear_Status;
 
@@ -609,22 +633,6 @@ package body STM32.DAC is
             return This.CR.DMAUDRIE2;
       end case;
    end Interrupt_Enabled;
-
-   ----------------------
-   -- Interrupt_Source --
-   ----------------------
-
-   function Interrupt_Source
-     (This : Digital_To_Analog_Converter)
-      return DAC_Interrupts
-   is
-   begin
-      if This.CR.DMAUDRIE1 then
-         return DMA_Underrun_Channel_1;
-      else
-         return DMA_Underrun_Channel_2;
-      end if;
-   end Interrupt_Source;
 
    -----------------------------
    -- Clear_Interrupt_Pending --
