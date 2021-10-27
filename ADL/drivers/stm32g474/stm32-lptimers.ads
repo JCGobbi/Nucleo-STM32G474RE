@@ -184,16 +184,16 @@ package STM32.LPTimers is
       Filter   : LPTimer_Digital_Filter);
 
    type LPTimer_Input_Clock_Enum is
-     (Option_0,
-      Option_1,
+     (Option_1,
       Option_2,
-      Option_3)
+      Option_3,
+      Option_4)
      with Size => 2;
    --  Option       Input 1        Input 2
-   --  0            COMP2          COMP1
-   --  1            COMP4          COMP3
-   --  2            COMP6          COMP5
-   --  3            COMP6          COMP7
+   --  1            COMP2          COMP1
+   --  2            COMP4          COMP3
+   --  3            COMP6          COMP5
+   --  4            COMP6          COMP7
    --  See RM0440 rev 6 Chapter 32.4.2 "LPTIM input and trigger mapping".
 
    type LPTimer_Input_Clock is record
