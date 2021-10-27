@@ -194,6 +194,7 @@ package STM32.LPTimers is
    --  1            COMP4          COMP3
    --  2            COMP6          COMP5
    --  3            COMP6          COMP7
+   --  See RM0440 rev 6 Chapter 32.4.2 "LPTIM input and trigger mapping".
 
    type LPTimer_Input_Clock is record
       Internal : Boolean := True;
@@ -215,6 +216,8 @@ package STM32.LPTimers is
       Clock : LPTimer_Input_Clock);
    --  LPTimer input 1  or input 2 connected to COMP output (Internal = True)
    --  or to GPIO (Internal = False).
+   --  See RM0440 rev 6 Chapter 32.4.2 "LPTIM input and trigger mapping" and
+   --  Chapter 32.4.1 "LPTIM block diagram".
 
    type LPTimer_Trigger_Source is
      (GPIO,
@@ -231,6 +234,7 @@ package STM32.LPTimers is
       COMP6_OUT,
       COMP7_OUT)
      with Size => 4;
+   --  See RM0440 rev 6 Chapter 32.4.2 "LPTIM input and trigger mapping".
 
    procedure Select_Trigger_Source
      (This   : in out LPTimer;
