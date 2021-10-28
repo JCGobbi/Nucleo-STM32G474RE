@@ -2,7 +2,7 @@
 --  This file provides interfaces for the comparators on the
 --  STM32F3 (ARM Cortex M4F) microcontrollers from ST Microelectronics.
 
-with System; use System;
+private with STM32_SVD.COMP;
 
 package STM32.COMP is
 
@@ -63,13 +63,13 @@ package STM32.COMP is
      (This  : in out Comparator;
       Input : NonInverting_Input_Port)
      with Post => Read_NonInverting_Input_Port (This) = Input;
-   --  Select the source connected to the inverting input of the comparator.
+   --  Select the source connected to the non-inverting input of the comparator.
    --  See Table 195: COMPx non-inverting input assignment at pg 781 chapter
    --  24.3.2 RM0440 rev 6.
 
    function Read_NonInverting_Input_Port
      (This : Comparator) return NonInverting_Input_Port;
-   --  Return the source connected to the inverting input of the comparator.
+   --  Return the source connected to the non-inverting input of the comparator.
 
    type Output_Polarity is
      (Not_Inverted,
@@ -177,62 +177,7 @@ package STM32.COMP is
 
 private
 
-   --  representation for Comparator 2, 4 and 6 Control and Status Registers  ----------
-
-   subtype CxCSR_INMSEL_Field is HAL.UInt3;
-   subtype CxCSR_HYST_Field is HAL.UInt3;
-   subtype CxCSR_BLANKSEL_Field is HAL.UInt3;
-
-   --  Comparator control/status register
-   type CxCSR_Register is record
-      --  EN
-      EN             : Boolean := False;
-      --  unspecified
-      Reserved_1_3   : HAL.UInt3 := 16#0#;
-      --  INMSEL
-      INMSEL         : CxCSR_INMSEL_Field := 16#0#;
-      --  unspecified
-      Reserved_7_7   : HAL.Bit := 16#0#;
-      --  INPSEL
-      INPSEL         : Boolean := False;
-      --  unspecified
-      Reserved_9_14  : HAL.UInt6 := 16#0#;
-      --  POL
-      POL            : Boolean := False;
-      --  HYST
-      HYST           : CxCSR_HYST_Field := 16#0#;
-      --  BLANKSEL
-      BLANKSEL       : CxCSR_BLANKSEL_Field := 16#0#;
-      --  BRGEN
-      BRGEN          : Boolean := False;
-      --  SCALEN
-      SCALEN         : Boolean := False;
-      --  unspecified
-      Reserved_24_29 : HAL.UInt6 := 16#0#;
-      --  Read-only. VALUE
-      VALUE          : Boolean := False;
-      --  LOCK
-      LOCK           : Boolean := False;
-   end record
-     with Volatile_Full_Access, Object_Size => 32,
-          Bit_Order => System.Low_Order_First;
-
-   for CxCSR_Register use record
-      EN             at 0 range 0 .. 0;
-      Reserved_1_3   at 0 range 1 .. 3;
-      INMSEL         at 0 range 4 .. 6;
-      Reserved_7_7   at 0 range 7 .. 7;
-      INPSEL         at 0 range 8 .. 8;
-      Reserved_9_14  at 0 range 9 .. 14;
-      POL            at 0 range 15 .. 15;
-      HYST           at 0 range 16 .. 18;
-      BLANKSEL       at 0 range 19 .. 21;
-      BRGEN          at 0 range 22 .. 22;
-      SCALEN         at 0 range 23 .. 23;
-      Reserved_24_29 at 0 range 24 .. 29;
-      VALUE          at 0 range 30 .. 30;
-      LOCK           at 0 range 31 .. 31;
-   end record;
+   --  representation for Comparator Control and Status Registers  ----------
 
    -----------------
    -- Peripherals --
@@ -241,7 +186,7 @@ private
    --  representation for the whole Comparator type  -----------------
 
    type Comparator is record
-      CSR : CxCSR_Register;
+      CSR : STM32_SVD.COMP.C1CSR_Register;
    end record with Volatile, Size => 1 * 32;
 
    for Comparator use record
