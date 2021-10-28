@@ -2,7 +2,7 @@
 --  This file provides interfaces for the operational amplifiers on the
 --  STM32G4 (ARM Cortex M4F) microcontrollers from ST Microelectronics.
 
-with System; use System;
+private with STM32_SVD.OPAMP;
 
 package STM32.OPAMP is
 
@@ -312,110 +312,11 @@ package STM32.OPAMP is
    --  Return the OPAMP lock bit state.
 
 private
-
-   --  representation for OpAmp x Control and Status Registers  ----------
-
-   subtype OPAMPx_CSR_VP_SEL_Field is HAL.UInt2;
-   subtype OPAMPx_CSR_VM_SEL_Field is HAL.UInt2;
-   subtype OPAMPx_CSR_CALSEL_Field is HAL.UInt2;
-   subtype OPAMPx_CSR_PGA_GAIN_Field is HAL.UInt5;
-   subtype OPAMPx_CSR_TRIMOFFSETP_Field is HAL.UInt5;
-   subtype OPAMPx_CSR_TRIMOFFSETN_Field is HAL.UInt5;
-
-   --  OPAMPx control/status register
-   type OPAMPx_CSR_Register is record
-      --  Operational amplifier Enable
-      OPAEN          : Boolean := False;
-      --  FORCE_VP
-      FORCE_VP       : Boolean := False;
-      --  VP_SEL
-      VP_SEL         : OPAMPx_CSR_VP_SEL_Field := 16#0#;
-      --  USERTRIM
-      USERTRIM       : Boolean := False;
-      --  VM_SEL
-      VM_SEL         : OPAMPx_CSR_VM_SEL_Field := 16#0#;
-      --  OPAHSM
-      OPAHSM         : Boolean := False;
-      --  OPAINTOEN
-      OPAINTOEN      : Boolean := False;
-      --  unspecified
-      Reserved_9_10  : HAL.UInt2 := 16#0#;
-      --  CALON
-      CALON          : Boolean := False;
-      --  CALSEL
-      CALSEL         : OPAMPx_CSR_CALSEL_Field := 16#0#;
-      --  PGA_GAIN
-      PGA_GAIN       : OPAMPx_CSR_PGA_GAIN_Field := 16#0#;
-      --  TRIMOFFSETP
-      TRIMOFFSETP    : OPAMPx_CSR_TRIMOFFSETP_Field := 16#0#;
-      --  TRIMOFFSETN
-      TRIMOFFSETN    : OPAMPx_CSR_TRIMOFFSETN_Field := 16#0#;
-      --  unspecified
-      Reserved_29_29 : HAL.Bit := 16#0#;
-      --  CALOUT
-      CALOUT         : Boolean := False;
-      --  LOCK
-      LOCK           : Boolean := False;
-   end record
-     with Volatile_Full_Access, Object_Size => 32,
-          Bit_Order => System.Low_Order_First;
-
-   for OPAMPx_CSR_Register use record
-      OPAEN          at 0 range 0 .. 0;
-      FORCE_VP       at 0 range 1 .. 1;
-      VP_SEL         at 0 range 2 .. 3;
-      USERTRIM       at 0 range 4 .. 4;
-      VM_SEL         at 0 range 5 .. 6;
-      OPAHSM         at 0 range 7 .. 7;
-      OPAINTOEN      at 0 range 8 .. 8;
-      Reserved_9_10  at 0 range 9 .. 10;
-      CALON          at 0 range 11 .. 11;
-      CALSEL         at 0 range 12 .. 13;
-      PGA_GAIN       at 0 range 14 .. 18;
-      TRIMOFFSETP    at 0 range 19 .. 23;
-      TRIMOFFSETN    at 0 range 24 .. 28;
-      Reserved_29_29 at 0 range 29 .. 29;
-      CALOUT         at 0 range 30 .. 30;
-      LOCK           at 0 range 31 .. 31;
-   end record;
-
-   subtype OPAMPx_TCMR_VPS_SEL_Field is HAL.UInt2;
-
-   --  OPAMPx control/status register
-   type OPAMPx_TCMR_Register is record
-      --  VMS_SEL
-      VMS_SEL       : Boolean := False;
-      --  VPS_SEL
-      VPS_SEL       : OPAMPx_TCMR_VPS_SEL_Field := 16#0#;
-      --  T1CM_EN
-      T1CM_EN       : Boolean := False;
-      --  T8CM_EN
-      T8CM_EN       : Boolean := False;
-      --  T20CM_EN
-      T20CM_EN      : Boolean := False;
-      --  unspecified
-      Reserved_6_30 : HAL.UInt25 := 16#0#;
-      --  LOCK
-      LOCK          : Boolean := False;
-   end record
-     with Volatile_Full_Access, Object_Size => 32,
-          Bit_Order => System.Low_Order_First;
-
-   for OPAMPx_TCMR_Register use record
-      VMS_SEL       at 0 range 0 .. 0;
-      VPS_SEL       at 0 range 1 .. 2;
-      T1CM_EN       at 0 range 3 .. 3;
-      T8CM_EN       at 0 range 4 .. 4;
-      T20CM_EN      at 0 range 5 .. 5;
-      Reserved_6_30 at 0 range 6 .. 30;
-      LOCK          at 0 range 31 .. 31;
-   end record;
-
    --  representation for the whole Operationa Amplifier type  -----------------
 
    type Operational_Amplifier is limited record
-      CSR  : OPAMPx_CSR_Register;
-      TCMR : OPAMPx_TCMR_Register;
+      CSR  : STM32_SVD.OPAMP.OPAMP1_CSR_Register;
+      TCMR : STM32_SVD.OPAMP.OPAMP1_TCMR_Register;
    end record with Volatile, Size => 7 * 32;
 
    for Operational_Amplifier use record
