@@ -418,22 +418,22 @@ package STM32.Device is
    -----------
 
    --  subtype SAI_Port is STM32_SVD.SAI.SAI_Peripheral;
-   --
+
    --  SAI_1 : SAI_Port renames STM32_SVD.SAI.SAI_Periph;
-   --
+
    --  procedure Enable_Clock (This : SAI_Port);
    --  procedure Reset (This : SAI_Port);
-   --
+
    --  type SAI_Clock_Source is (SYSCLK, PLLQ, I2S_CKIN, HSI16);
-   --
+
    --  procedure Write_Clock_Source (This   : SAI_Port;
    --                                Source : SAI_Clock_Source);
-   --  --  Set SAI Clock Mux source.
-   --
+   --  Set SAI Clock Mux source.
+
    --  function Read_Clock_Source (This : SAI_Port) return SAI_Clock_Source;
-   --  --  Return SAI Clock Mux source.
-   --
-   --  function Get_Input_Clock (Periph : SAI_Port) return UInt32;
+   --  Return SAI Clock Mux source.
+
+   --  function Get_Clock_Frequency (This : SAI_Port) return UInt32;
 
    ---------
    -- CRC --

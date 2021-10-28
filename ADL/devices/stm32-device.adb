@@ -359,16 +359,16 @@ package body STM32.Device is
    --     return SAI_Clock_Source'Val (RCC_Periph.CCIPR.SAI1SEL);
    --  end Read_Clock_Source;
 
-   ---------------------
-   -- Get_Input_Clock --
-   ---------------------
+   -------------------------
+   -- Get_Clock_Frequency --
+   -------------------------
 
-   --  function Get_Input_Clock (Periph : SAI_Port) return UInt32
+   --  function Get_Clock_Frequency (This : SAI_Port) return UInt32
    --  is
    --     Input_Selector  : SAI_Clock_Source;
    --     VCO_Input       : UInt32;
    --  begin
-   --     if Periph'Address /= SAI_Base then
+   --     if This'Address /= SAI_Base then
    --        raise Unknown_Device;
    --     end if;
    --
@@ -388,7 +388,7 @@ package body STM32.Device is
    --     end case;
    --
    --     return VCO_Input;
-   --  end Get_Input_Clock;
+   --  end Get_Clock_Frequency;
 
    ------------------
    -- Enable_Clock --
