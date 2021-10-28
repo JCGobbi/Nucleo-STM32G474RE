@@ -45,34 +45,52 @@
 --  See the child packages for routines to initialze the generator and acquire
 --  numbers, using either polling or interrupts.
 
+with STM32_SVD.RNG;
+
 package STM32.RNG is
 
-   procedure Enable_RNG;
+   type RNG_Generator is limited private;
 
-   procedure Disable_RNG;
+   procedure Enable (This : in out RNG_Generator)
+     with Post => Enabled (This);
 
-   procedure Reset_RNG;
+   procedure Disable (This : in out RNG_Generator)
+     with Post => not Enabled (This);
 
-   procedure Enable_RNG_Clock;
+   function Enabled (This : RNG_Generator) return Boolean;
 
-   function RNG_Enabled return Boolean;
+   procedure Enable_Interrupt (This : in out RNG_Generator)
+     with Inline,
+       Post => Interrupt_Enabled (This);
 
-   procedure Enable_RNG_Interrupt;
+   procedure Disable_Interrupt (This : in out RNG_Generator)
+     with Inline,
+       Post => not Interrupt_Enabled (This);
 
-   procedure Disable_RNG_Interrupt;
+   function Interrupt_Enabled (This : RNG_Generator) return Boolean;
 
-   function RNG_Interrupt_Enabled return Boolean;
+   function Read_Data (This : RNG_Generator) return UInt32;
 
-   function RNG_Data return UInt32;
+   type Status_Flag is
+     (Data_Ready,
+      Clock_Error,
+      Seed_Error,
+      Clock_Error_Interrupt,
+      Seed_Error_Interrupt);
 
-   function RNG_Data_Ready return Boolean;
+   subtype Clearable_Status_Flag is Status_Flag
+     range Clock_Error_Interrupt .. Seed_Error_Interrupt;
 
-   function RNG_Seed_Error_Status return Boolean;
+   function Status (This : RNG_Generator; Flag : Status_Flag) return Boolean;
 
-   function RNG_Clock_Error_Status return Boolean;
+   procedure Clear_Interrupt_Pending
+     (This : in out RNG_Generator;
+      Flag : Clearable_Status_Flag)
+     with Inline,
+       Post => not Status (This, Flag);
 
-   procedure Clear_RNG_Seed_Error_Status;
+private
 
-   procedure Clear_RNG_Clock_Error_Status;
+   type RNG_Generator is new STM32_SVD.RNG.RNG_Peripheral;
 
 end STM32.RNG;

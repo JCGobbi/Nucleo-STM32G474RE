@@ -425,6 +425,37 @@ package body STM32.Device is
    -- Enable_Clock --
    ------------------
 
+   --  procedure Enable_Clock (This : RNG_Generator) is
+   --     pragma Unreferenced (This);
+   --  begin
+   --     RCC_Periph.AHB2ENR.RNGEN := True;
+   --  end Enable_Clock;
+
+   -------------------
+   -- Disable_Clock --
+   -------------------
+
+   --  procedure Disable_Clock (This : RNG_Generator) is
+   --     pragma Unreferenced (This);
+   --  begin
+   --     RCC_Periph.AHB2ENR.RNGEN := False;
+   --  end Disable_Clock;
+
+   -----------
+   -- Reset --
+   -----------
+
+   --  procedure Reset (This : RNG_Generator) is
+   --     pragma Unreferenced (This);
+   --  begin
+   --     RCC_Periph.AHB2RSTR.RNGRST := True;
+   --     RCC_Periph.AHB2RSTR.RNGRST := False;
+   --  end Reset;
+
+   ------------------
+   -- Enable_Clock --
+   ------------------
+
    procedure Enable_Clock (This : CORDIC_Coprocessor) is
       pragma Unreferenced (This);
    begin
@@ -1115,87 +1146,87 @@ package body STM32.Device is
    -- Enable_Clock --
    ------------------
 
-   --  procedure Enable_Clock (This : HRTimer_Master) is
-   --  begin
-   --     if This'Address = HRTIM_Master_Base then
-   --        RCC_Periph.APB2ENR.HRTIM1EN := True;
-   --     else
-   --        raise Unknown_Device;
-   --     end if;
-   --  end Enable_Clock;
+   procedure Enable_Clock (This : HRTimer_Master) is
+   begin
+      if This'Address = HRTIM_Master_Base then
+         RCC_Periph.APB2ENR.HRTIM1EN := True;
+      else
+         raise Unknown_Device;
+      end if;
+   end Enable_Clock;
 
    ------------------
    -- Enable_Clock --
    ------------------
 
-   --  procedure Enable_Clock (This : HRTimer_Channel) is
-   --  begin
-   --     if This'Address = HRTIM_TIMA_Base or
-   --        This'Address = HRTIM_TIMB_Base or
-   --        This'Address = HRTIM_TIMC_Base or
-   --        This'Address = HRTIM_TIMD_Base or
-   --        This'Address = HRTIM_TIME_Base or
-   --        This'Address = HRTIM_TIMF_Base
-   --     then
-   --        RCC_Periph.APB2ENR.HRTIM1EN := True;
-   --     else
-   --        raise Unknown_Device;
-   --     end if;
-   --  end Enable_Clock;
+   procedure Enable_Clock (This : HRTimer_Channel) is
+   begin
+      if This'Address = HRTIM_TIMA_Base or
+         This'Address = HRTIM_TIMB_Base or
+         This'Address = HRTIM_TIMC_Base or
+         This'Address = HRTIM_TIMD_Base or
+         This'Address = HRTIM_TIME_Base or
+         This'Address = HRTIM_TIMF_Base
+      then
+         RCC_Periph.APB2ENR.HRTIM1EN := True;
+      else
+         raise Unknown_Device;
+      end if;
+   end Enable_Clock;
 
    -----------
    -- Reset --
    -----------
 
-   --  procedure Reset (This : HRTimer_Master) is
-   --  begin
-   --     if This'Address = HRTIM_Master_Base then
-   --        RCC_Periph.APB2RSTR.HRTIM1RST := True;
-   --        RCC_Periph.APB2RSTR.HRTIM1RST := False;
-   --     else
-   --        raise Unknown_Device;
-   --     end if;
-   --  end Reset;
+   procedure Reset (This : HRTimer_Master) is
+   begin
+      if This'Address = HRTIM_Master_Base then
+         RCC_Periph.APB2RSTR.HRTIM1RST := True;
+         RCC_Periph.APB2RSTR.HRTIM1RST := False;
+      else
+         raise Unknown_Device;
+      end if;
+   end Reset;
 
    -----------
    -- Reset --
    -----------
 
-   --  procedure Reset (This : HRTimer_Channel) is
-   --  begin
-   --     if This'Address = HRTIM_TIMA_Base or
-   --        This'Address = HRTIM_TIMB_Base or
-   --        This'Address = HRTIM_TIMC_Base or
-   --        This'Address = HRTIM_TIMD_Base or
-   --        This'Address = HRTIM_TIME_Base or
-   --        This'Address = HRTIM_TIMF_Base
-   --     then
-   --        RCC_Periph.APB2RSTR.HRTIM1RST := True;
-   --        RCC_Periph.APB2RSTR.HRTIM1RST := False;
-   --     else
-   --        raise Unknown_Device;
-   --     end if;
-   --  end Reset;
+   procedure Reset (This : HRTimer_Channel) is
+   begin
+      if This'Address = HRTIM_TIMA_Base or
+         This'Address = HRTIM_TIMB_Base or
+         This'Address = HRTIM_TIMC_Base or
+         This'Address = HRTIM_TIMD_Base or
+         This'Address = HRTIM_TIME_Base or
+         This'Address = HRTIM_TIMF_Base
+      then
+         RCC_Periph.APB2RSTR.HRTIM1RST := True;
+         RCC_Periph.APB2RSTR.HRTIM1RST := False;
+      else
+         raise Unknown_Device;
+      end if;
+   end Reset;
 
    -------------------------
    -- Get_Clock_Frequency --
    -------------------------
 
-   --  function Get_Clock_Frequency (This : HRTimer_Master) return UInt32 is
-   --     pragma Unreferenced (This);
-   --  begin
-   --     return System_Clock_Frequencies.TIMCLK2;
-   --  end Get_Clock_Frequency;
+   function Get_Clock_Frequency (This : HRTimer_Master) return UInt32 is
+      pragma Unreferenced (This);
+   begin
+      return System_Clock_Frequencies.TIMCLK2;
+   end Get_Clock_Frequency;
 
    -------------------------
    -- Get_Clock_Frequency --
    -------------------------
 
-   --  function Get_Clock_Frequency (This : HRTimer_Channel) return UInt32 is
-   --     pragma Unreferenced (This);
-   --  begin
-   --     return System_Clock_Frequencies.TIMCLK2;
-   --  end Get_Clock_Frequency;
+   function Get_Clock_Frequency (This : HRTimer_Channel) return UInt32 is
+      pragma Unreferenced (This);
+   begin
+      return System_Clock_Frequencies.TIMCLK2;
+   end Get_Clock_Frequency;
 
    ------------------------------
    -- System_Clock_Frequencies --

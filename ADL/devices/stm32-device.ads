@@ -53,6 +53,7 @@ with STM32.GPIO;     use STM32.GPIO;
 with STM32.ADC;      use STM32.ADC;
 --  with STM32.DAC;      use STM32.DAC;
 --  with STM32.CRC;      use STM32.CRC;
+--  with STM32.RNG;      use STM32.RNG;
 with STM32.CORDIC;   use STM32.CORDIC;
 --  with STM32.FMAC;     use STM32.FMAC;
 --  with STM32.DMA;      use STM32.DMA;
@@ -64,7 +65,7 @@ with STM32.CORDIC;   use STM32.CORDIC;
 --  with STM32.RTC;      use STM32.RTC;
 with STM32.Timers;   use STM32.Timers;
 --  with STM32.LPTimers; use STM32.LPTimers;
---  with STM32.HRTimers; use STM32.HRTimers;
+with STM32.HRTimers; use STM32.HRTimers;
 --  with STM32.OPAMP;    use STM32.OPAMP;
 --  with STM32.COMP;     use STM32.COMP;
 
@@ -446,6 +447,19 @@ package STM32.Device is
    --
    --  procedure Reset (This : CRC_32);
 
+   ---------
+   -- RNG --
+   ---------
+
+   --  RNG_Unit : RNG_Generator
+   --    with Import, Volatile, Address => RNG_Base;
+
+   --  procedure Enable_Clock (This : RNG_Generator) with Inline;
+
+   --  procedure Disable_Clock (This : RNG_Generator) with Inline;
+
+   --  procedure Reset (This : RNG_Generator);
+
    ------------
    -- CORDIC --
    ------------
@@ -669,7 +683,8 @@ package STM32.Device is
    -- LPTimer --
    -------------
 
-   --  LPTimer_1 : aliased LPTimer with Import, Volatile, Address => LPTIMER1_Base;
+   --  LPTimer_1 : aliased LPTimer
+   --    with Import, Volatile, Address => LPTIMER1_Base;
    --
    --  procedure Enable_Clock (This : LPTimer);
    --
@@ -702,35 +717,35 @@ package STM32.Device is
    -- HRTimer --
    -------------
 
-   --  HRTimer_M : aliased HRTimer_Master
-   --    with Import, Volatile, Address => HRTIM_Master_Base;
+   HRTimer_M : aliased HRTimer_Master
+     with Import, Volatile, Address => HRTIM_Master_Base;
 
-   --  HRTimer_A : aliased HRTimer_Channel
-   --    with Import, Volatile, Address => HRTIM_TIMA_Base;
-   --  HRTimer_B : aliased HRTimer_Channel
-   --    with Import, Volatile, Address => HRTIM_TIMB_Base;
-   --  HRTimer_C : aliased HRTimer_Channel
-   --    with Import, Volatile, Address => HRTIM_TIMC_Base;
-   --  HRTimer_D : aliased HRTimer_Channel
-   --    with Import, Volatile, Address => HRTIM_TIMD_Base;
-   --  HRTimer_E : aliased HRTimer_Channel
-   --    with Import, Volatile, Address => HRTIM_TIME_Base;
-   --  HRTimer_F : aliased HRTimer_Channel
-   --    with Import, Volatile, Address => HRTIM_TIMF_Base;
+   HRTimer_A : aliased HRTimer_Channel
+     with Import, Volatile, Address => HRTIM_TIMA_Base;
+   HRTimer_B : aliased HRTimer_Channel
+     with Import, Volatile, Address => HRTIM_TIMB_Base;
+   HRTimer_C : aliased HRTimer_Channel
+     with Import, Volatile, Address => HRTIM_TIMC_Base;
+   HRTimer_D : aliased HRTimer_Channel
+     with Import, Volatile, Address => HRTIM_TIMD_Base;
+   HRTimer_E : aliased HRTimer_Channel
+     with Import, Volatile, Address => HRTIM_TIME_Base;
+   HRTimer_F : aliased HRTimer_Channel
+     with Import, Volatile, Address => HRTIM_TIMF_Base;
 
-   --  procedure Enable_Clock (This : HRTimer_Master);
+   procedure Enable_Clock (This : HRTimer_Master);
 
-   --  procedure Enable_Clock (This : HRTimer_Channel);
+   procedure Enable_Clock (This : HRTimer_Channel);
 
-   --  procedure Reset (This : HRTimer_Master);
+   procedure Reset (This : HRTimer_Master);
 
-   --  procedure Reset (This : HRTimer_Channel);
+   procedure Reset (This : HRTimer_Channel);
 
-   --  function Get_Clock_Frequency (This : HRTimer_Master) return UInt32;
-   --  --  Returns the timer input frequency in Hz.
+   function Get_Clock_Frequency (This : HRTimer_Master) return UInt32;
+   --  Returns the timer input frequency in Hz.
 
-   --  function Get_Clock_Frequency (This : HRTimer_Channel) return UInt32;
-   --  --  Returns the timer input frequency in Hz.
+   function Get_Clock_Frequency (This : HRTimer_Channel) return UInt32;
+   --  Returns the timer input frequency in Hz.
 
    ----------------
    -- Comparator --

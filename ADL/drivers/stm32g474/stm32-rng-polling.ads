@@ -46,13 +46,13 @@
 
 package STM32.RNG.Polling is
 
-   procedure Initialize_RNG with
-     Post => not RNG_Interrupt_Enabled;
+   procedure Initialize (This : in out RNG_Generator) with
+     Post => not Interrupt_Enabled (This);
    --  Must be called once, prior to any call to get a random number via
    --  polling. Both necessary and sufficient.
    --  Enables the clock as well.
 
-   function Random return UInt32;
+   function Random (This : RNG_Generator) return UInt32;
    --  Polls the RNG directly to get the next available number.
    --  NB: call Initialize_RNG before any calls to this function.
 

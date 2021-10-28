@@ -40,46 +40,50 @@
 ------------------------------------------------------------------------------
 with STM32_SVD.RNG; use STM32_SVD.RNG;
 
+with STM32.Device;
 
 package body STM32.RNG.Polling is
 
-   --------------------
-   -- Initialize_RNG --
-   --------------------
+   ----------------
+   -- Initialize --
+   ----------------
 
-   procedure Initialize_RNG is
+   procedure Initialize (This : in out RNG_Generator) is
+      use STM32.Device;
+
       Discard : UInt32;
    begin
-      Enable_RNG_Clock;
-      Enable_RNG;
+      Enable_Clock (This);
+      Enable (This);
 
       --  Discard the first four randomly generated number, according to
       --  RM0440 rev 6 section 26.3.5.
       for I in 1 .. 4 loop
-         Discard := Random;
+         Discard := Random (This);
 
-         --  Check for errors and treat them as section 26.3.7.
-         while RNG_Periph.SR.SEIS loop
-            RNG_Periph.SR.SEIS := False;
+         --  Check for seed errors and treat them as section 26.3.7.
+         while This.SR.SEIS loop
+            This.SR.SEIS := False;
 
             for J in 1 .. 12 loop
-               Discard := Random;
+               Discard := Random (This);
             end loop;
          end loop;
       end loop;
 
-   end Initialize_RNG;
+   end Initialize;
 
    ------------
    -- Random --
    ------------
 
-   function Random return UInt32 is
+   function Random (This : RNG_Generator) return UInt32 is
    begin
-      while not RNG_Data_Ready loop
+      --  wait for data ready status
+      while not This.SR.DRDY loop
          null;
       end loop;
-      return RNG_Data;
+      return This.DR;
    end Random;
 
 end STM32.RNG.Polling;

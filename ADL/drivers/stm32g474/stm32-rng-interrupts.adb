@@ -41,6 +41,8 @@
 
 with Ada.Interrupts.Names;
 
+with STM32.Device;
+
 package body STM32.RNG.Interrupts is
 
    type Buffer_Content is array (Integer range <>) of UInt32;
@@ -82,7 +84,11 @@ package body STM32.RNG.Interrupts is
       -- Get_Random_32 --
       -------------------
 
-      entry Get_Random_32 (Value : out UInt32) when Data_Available is
+      entry Get_Random_32 (Value : out UInt32)
+        when Data_Available
+      is
+         use STM32.Device;
+
          Next : constant Integer :=
            (Buffer.Tail + 1) mod Buffer.Content'Length;
       begin
@@ -96,7 +102,7 @@ package body STM32.RNG.Interrupts is
             Data_Available := False;
          end if;
 
-         Enable_RNG;
+         Enable (RNG_Unit);
       end Get_Random_32;
 
       -----------------------
@@ -104,32 +110,35 @@ package body STM32.RNG.Interrupts is
       -----------------------
 
       procedure Interrupt_Handler is
+         use STM32.Device;
+
          Current : UInt32;
       begin
-         if RNG_Seed_Error_Status then
-            Clear_RNG_Seed_Error_Status;
+         if Status (RNG_Unit, Flag => Seed_Error_Interrupt) then
+            Clear_Interrupt_Pending (RNG_Unit, Flag => Seed_Error_Interrupt);
 
             --  Clear then set the RNGEN bit to reinitialize and restart
             --  the RNG.
-            Reset_RNG;
+            Disable (RNG_Unit);
+            Initialize (RNG_Unit);
          end if;
 
-         if RNG_Clock_Error_Status then
+         if Status (RNG_Unit, Flag => Clock_Error_Interrupt) then
             --  TODO: reconfigure the clock and make sure it's okay
 
             --  Clear the bit.
-            Clear_RNG_Clock_Error_Status;
+            Clear_Interrupt_Pending (RNG_Unit, Flag => Clock_Error_Interrupt);
          end if;
 
-         if RNG_Data_Ready then
-            Current := RNG_Data;
+         if Status (RNG_Unit, Flag => Data_Ready) then
+            Current := Read_Data (RNG_Unit);
 
             if Current /= Last then
                --  This number is good.
                if (Buffer.Head + 1) mod Buffer.Content'Length = Buffer.Tail
                then
                   --  But our buffer is full.  Turn off the RNG.
-                  Disable_RNG;
+                  Disable (RNG_Unit);
                else
                   --  Add this new data to our buffer.
                   Buffer.Head := (Buffer.Head + 1) mod Buffer.Content'Length;
@@ -144,27 +153,31 @@ package body STM32.RNG.Interrupts is
 
    end Receiver;
 
-   --------------------
-   -- Initialize_RNG --
-   --------------------
+   ----------------
+   -- Initialize --
+   ----------------
 
-   procedure Initialize_RNG is
+   procedure Initialize (This : in out RNG_Generator) is
       Discard : UInt32;
    begin
-      Enable_RNG_Clock;
-      Enable_RNG_Interrupt;
-      Enable_RNG;
+      STM32.Device.Enable_Clock (This);
+      Enable_Interrupt (This);
+      Enable (This);
 
-      --  Discard the first randomly generated number, according to STM32F4
-      --  docs.
-      Receiver.Get_Random_32 (Discard);
-   end Initialize_RNG;
+      --  Discard the first four randomly generated number, according to
+      --  RM0440 rev 6 section 26.3.5.
+      for I in 1 .. 4 loop
+         Receiver.Get_Random_32 (Discard);
+      end loop;
+   end Initialize;
 
    ------------
    -- Random --
    ------------
 
-   function Random return UInt32 is
+   function Random (This : RNG_Generator) return UInt32 is
+      pragma Unreferenced (This);
+
       Result : UInt32;
    begin
       Receiver.Get_Random_32 (Result);

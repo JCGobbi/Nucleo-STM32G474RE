@@ -44,122 +44,101 @@ with STM32_SVD.RNG; use STM32_SVD.RNG;
 
 package body STM32.RNG is
 
+   ------------
+   -- Enable --
+   ------------
+
+   procedure Enable (This : in out RNG_Generator) is
+   begin
+      This.CR.RNGEN := True;
+   end Enable;
+
+   -------------
+   -- Disable --
+   -------------
+
+   procedure Disable (This : in out RNG_Generator) is
+   begin
+      This.CR.RNGEN := False;
+   end Disable;
+
+   -------------
+   -- Enabled --
+   -------------
+
+   function Enabled (This : RNG_Generator) return Boolean is
+      (This.CR.RNGEN);
+
    ----------------------
-   -- Enable_RNG_Clock --
+   -- Enable_Interrupt --
    ----------------------
 
-   procedure Enable_RNG_Clock is
+   procedure Enable_Interrupt (This : in out RNG_Generator) is
    begin
-      RCC_Periph.AHB2ENR.RNGEN := True;
-   end Enable_RNG_Clock;
+      This.CR.IE := True;
+   end Enable_Interrupt;
 
-   ----------------
-   -- Enable_RNG --
-   ----------------
+   -----------------------
+   -- Disable_Interrupt --
+   -----------------------
 
-   procedure Enable_RNG is
+   procedure Disable_Interrupt (This : in out RNG_Generator) is
    begin
-      RNG_Periph.CR.RNGEN := True;
-   end Enable_RNG;
+      This.CR.IE := False;
+   end Disable_Interrupt;
 
-   -----------------
-   -- Disable_RNG --
-   -----------------
+   -----------------------
+   -- Interrupt_Enabled --
+   -----------------------
 
-   procedure Disable_RNG is
-   begin
-      RNG_Periph.CR.RNGEN := False;
-   end Disable_RNG;
+   function Interrupt_Enabled (This : RNG_Generator) return Boolean is
+      (This.CR.IE);
 
    ---------------
-   -- Reset_RNG --
+   -- Read_Data --
    ---------------
 
-   procedure Reset_RNG
+   function Read_Data (This : RNG_Generator) return UInt32
+     is (This.DR);
+
+   ------------
+   -- Status --
+   ------------
+
+   function Status
+     (This : RNG_Generator;
+      Flag : Status_Flag) return Boolean
    is
    begin
-      RCC_Periph.AHB2RSTR.RNGRST := True;
-      RCC_Periph.AHB2RSTR.RNGRST := False;
-   end Reset_RNG;
+      case Flag is
+         when Data_Ready =>
+            return This.SR.DRDY;
+         when Clock_Error =>
+            return This.SR.CECS;
+         when Seed_Error =>
+            return This.SR.SECS;
+         when Clock_Error_Interrupt =>
+            return This.SR.CEIS;
+         when Seed_Error_Interrupt =>
+            return This.SR.SEIS;
+      end case;
+   end Status;
 
-   -----------------
-   -- RNG_Enabled --
-   -----------------
+   -----------------------------
+   -- Clear_Interrupt_Pending --
+   -----------------------------
 
-   function RNG_Enabled return Boolean is
-      (RNG_Periph.CR.RNGEN);
-
-   --------------------------
-   -- Enable_RNG_Interrupt --
-   --------------------------
-
-   procedure Enable_RNG_Interrupt is
-   begin
-      RNG_Periph.CR.IE := True;
-   end Enable_RNG_Interrupt;
-
-   ---------------------------
-   -- Disable_RNG_Interrupt --
-   ---------------------------
-
-   procedure Disable_RNG_Interrupt is
-   begin
-      RNG_Periph.CR.IE := False;
-   end Disable_RNG_Interrupt;
-
-   ---------------------------
-   -- RNG_Interrupt_Enabled --
-   ---------------------------
-
-   function RNG_Interrupt_Enabled return Boolean is
-      (RNG_Periph.CR.IE);
-
-   --------------
-   -- RNG_Data --
-   --------------
-
-   function RNG_Data return UInt32
-     is (RNG_Periph.DR);
-
-   --------------------
-   -- RNG_Data_Ready --
-   --------------------
-
-   function RNG_Data_Ready return Boolean
-     is (RNG_Periph.SR.DRDY);
-
-   ---------------------------
-   -- RNG_Seed_Error_Status --
-   ---------------------------
-
-   function RNG_Seed_Error_Status return Boolean is
-      (RNG_Periph.SR.SECS);
-
-   ----------------------------
-   -- RNG_Clock_Error_Status --
-   ----------------------------
-
-   function RNG_Clock_Error_Status return Boolean is
-      (RNG_Periph.SR.CECS);
-
-   ---------------------------------
-   -- Clear_RNG_Seed_Error_Status --
-   ---------------------------------
-
-   procedure Clear_RNG_Seed_Error_Status
+   procedure Clear_Interrupt_Pending
+     (This : in out RNG_Generator;
+      Flag : Clearable_Status_Flag)
    is
    begin
-      RNG_Periph.SR.SECS := False;
-   end Clear_RNG_Seed_Error_Status;
-
-   ----------------------------------
-   -- Clear_RNG_Clock_Error_Status --
-   ----------------------------------
-
-   procedure Clear_RNG_Clock_Error_Status
-   is
-   begin
-      RNG_Periph.SR.CECS := False;
-   end Clear_RNG_Clock_Error_Status;
+      case Flag is
+         when Clock_Error_Interrupt =>
+            This.SR.CEIS := False;
+         when Seed_Error_Interrupt =>
+            This.SR.CEIS := False;
+      end case;
+   end Clear_Interrupt_Pending;
 
 end STM32.RNG;
