@@ -45,12 +45,10 @@
 --   COPYRIGHT(c) 2015 STMicroelectronics                                   --
 ------------------------------------------------------------------------------
 
-with Ada.Real_Time;             use Ada.Real_Time;
+with Ada.Real_Time; use Ada.Real_Time;
 
-with STM32.Device;              use STM32.Device;
-
-with STM32_SVD;                 use STM32_SVD;
-with STM32_SVD.RCC;             use STM32_SVD.RCC;
+with STM32_SVD;     use STM32_SVD;
+with STM32_SVD.RCC; use STM32_SVD.RCC;
 
 package body STM32.SAI is
 
@@ -245,7 +243,7 @@ package body STM32.SAI is
       --  MCLK_x = SAI_CK_x / (MCKDIV[3:0] * 2) with MCLK_x = 256 * FS
       --  FS = SAI_CK_x / (MCKDIV[3:0] * 2) * 256
       --  MCKDIV[3:0] = SAI_CK_x / FS * 512
-      Freq := Get_Input_Clock (This);
+      Freq := STM32.Device.Get_Clock_Frequency (This);
 
       --  Calculate *10 to keep some precision
       Tmp_Clock := Freq * 10 / (Frequency * 512);

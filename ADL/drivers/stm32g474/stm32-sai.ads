@@ -47,7 +47,7 @@
 
 with STM32.Device;
 
-with STM32_SVD.SAI;             use STM32_SVD.SAI;
+private with STM32_SVD.SAI;
 
 package STM32.SAI is
 
@@ -335,19 +335,19 @@ private
 
    type Block_Registers is record
       --  AConfiguration register 1
-      CR1   : ACR1_Register;
+      CR1   : STM32_SVD.SAI.ACR1_Register;
       --  AConfiguration register 2
-      CR2   : ACR2_Register;
+      CR2   : STM32_SVD.SAI.ACR2_Register;
       --  AFRCR
-      FRCR  : AFRCR_Register;
+      FRCR  : STM32_SVD.SAI.AFRCR_Register;
       --  ASlot register
-      SLOTR : ASLOTR_Register;
+      SLOTR : STM32_SVD.SAI.ASLOTR_Register;
       --  AInterrupt mask register2
-      IM    : AIM_Register;
+      IM    : STM32_SVD.SAI.AIM_Register;
       --  AStatus register
-      SR    : ASR_Register;
+      SR    : STM32_SVD.SAI.ASR_Register;
       --  AClear flag register
-      CLRFR : ACLRFR_Register;
+      CLRFR : STM32_SVD.SAI.ACLRFR_Register;
       --  AData register
       DR    : UInt32;
    end record with Volatile;
