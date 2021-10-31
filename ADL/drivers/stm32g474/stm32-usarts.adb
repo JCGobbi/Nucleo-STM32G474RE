@@ -46,22 +46,6 @@ with STM32.Device;
 
 package body STM32.USARTs is
 
-   ---------------
-   -- APB_Clock --
-   ---------------
-
-   function APB_Clock (This : USART) return UInt32 is
-      use STM32.Device;
-      Clocks : constant RCC_System_Clocks := System_Clock_Frequencies;
-   begin
-      if This.Periph.all'Address = USART1_Base
-      then
-         return Clocks.PCLK2;
-      else
-         return Clocks.PCLK1;
-      end if;
-   end APB_Clock;
-
    ------------
    -- Enable --
    ------------
@@ -144,7 +128,7 @@ package body STM32.USARTs is
 
    procedure Set_Baud_Rate (This : in out USART; To : Baud_Rates)
    is
-      Clock        : constant UInt32 := APB_Clock (This);
+      Clock        : constant UInt32 := STM32.Device.Get_Clock_Frequency (This);
       Over_By_8    : constant Boolean := This.Periph.CR1.OVER8;
       Int_Scale    : constant UInt32 := (if Over_By_8 then 2 else 4);
       Int_Divider  : constant UInt32 := (25 * Clock) / (Int_Scale * To);

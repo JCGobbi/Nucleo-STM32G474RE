@@ -646,6 +646,20 @@ package body STM32.Device is
    --     end if;
    --  end Read_Clock_Source;
 
+   -------------------------
+   -- Get_Clock_Frequency --
+   -------------------------
+
+   function Get_Clock_Frequency (This : USART) return UInt32 is
+   begin
+      if This.Periph.all'Address = USART1_Base
+      then
+         return System_Clock_Frequencies.PCLK2;
+      else
+         return System_Clock_Frequencies.PCLK1;
+      end if;
+   end Get_Clock_Frequency;
+
    ----------------
    -- As_Port_Id --
    ----------------

@@ -296,15 +296,6 @@ package STM32.USARTs is
 
 private
 
-   function APB_Clock (This : USART) return UInt32 with Inline;
-   --  Returns either APB1 or APB2 clock rate, in Hertz, depending on the
-   --  USART. For the sake of not making this package board-specific, we assume
-   --  that we are given a valid USART object at a valid address, AND that the
-   --  USART devices really are configured such that only 1 and 6 are on APB2.
-   --  Therefore, if a board has additional USARTs beyond USART6, eg USART8 on
-   --  the F429I Discovery board, they better conform to that assumption.
-   --  See Note # 2 in each of Tables 139-141 of the RM on pages 970 - 972.
-
    type Internal_USART is new STM32_SVD.USART.USART_Peripheral;
 
    type USART (Periph : not null access Internal_USART) is

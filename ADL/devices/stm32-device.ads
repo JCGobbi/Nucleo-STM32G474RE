@@ -57,7 +57,7 @@ with STM32.ADC;      use STM32.ADC;
 with STM32.CORDIC;   use STM32.CORDIC;
 --  with STM32.FMAC;     use STM32.FMAC;
 --  with STM32.DMA;      use STM32.DMA;
---  with STM32.USARTs;   use STM32.USARTs;
+with STM32.USARTs;   use STM32.USARTs;
 --  with STM32.SPI;      use STM32.SPI;
 --  with STM32.SPI.DMA;  use STM32.SPI.DMA;
 --  with STM32.I2C;      use STM32.I2C;
@@ -418,21 +418,21 @@ package STM32.Device is
    -----------
 
    --  subtype SAI_Port is STM32_SVD.SAI.SAI_Peripheral;
-
+   --
    --  SAI_1 : SAI_Port renames STM32_SVD.SAI.SAI_Periph;
-
+   --
    --  procedure Enable_Clock (This : SAI_Port);
    --  procedure Reset (This : SAI_Port);
-
+   --
    --  type SAI_Clock_Source is (SYSCLK, PLLQ, I2S_CKIN, HSI16);
-
+   --
    --  procedure Write_Clock_Source (This   : SAI_Port;
    --                                Source : SAI_Clock_Source);
    --  Set SAI Clock Mux source.
-
+   --
    --  function Read_Clock_Source (This : SAI_Port) return SAI_Clock_Source;
    --  Return SAI Clock Mux source.
-
+   --
    --  function Get_Clock_Frequency (This : SAI_Port) return UInt32;
 
    ---------
@@ -501,32 +501,32 @@ package STM32.Device is
    -- USART --
    -----------
 
-   --  Internal_USART_1 : aliased Internal_USART
-   --    with Import, Volatile, Address => USART1_Base;
-   --  Internal_USART_2 : aliased Internal_USART
-   --    with Import, Volatile, Address => USART2_Base;
-   --  Internal_USART_3 : aliased Internal_USART
-   --    with Import, Volatile, Address => USART3_Base;
-   --  Internal_UART_1 : aliased Internal_USART
-   --    with Import, Volatile, Address => UART4_Base;
-   --  Internal_UART_2 : aliased Internal_USART
-   --    with Import, Volatile, Address => UART5_Base;
-   --  Internal_LPUART_1 : aliased Internal_USART
-   --    with Import, Volatile, Address => LPUART1_Base;
-   --
-   --  USART_1 : aliased USART (Internal_USART_1'Access);
-   --  USART_2 : aliased USART (Internal_USART_2'Access);
-   --  USART_3 : aliased USART (Internal_USART_3'Access);
-   --  USART_4 : aliased USART (Internal_UART_1'Access);
-   --  USART_5 : aliased USART (Internal_UART_2'Access);
-   --  USART_6 : aliased USART (Internal_LPUART_1'Access);
+   Internal_USART_1 : aliased Internal_USART
+     with Import, Volatile, Address => USART1_Base;
+   Internal_USART_2 : aliased Internal_USART
+       with Import, Volatile, Address => USART2_Base;
+   Internal_USART_3 : aliased Internal_USART
+     with Import, Volatile, Address => USART3_Base;
+   Internal_UART_4 : aliased Internal_USART
+     with Import, Volatile, Address => UART4_Base;
+   Internal_UART_5 : aliased Internal_USART
+     with Import, Volatile, Address => UART5_Base;
+   Internal_LPUART_1 : aliased Internal_USART
+     with Import, Volatile, Address => LPUART1_Base;
+
+   USART_1  : aliased USART (Internal_USART_1'Access);
+   USART_2  : aliased USART (Internal_USART_2'Access);
+   USART_3  : aliased USART (Internal_USART_3'Access);
+   UART_4   : aliased USART (Internal_UART_4'Access);
+   UART_5   : aliased USART (Internal_UART_5'Access);
+   LPUART_1 : aliased USART (Internal_LPUART_1'Access);
    --
    --  procedure Enable_Clock (This : aliased USART);
    --
    --  procedure Reset (This : aliased USART);
    --
    --  type USART_Clock_Source is (PCLK, SYSCLK, HSI16, LSE);
-   --  --  Option   USART1    USART2 .. USART5
+   --  --  Option   USART1    USART2345
    --  --  PCLK     PCLK2     PCLK1
    --
    --  procedure Write_Clock_Source (This   : aliased USART;
@@ -534,6 +534,10 @@ package STM32.Device is
    --
    --  function Read_Clock_Source (This : aliased USART)
    --    return USART_Clock_Source;
+
+   function Get_Clock_Frequency (This : USART) return UInt32 with Inline;
+   --  Returns USART clock frequency, in Hertz.
+
 
    ---------
    -- I2C --
