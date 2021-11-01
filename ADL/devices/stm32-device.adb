@@ -50,6 +50,9 @@ package body STM32.Device is
    LSI_VALUE : constant := 32_000;
    --  Low-Speed internal oscillator in Hz
 
+   I2SCLK : constant := 12_288_000;
+   --  I2S_CKIN external frequency
+
    HPRE_Presc_Table : constant array (UInt4) of UInt32 :=
      (1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512);
 
@@ -380,9 +383,7 @@ package body STM32.Device is
    --        when PLLQ =>
    --           VCO_Input := System_Clock_Frequencies.PLLQCLK;
    --        when I2S_CKIN =>
-   --           --  This driver doesn't support external source clock
-   --           raise Constraint_Error
-   --             with "External PLL SAI source clock unsupported";
+   --           VCO_Input := I2SCLK;
    --        when HSI16 =>
    --           VCO_Input := HSI_VALUE;
    --     end case;
@@ -948,9 +949,6 @@ package body STM32.Device is
    --  function Get_Clock_Frequency (This : I2S_Port) return UInt32 is
    --     Source : constant I2S_Clock_Source :=
    --       I2S_Clock_Source'Val (RCC_Periph.CCIPR.I2S23SEL);
-   --
-   --     --  I2S_CKIN external frequency
-   --     I2SCLK : constant UInt32 := 12_288_000;
    --  begin
    --     if This.Periph.all'Address = SPI2_Base or
    --       This.Periph.all'Address = SPI3_Base
