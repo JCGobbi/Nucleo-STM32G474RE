@@ -30,7 +30,7 @@
 ------------------------------------------------------------------------------
 
 with ADL_Config;
-with System;          use System;
+with System;          use System; --  Disable for SPI, COMP and OPAMP
 
 with STM32_SVD.RCC;   use STM32_SVD.RCC;
 with STM32_SVD.CRC;   use STM32_SVD.CRC;
@@ -650,15 +650,15 @@ package body STM32.Device is
    -- Get_Clock_Frequency --
    -------------------------
 
-   function Get_Clock_Frequency (This : USART) return UInt32 is
-   begin
-      if This.Periph.all'Address = USART1_Base
-      then
-         return System_Clock_Frequencies.PCLK2;
-      else
-         return System_Clock_Frequencies.PCLK1;
-      end if;
-   end Get_Clock_Frequency;
+   --  function Get_Clock_Frequency (This : USART) return UInt32 is
+   --  begin
+   --     if This.Periph.all'Address = USART1_Base
+   --     then
+   --        return System_Clock_Frequencies.PCLK2;
+   --     else
+   --        return System_Clock_Frequencies.PCLK1;
+   --     end if;
+   --  end Get_Clock_Frequency;
 
    ----------------
    -- As_Port_Id --
@@ -848,11 +848,13 @@ package body STM32.Device is
    --  is
    --  begin
    --     if This.Periph.all'Address = SPI1_Base or
-   --       This.Periph.all'Address = SPI2_Base or
-   --       This.Periph.all'Address = SPI3_Base or
-   --       This.Periph.all'Address = SPI4_Base
+   --        This.Periph.all'Address = SPI4_Base
    --     then
-   --        RCC_Periph.CCIPR2.QSPISEL := Source'Enum_Rep;
+   --        null;
+   --     elsif  This.Periph.all'Address = SPI2_Base or
+   --            This.Periph.all'Address = SPI3_Base
+   --     then
+   --        RCC_Periph.CCIPR.I2S23SEL := Source'Enum_Rep;
    --     else
    --        raise Unknown_Device;
    --     end if;
@@ -865,12 +867,10 @@ package body STM32.Device is
    --  function Read_Clock_Source (This : SPI_Port'Class) return SPI_Clock_Source
    --  is
    --  begin
-   --     if This.Periph.all'Address = SPI1_Base or
-   --       This.Periph.all'Address = SPI2_Base or
-   --       This.Periph.all'Address = SPI3_Base or
-   --       This.Periph.all'Address = SPI4_Base
+   --     if This.Periph.all'Address = SPI2_Base or
+   --        This.Periph.all'Address = SPI3_Base
    --     then
-   --        return SPI_Clock_Source'Val (RCC_Periph.CCIPR2.QSPISEL);
+   --        return SPI_Clock_Source'Val (RCC_Periph.CCIPR.I2S23SEL);
    --     else
    --        raise Unknown_Device;
    --     end if;

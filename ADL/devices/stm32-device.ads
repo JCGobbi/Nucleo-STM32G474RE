@@ -42,7 +42,7 @@
 --  This file provides declarations for devices on the STM32G474xx MCUs
 --  manufactured by ST Microelectronics.  For example, an STM32G474RE.
 
---  with System;         use System; --  Enable for COMP and OPAMP
+--  with System;         use System; --  Enable for SPI, COMP and OPAMP
 
 with STM32_SVD;      use STM32_SVD;
 --  with STM32_SVD.COMP; --  Enable for COMP
@@ -57,7 +57,7 @@ with STM32.ADC;      use STM32.ADC;
 with STM32.CORDIC;   use STM32.CORDIC;
 --  with STM32.FMAC;     use STM32.FMAC;
 --  with STM32.DMA;      use STM32.DMA;
-with STM32.USARTs;   use STM32.USARTs;
+--  with STM32.USARTs;   use STM32.USARTs;
 --  with STM32.SPI;      use STM32.SPI;
 --  with STM32.SPI.DMA;  use STM32.SPI.DMA;
 --  with STM32.I2C;      use STM32.I2C;
@@ -501,25 +501,25 @@ package STM32.Device is
    -- USART --
    -----------
 
-   Internal_USART_1 : aliased Internal_USART
-     with Import, Volatile, Address => USART1_Base;
-   Internal_USART_2 : aliased Internal_USART
-       with Import, Volatile, Address => USART2_Base;
-   Internal_USART_3 : aliased Internal_USART
-     with Import, Volatile, Address => USART3_Base;
-   Internal_UART_4 : aliased Internal_USART
-     with Import, Volatile, Address => UART4_Base;
-   Internal_UART_5 : aliased Internal_USART
-     with Import, Volatile, Address => UART5_Base;
-   Internal_LPUART_1 : aliased Internal_USART
-     with Import, Volatile, Address => LPUART1_Base;
+   --  Internal_USART_1 : aliased Internal_USART
+   --    with Import, Volatile, Address => USART1_Base;
+   --  Internal_USART_2 : aliased Internal_USART
+   --      with Import, Volatile, Address => USART2_Base;
+   --  Internal_USART_3 : aliased Internal_USART
+   --    with Import, Volatile, Address => USART3_Base;
+   --  Internal_UART_4 : aliased Internal_USART
+   --    with Import, Volatile, Address => UART4_Base;
+   --  Internal_UART_5 : aliased Internal_USART
+   --    with Import, Volatile, Address => UART5_Base;
+   --  Internal_LPUART_1 : aliased Internal_USART
+   --    with Import, Volatile, Address => LPUART1_Base;
 
-   USART_1  : aliased USART (Internal_USART_1'Access);
-   USART_2  : aliased USART (Internal_USART_2'Access);
-   USART_3  : aliased USART (Internal_USART_3'Access);
-   UART_4   : aliased USART (Internal_UART_4'Access);
-   UART_5   : aliased USART (Internal_UART_5'Access);
-   LPUART_1 : aliased USART (Internal_LPUART_1'Access);
+   --  USART_1  : aliased USART (Internal_USART_1'Access);
+   --  USART_2  : aliased USART (Internal_USART_2'Access);
+   --  USART_3  : aliased USART (Internal_USART_3'Access);
+   --  UART_4   : aliased USART (Internal_UART_4'Access);
+   --  UART_5   : aliased USART (Internal_UART_5'Access);
+   --  LPUART_1 : aliased USART (Internal_LPUART_1'Access);
    --
    --  procedure Enable_Clock (This : aliased USART);
    --
@@ -535,9 +535,9 @@ package STM32.Device is
    --  function Read_Clock_Source (This : aliased USART)
    --    return USART_Clock_Source;
 
-   function Get_Clock_Frequency (This : USART) return UInt32 with Inline;
+   --  function Get_Clock_Frequency (This : USART) return UInt32
+   --    with Inline;
    --  Returns USART clock frequency, in Hertz.
-
 
    ---------
    -- I2C --
@@ -612,14 +612,16 @@ package STM32.Device is
    --  procedure Enable_Clock (This : SPI_Port'Class);
    --  procedure Reset (This : SPI_Port'Class);
    --
-   --  type SPI_Clock_Source is (SYSCLK, HSI16, PLLQ);
+   --  type SPI_Clock_Source is (SYSCLK, PLLQ, I2S_CKIN, HSI16);
    --
    --  procedure Write_Clock_Source (This   : SPI_Port'Class;
-   --                                Source : SPI_Clock_Source);
-   --  --  Set QUADSPI Clock Mux source (the same source for SPI1 .. SPI4).
+   --                                Source : SPI_Clock_Source)
+   --    with Pre => This'Address = SPI2_Base or This'Address = SPI3_Base;
+   --  --  Set SPI Clock Mux source (the same source for SPI2 .. SPI3).
    --
-   --  function Read_Clock_Source (This : SPI_Port'Class) return SPI_Clock_Source;
-   --  --  Return QUADSPI Clock Mux source.
+   --  function Read_Clock_Source (This : SPI_Port'Class) return SPI_Clock_Source
+   --    with Pre => This'Address = SPI2_Base or This'Address = SPI3_Base;
+   --  --  Return SPI Clock Mux source.
 
    ---------
    -- I2S --
