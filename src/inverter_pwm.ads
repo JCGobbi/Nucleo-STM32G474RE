@@ -47,15 +47,15 @@ package Inverter_PWM is
 
    PWM_Frequency_Hz : Frequency_Hz := 30_000.0; -- for 60 Hz
 
-   --  STM32F334 operates at 72 MHz with 72 or 144 MHz into Prescaler.
-   --  With 144 MHz and (12 - 1) for prescaler we have 12 MHz for counter
-   --  period, that have values of 480, 400 and 60 for 25, 30 and 200 KHz.
-   --  For 50 Hz we have 144 MHz / 25 kHz = 5760 ticks by each 25 kHz period,
-   --  so the minimum duty cycle is 100 / 5760 = 0.0174 %.
-   --  For 60 Hz we have 144 MHz / 30 kHz = 4800 ticks by each 30 kHz period,
-   --  so the minimum duty cycle is 100 / 4800 = 0.0208 %.
-   --  For 400 Hz we have 144 MHz / 200 kHz = 720 ticks by each 200 kHz period,
-   --  so the minimum duty cycle is 100 / 720 = 0.139 %.
+   --  Actually the STM32G474 operates at 170 MHz with 170 MHz into Prescaler.
+   --  To get exact divisor values for the frequencies, it must operate with a
+   --  multiple of 25, 30 and 200 kHz, like 162 MHz or 150 MHz. To do this, the
+   --  value of PLLN in the RCC_PLLCFGR, that actually is 85, must be changed
+   --  to 81 for 162 MHz or 75 for 150 MHz.
+   --  With 162 MHz and (10 - 1) for prescaler we have 16.2 MHz for counter
+   --  period, that have values of 648, 540 and 81 for 25, 30 and 200 KHz.
+   --  With 150 MHz and (10 - 1) for prescaler we have 15 MHz for counter
+   --  period, that have values of 600, 500 and 75 for 25, 30 and 200 KHz.
 
    subtype Deadtime_Range is Float range 0.0 .. 400.0e-9;
    --  Maximum deadtime permissible is 126 us.
@@ -63,8 +63,7 @@ package Inverter_PWM is
    PWM_Deadtime : constant Deadtime_Range := 166.7e-9;
    --  The delay exists in the rising edges.
    --  It depends on the electronic circuit rise and fall times.
-   --  166.7e-9 * 30 kHz * 100 = 0.5% of the total period,
-   --  0.5% of 2800 ticks = 14 ticks.
+   --  166.7e-9 * 30 kHz * 100 = 0.5% of the total period.
 
    subtype Sine_Step_Range is Natural range 1 .. 250;
    --  Number of steps for the half sine table.
