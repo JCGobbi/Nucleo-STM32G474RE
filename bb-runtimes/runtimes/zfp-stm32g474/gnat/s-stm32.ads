@@ -134,10 +134,10 @@ package System.STM32 is
       Value   at 0 range 0 .. 1;
    end record;
 
-   type MCO_Clock_Selection is
+   type MCO_Clock_Source is
      (MCOSEL_Disabled,
       MCOSEL_SYSCLK,
-      MCOSEL_HSI16,
+      MCOSEL_HSI,
       MCOSEL_HSE,
       MCOSEL_PLL,
       MCOSEL_LSI,
@@ -145,10 +145,10 @@ package System.STM32 is
       MCOSEL_HSI48)
      with Size => 4;
 
-   for MCO_Clock_Selection use
+   for MCO_Clock_Source use
      (MCOSEL_Disabled => 2#0000#,
       MCOSEL_SYSCLK   => 2#0001#,
-      MCOSEL_HSI16    => 2#0011#,
+      MCOSEL_HSI      => 2#0011#,
       MCOSEL_HSE      => 2#0100#,
       MCOSEL_PLL      => 2#0101#,
       MCOSEL_LSI      => 2#0110#,

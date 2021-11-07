@@ -1354,12 +1354,12 @@ package STM32_SVD.RCC is
       Reserved_10_14 : HAL.UInt5 := 16#0#;
       --  RTC clock enable
       RTCEN          : Boolean := False;
-      --  Vswitch domain software reset
-      VSWRST         : Boolean := False;
+      --  BDRST domain software reset
+      BDRST          : Boolean := False;
       --  unspecified
       Reserved_17_23 : HAL.UInt7 := 16#0#;
       --  Low speed clock output enable
-      LSCCOEN        : Boolean := False;
+      LSCOEN         : Boolean := False;
       --  Low speed clock output selection
       LSCOSEL        : Boolean := False;
       --  unspecified
@@ -1379,9 +1379,9 @@ package STM32_SVD.RCC is
       RTCSEL         at 0 range 8 .. 9;
       Reserved_10_14 at 0 range 10 .. 14;
       RTCEN          at 0 range 15 .. 15;
-      VSWRST         at 0 range 16 .. 16;
+      BDRST          at 0 range 16 .. 16;
       Reserved_17_23 at 0 range 17 .. 23;
-      LSCCOEN        at 0 range 24 .. 24;
+      LSCOEN         at 0 range 24 .. 24;
       LSCOSEL        at 0 range 25 .. 25;
       Reserved_26_31 at 0 range 26 .. 31;
    end record;
@@ -1431,18 +1431,18 @@ package STM32_SVD.RCC is
       LPWRSTF        at 0 range 31 .. 31;
    end record;
 
-   subtype CRRCR_RC48CAL_Field is HAL.UInt9;
+   subtype CRRCR_HSI48CAL_Field is HAL.UInt9;
 
    --  Clock recovery RC register
    type CRRCR_Register is record
       --  HSI48 clock enable
-      RC48ON         : Boolean := False;
+      HSI48ON        : Boolean := False;
       --  Read-only. HSI48 clock ready flag
-      RC48RDY        : Boolean := False;
+      HSI48RDY       : Boolean := False;
       --  unspecified
       Reserved_2_6   : HAL.UInt5 := 16#0#;
       --  Read-only. HSI48 clock calibration
-      RC48CAL        : CRRCR_RC48CAL_Field := 16#0#;
+      HSI48CAL       : CRRCR_HSI48CAL_Field := 16#0#;
       --  unspecified
       Reserved_16_31 : HAL.UInt16 := 16#0#;
    end record
@@ -1450,10 +1450,10 @@ package STM32_SVD.RCC is
           Bit_Order => System.Low_Order_First;
 
    for CRRCR_Register use record
-      RC48ON         at 0 range 0 .. 0;
-      RC48RDY        at 0 range 1 .. 1;
+      HSI48ON        at 0 range 0 .. 0;
+      HSI48RDY       at 0 range 1 .. 1;
       Reserved_2_6   at 0 range 2 .. 6;
-      RC48CAL        at 0 range 7 .. 15;
+      HSI48CAL       at 0 range 7 .. 15;
       Reserved_16_31 at 0 range 16 .. 31;
    end record;
 

@@ -25,9 +25,9 @@ U ada.strings%s		a-string.ads		e6d4fa36 NE OL PU PK
 W ada%s			ada.ads			ada.ali
 Z system%s		system.ads		system.ali
 
-D ada.ads		20210828210331 76789da1 ada%s
-D a-string.ads		20210828210331 90ac6797 ada.strings%s
-D system.ads		20210828210331 5ad4ef55 system%s
+D ada.ads		20211107195435 76789da1 ada%s
+D a-string.ads		20211107195436 90ac6797 ada.strings%s
+D system.ads		20211107195436 5ad4ef55 system%s
 G a e
 X 1 ada.ads
 16K9*Ada 20e8 2|16r9 35r5

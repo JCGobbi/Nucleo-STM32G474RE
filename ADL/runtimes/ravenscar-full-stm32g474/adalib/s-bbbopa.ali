@@ -22,23 +22,23 @@ RN
 RV NO_IMPLEMENTATION_PRAGMAS
 RR NO_ELABORATION_CODE
 
-U system.bb.board_parameters%s  s-bbbopa.ads	d4fa2a2a NE OL PU PK
+U system.bb.board_parameters%s  s-bbbopa.ads	84b08d2d NE OL PU PK
 W system.bb%s		s-bb.ads		s-bb.ali
 
-D system.ads		20210828210331 5ad4ef55 system%s
-D s-bb.ads		20210828210331 09e072ae system.bb%s
-D s-bbbopa.ads		20210828210331 dd1a5884 system.bb.board_parameters%s
+D system.ads		20211107195436 5ad4ef55 system%s
+D s-bb.ads		20211107195435 09e072ae system.bb%s
+D s-bbbopa.ads		20211107195436 8d50ff83 system.bb.board_parameters%s
 G a e
 X 1 system.ads
-50K9*System 164e11 3|37r9 62r5
+50K9*System 164e11 3|35r9 60r5
 X 2 s-bb.ads
-40K16*BB 1|50k9 2|95e14 3|37r16 62r12
+40K16*BB 1|50k9 2|95e14 3|35r16 60r12
 X 3 s-bbbopa.ads
-37K19*Board_Parameters 2|40k16 3|62l15 62e31
-45N4*Main_Clock_Frequency
-51N4*HSE_Clock_Frequency
-53N4*LSE_Clock_Frequency
-55N4*HSI_Clock_Frequency
-57N4*HSI48_Clock_Frequency
-59N4*LSI_Clock_Frequency
+35K19*Board_Parameters 2|40k16 3|60l15 60e31
+43N4*Main_Clock_Frequency
+49N4*HSE_Clock_Frequency
+51N4*LSE_Clock_Frequency
+53N4*HSI_Clock_Frequency
+55N4*HSI48_Clock_Frequency
+57N4*LSI_Clock_Frequency
 

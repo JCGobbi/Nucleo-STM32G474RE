@@ -47,13 +47,7 @@ package Inverter_PWM is
 
    PWM_Frequency_Hz : Frequency_Hz := 30_000.0; -- for 60 Hz
 
-   --  Actually the STM32G474 operates at 170 MHz with 170 MHz into Prescaler.
-   --  To get exact divisor values for the frequencies, it must operate with a
-   --  multiple of 25, 30 and 200 kHz, like 162 MHz or 150 MHz. To do this, the
-   --  value of PLLN in the RCC_PLLCFGR, that actually is 85, must be changed
-   --  to 81 for 162 MHz or 75 for 150 MHz.
-   --  With 162 MHz and (10 - 1) for prescaler we have 16.2 MHz for counter
-   --  period, that have values of 648, 540 and 81 for 25, 30 and 200 KHz.
+   --  Actually the STM32G474 operates at 150 MHz with 150 MHz into Prescaler.
    --  With 150 MHz and (10 - 1) for prescaler we have 15 MHz for counter
    --  period, that have values of 600, 500 and 75 for 25, 30 and 200 KHz.
 

@@ -50,8 +50,8 @@ __vectors:
 	.word __gnat_irq_trap        /* 34 ADC1_2 */
 	.word __gnat_irq_trap        /* 35 USB_HP */
 	.word __gnat_irq_trap        /* 36 USB_LP */
-	.word __gnat_irq_trap        /* 37 fdcan1_intr1_it */
-	.word __gnat_irq_trap        /* 38 fdcan1_intr0_it */
+	.word __gnat_irq_trap        /* 37 FDCAN1_intr1_it */
+	.word __gnat_irq_trap        /* 38 FDCAN1_intr0_it */
 	.word __gnat_irq_trap        /* 39 EXTI9_5 */
 	.word __gnat_irq_trap        /* 40 TIM1_BRK_TIM15 */
 	.word __gnat_irq_trap        /* 41 TIM1_UP_TIM16 */

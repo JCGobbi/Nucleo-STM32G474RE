@@ -32,7 +32,7 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with Interfaces.STM32.PWR; use Interfaces.STM32.PWR;
+with Interfaces.STM32.PWR; use Interfaces.STM32, Interfaces.STM32.PWR;
 
 package body System.BB.MCU_Parameters is
 
@@ -82,9 +82,16 @@ package body System.BB.MCU_Parameters is
       --  Range 1 boost mode (R1MODE = 0) when SYSCLK ≤ 170 MHz.
       --  Range 1 normal mode (R1MODE = 1) when SYSCLK ≤ 150 MHz.
       --  See RM0440 ver. 4 pg. 235 chapter 6.1.5 for other modes.
+      if PWR_Periph.CR1.VOS = 2 then --  Range 2
+         PWR_Periph.CR1.VOS := 1; --  put in Range 1
+         --  Wait for stabilization
+         loop
+            exit when PWR_Periph.SR2.VOSF = 0;
+         end loop;
+      end if;
+
       PWR_Periph.CR5.R1MODE := 0;
       --  Main regulator in range 1 boost mode.
-
       --  Wait for stabilization
       loop
          exit when PWR_Periph.SR2.VOSF = 0;

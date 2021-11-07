@@ -24,10 +24,10 @@ RV NO_IMPLEMENTATION_PRAGMAS
 U ada.characters.wide_latin_1%s  a-cwila1.ads	6265e28a NE OL PU PK
 W ada.characters%s	a-charac.ads		a-charac.ali
 
-D ada.ads		20210828210331 76789da1 ada%s
-D a-charac.ads		20210828210331 2d3ec45b ada.characters%s
-D a-cwila1.ads		20210828210331 4f5b26d1 ada.characters.wide_latin_1%s
-D system.ads		20210828210331 5ad4ef55 system%s
+D ada.ads		20211107195435 76789da1 ada%s
+D a-charac.ads		20211107195436 2d3ec45b ada.characters%s
+D a-cwila1.ads		20211107195436 4f5b26d1 ada.characters.wide_latin_1%s
+D system.ads		20211107195436 5ad4ef55 system%s
 G a e
 X 1 ada.ads
 16K9*Ada 20e8 3|37r9 322r5

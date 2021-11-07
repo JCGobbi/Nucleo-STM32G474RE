@@ -28,10 +28,10 @@ W ada%s			ada.ads			ada.ali
 U ada.decimal%s		a-decima.ads		5f00330f BN NE OL PU PK
 W ada%s			ada.ads			ada.ali
 
-D ada.ads		20210828210331 76789da1 ada%s
-D a-decima.ads		20210828210331 2978aeae ada.decimal%s
-D a-decima.adb		20210828210331 9ed0caf0 ada.decimal%b
-D system.ads		20210828210331 5ad4ef55 system%s
+D ada.ads		20211107195435 76789da1 ada%s
+D a-decima.ads		20211107195436 2978aeae ada.decimal%s
+D a-decima.adb		20211107195436 9ed0caf0 ada.decimal%b
+D system.ads		20211107195436 5ad4ef55 system%s
 G a e
 X 1 ada.ads
 16K9*Ada 20e8 2|36r9 67r5 3|32r14 60r5

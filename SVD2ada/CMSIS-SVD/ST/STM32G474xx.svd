@@ -574,7 +574,7 @@
                   </field>
                   <field>
                      <name>SADD</name>
-                     <description>Slave address bit (master               mode)</description>
+                     <description>Slave address (master               mode)</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>10</bitWidth>
                   </field>
@@ -3712,15 +3712,15 @@
                      <access>read-write</access>
                   </field>
                   <field>
-                     <name>LSCCOEN</name>
+                     <name>LSCOEN</name>
                      <description>Low speed clock output enable</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-write</access>
                   </field>
                   <field>
-                     <name>VSWRST</name>
-                     <description>Vswitch domain software reset</description>
+                     <name>BDRST</name>
+                     <description>BDRST domain software reset</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-write</access>
@@ -3872,21 +3872,21 @@
                <resetValue>0x00000000</resetValue>
                <fields>
                   <field>
-                     <name>RC48ON</name>
+                     <name>HSI48ON</name>
                      <description>HSI48 clock enable</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-write</access>
                   </field>
                   <field>
-                     <name>RC48RDY</name>
+                     <name>HSI48RDY</name>
                      <description>HSI48 clock ready flag</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                   </field>
                   <field>
-                     <name>RC48CAL</name>
+                     <name>HSI48CAL</name>
                      <description>HSI48 clock calibration</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>9</bitWidth>

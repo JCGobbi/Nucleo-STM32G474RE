@@ -235,11 +235,8 @@ procedure Setup_Pll is
          RCC_Periph.PLLCFGR :=
            (PLLM    => PLLM,
             PLLN    => PLLN,
-            PLLPEN  => 1,
             PLLPDIV => PLLP,
-            PLLQEN  => 1,
             PLLQ    => PLLQ,
-            PLLREN  => 1,
             PLLR    => PLLR,
             PLLSRC  => (if HSE_Enabled
                         then PLL_Source'Enum_Rep (PLL_SRC_HSE)
@@ -251,6 +248,10 @@ procedure Setup_Pll is
          loop
             exit when RCC_Periph.CR.PLLRDY = 1;
          end loop;
+
+         RCC_Periph.PLLCFGR.PLLPEN := 1;
+         RCC_Periph.PLLCFGR.PLLQEN := 1;
+         RCC_Periph.PLLCFGR.PLLREN := 1;
       end if;
 
       --  Configure flash
@@ -294,7 +295,7 @@ procedure Setup_Pll is
                     Arr      => (1 => To_APB (APB1_PRE),
                                  2 => To_APB (APB2_PRE))),
          --  Microcontroller clock output
-         MCOSEL => MCO_Clock_Selection'Enum_Rep (MCOSEL_HSI16),
+         MCOSEL => MCO_Clock_Source'Enum_Rep (MCOSEL_HSI),
          MCOPRE => MCO_Prescaler'Enum_Rep (MCOPRE_DIV1),
          others => <>);
 

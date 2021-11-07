@@ -36,8 +36,6 @@
 
 --  This package defines basic parameters used by the low level tasking system
 
---  This is the STM32F40x (ARMv7) version of this package
-
 with System.STM32;
 with System.BB.Board_Parameters;
 with System.BB.MCU_Parameters;

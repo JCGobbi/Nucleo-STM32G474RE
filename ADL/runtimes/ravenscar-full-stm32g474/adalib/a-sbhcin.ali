@@ -32,19 +32,19 @@ W ada%s			ada.ads			ada.ali
 W ada.containers%s	a-contai.ads		a-contai.ali
 W ada.strings.bounded%s	a-strbou.adb		a-strbou.ali
 
-D ada.ads		20210828210331 76789da1 ada%s
-D a-charac.ads		20210828210331 2d3ec45b ada.characters%s
-D a-chlat1.ads		20210828210331 66457d31 ada.characters.latin_1%s
-D a-contai.ads		20210828210331 61e5e089 ada.containers%s
-D a-string.ads		20210828210331 90ac6797 ada.strings%s
-D a-strbou.ads		20210828210331 84c37afd ada.strings.bounded%s
-D a-sbhcin.ads		20210828210331 5719f5d4 ada.strings.bounded.hash_case_insensitive%s
-D a-sbhcin.adb		20210828210331 ccfff4fd ada.strings.bounded.hash_case_insensitive%b
-D a-shcain.ads		20210828210331 08af52df ada.strings.hash_case_insensitive%s
-D a-strmap.ads		20210828210331 5a88892a ada.strings.maps%s
-D a-strsup.ads		20210828210331 a27dcb33 ada.strings.superbounded%s
-D system.ads		20210828210331 5ad4ef55 system%s
-D s-unstyp.ads		20210828210331 2b077493 system.unsigned_types%s
+D ada.ads		20211107195435 76789da1 ada%s
+D a-charac.ads		20211107195436 2d3ec45b ada.characters%s
+D a-chlat1.ads		20211107195436 66457d31 ada.characters.latin_1%s
+D a-contai.ads		20211107195436 61e5e089 ada.containers%s
+D a-string.ads		20211107195436 90ac6797 ada.strings%s
+D a-strbou.ads		20211107195436 84c37afd ada.strings.bounded%s
+D a-sbhcin.ads		20211107195436 5719f5d4 ada.strings.bounded.hash_case_insensitive%s
+D a-sbhcin.adb		20211107195436 ccfff4fd ada.strings.bounded.hash_case_insensitive%b
+D a-shcain.ads		20211107195436 08af52df ada.strings.hash_case_insensitive%s
+D a-strmap.ads		20211107195436 5a88892a ada.strings.maps%s
+D a-strsup.ads		20211107195436 a27dcb33 ada.strings.superbounded%s
+D system.ads		20211107195436 5ad4ef55 system%s
+D s-unstyp.ads		20211107195435 2b077493 system.unsigned_types%s
 G a e
 G c Z s b [hash_case_insensitive ada__strings__bounded 40 30 none]
 X 1 ada.ads

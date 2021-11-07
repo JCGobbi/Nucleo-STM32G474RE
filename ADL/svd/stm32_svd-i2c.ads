@@ -96,7 +96,7 @@ package STM32_SVD.I2C is
 
    --  Control register 2
    type CR2_Register is record
-      --  Slave address bit (master mode)
+      --  Slave address (master mode)
       SADD           : CR2_SADD_Field := 16#0#;
       --  Transfer direction (master mode)
       RD_WRN         : Boolean := False;

@@ -1582,8 +1582,8 @@ package Interfaces.STM32.RCC is
    subtype BDCR_LSECSSD_Field is Interfaces.STM32.Bit;
    subtype BDCR_RTCSEL_Field is Interfaces.STM32.UInt2;
    subtype BDCR_RTCEN_Field is Interfaces.STM32.Bit;
-   subtype BDCR_VSWRST_Field is Interfaces.STM32.Bit;
-   subtype BDCR_LSCCOEN_Field is Interfaces.STM32.Bit;
+   subtype BDCR_BDRST_Field is Interfaces.STM32.Bit;
+   subtype BDCR_LSCOEN_Field is Interfaces.STM32.Bit;
    subtype BDCR_LSCOSEL_Field is Interfaces.STM32.Bit;
 
    --  BDCR
@@ -1608,12 +1608,12 @@ package Interfaces.STM32.RCC is
       Reserved_10_14 : Interfaces.STM32.UInt5 := 16#0#;
       --  RTC clock enable
       RTCEN          : BDCR_RTCEN_Field := 16#0#;
-      --  Vswitch domain software reset
-      VSWRST         : BDCR_VSWRST_Field := 16#0#;
+      --  BDRST domain software reset
+      BDRST          : BDCR_BDRST_Field := 16#0#;
       --  unspecified
       Reserved_17_23 : Interfaces.STM32.UInt7 := 16#0#;
       --  Low speed clock output enable
-      LSCCOEN        : BDCR_LSCCOEN_Field := 16#0#;
+      LSCOEN         : BDCR_LSCOEN_Field := 16#0#;
       --  Low speed clock output selection
       LSCOSEL        : BDCR_LSCOSEL_Field := 16#0#;
       --  unspecified
@@ -1633,9 +1633,9 @@ package Interfaces.STM32.RCC is
       RTCSEL         at 0 range 8 .. 9;
       Reserved_10_14 at 0 range 10 .. 14;
       RTCEN          at 0 range 15 .. 15;
-      VSWRST         at 0 range 16 .. 16;
+      BDRST          at 0 range 16 .. 16;
       Reserved_17_23 at 0 range 17 .. 23;
-      LSCCOEN        at 0 range 24 .. 24;
+      LSCOEN         at 0 range 24 .. 24;
       LSCOSEL        at 0 range 25 .. 25;
       Reserved_26_31 at 0 range 26 .. 31;
    end record;
@@ -1696,20 +1696,20 @@ package Interfaces.STM32.RCC is
       LPWRSTF        at 0 range 31 .. 31;
    end record;
 
-   subtype CRRCR_RC48ON_Field is Interfaces.STM32.Bit;
-   subtype CRRCR_RC48RDY_Field is Interfaces.STM32.Bit;
-   subtype CRRCR_RC48CAL_Field is Interfaces.STM32.UInt9;
+   subtype CRRCR_HSI48ON_Field is Interfaces.STM32.Bit;
+   subtype CRRCR_HSI48RDY_Field is Interfaces.STM32.Bit;
+   subtype CRRCR_HSI48CAL_Field is Interfaces.STM32.UInt9;
 
    --  Clock recovery RC register
    type CRRCR_Register is record
       --  HSI48 clock enable
-      RC48ON         : CRRCR_RC48ON_Field := 16#0#;
+      HSI48ON        : CRRCR_HSI48ON_Field := 16#0#;
       --  Read-only. HSI48 clock ready flag
-      RC48RDY        : CRRCR_RC48RDY_Field := 16#0#;
+      HSI48RDY       : CRRCR_HSI48RDY_Field := 16#0#;
       --  unspecified
       Reserved_2_6   : Interfaces.STM32.UInt5 := 16#0#;
       --  Read-only. HSI48 clock calibration
-      RC48CAL        : CRRCR_RC48CAL_Field := 16#0#;
+      HSI48CAL       : CRRCR_HSI48CAL_Field := 16#0#;
       --  unspecified
       Reserved_16_31 : Interfaces.STM32.UInt16 := 16#0#;
    end record
@@ -1717,10 +1717,10 @@ package Interfaces.STM32.RCC is
           Bit_Order => System.Low_Order_First;
 
    for CRRCR_Register use record
-      RC48ON         at 0 range 0 .. 0;
-      RC48RDY        at 0 range 1 .. 1;
+      HSI48ON        at 0 range 0 .. 0;
+      HSI48RDY       at 0 range 1 .. 1;
       Reserved_2_6   at 0 range 2 .. 6;
-      RC48CAL        at 0 range 7 .. 15;
+      HSI48CAL       at 0 range 7 .. 15;
       Reserved_16_31 at 0 range 16 .. 31;
    end record;
 

@@ -32,8 +32,6 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
---  This package defines board parameters for the STM32F334 board
-
 package System.BB.Board_Parameters is
    pragma No_Elaboration_Code_All;
    pragma Pure;
@@ -42,9 +40,9 @@ package System.BB.Board_Parameters is
    -- Hardware clock --
    --------------------
 
-   Main_Clock_Frequency : constant := 170_000_000;
-   --  With 24 MHz HSE clock + PLL use 170 MHz,
-   --  with 16 MHz HSI clock + PLL use 170 MHz,
+   Main_Clock_Frequency : constant := 150_000_000;
+   --  With 24 MHz HSE clock + PLL use 150 MHz,
+   --  with 16 MHz HSI clock + PLL use 150 MHz,
    --  with 24 MHz HSE clock - PLL use 24 MHz,
    --  with 16 MHz HSI clock - PLL use 16 MHz.
 
