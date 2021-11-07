@@ -142,7 +142,7 @@ package body STM32.I2S is
    is
       use STM32.Device;
 
-      I2SCLK       : constant UInt32 := Get_Clock_Source (This);
+      I2SCLK       : constant UInt32 := Get_Clock_Frequency (This);
       Real_Divider : UInt32;
       Packet_Len   : constant UInt32 := (if This.Periph.I2SCFGR.DATLEN = 0
                                          then 1 else 2);
