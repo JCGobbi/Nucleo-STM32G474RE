@@ -661,6 +661,25 @@ package STM32.Device is
 
    RTC : aliased RTC_Device;
 
+   procedure Enable_Clock (This : RTC_Device);
+
+   type RTC_Clock_Source is (No_Clock, LSE, LSI, HSE)
+     with Size => 2;
+
+   procedure Write_Clock_Source
+     (This       : RTC_Device;
+      Source     : RTC_Clock_Source)
+     with Post => Source = Read_Clock_Source (This);
+   --  Set RTC Clock Mux source. Once the RTC clock source has been selected,
+   --  it cannot be changed anymore unless the RTC domain is reset, or unless
+   --  a failure is detected on LSE (LSECSSD is set). The BDRST bit can be used
+   --  to reset them.
+   --  The HSE clock is divided by 32 before entering the RTC to assure it is
+   --  < 1 MHz.
+
+   function Read_Clock_Source (This : RTC_Device) return RTC_Clock_Source;
+   --  Return RTC Clock Mux source.
+
    -----------
    -- Timer --
    -----------
