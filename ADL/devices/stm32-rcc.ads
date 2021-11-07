@@ -126,9 +126,9 @@ package STM32.RCC is
 
    procedure Configure_System_Clock_Mux (Source : SYSCLK_Source);
 
-   -------------------------------
-   -- Domains 1, 2 and 3 Clocks --
-   -------------------------------
+   ------------------------
+   -- AHB and APB Clocks --
+   ------------------------
 
    type AHB_Prescaler_Enum is
      (DIV2,  DIV4,   DIV8,   DIV16,
@@ -182,13 +182,17 @@ package STM32.RCC is
    ----------------
 
    type PLL_Source is
-     (PLL_SRC_HSI,
+     (PLL_No_Source_PWR_OFF,
+      PLL_No_Source,
+      PLL_SRC_HSI,
       PLL_SRC_HSE)
      with Size => 2;
 
    for PLL_Source use
-     (PLL_SRC_HSI   => 2#10#,
-      PLL_SRC_HSE   => 2#11#);
+     (PLL_No_Source_PWR_OFF => 2#00#,
+      PLL_No_Source         => 2#01#,
+      PLL_SRC_HSI           => 2#10#,
+      PLL_SRC_HSE           => 2#11#);
 
    procedure Configure_PLL_Source_Mux (Source : PLL_Source);
 

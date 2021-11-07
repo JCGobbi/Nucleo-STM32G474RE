@@ -35,16 +35,21 @@ with STM32_SVD.RCC;   use STM32_SVD.RCC;
 with STM32_SVD.CRC;   use STM32_SVD.CRC;
 with STM32_SVD.LPTIM; use STM32_SVD.LPTIM;
 
+with STM32.RCC;       use STM32.RCC;
+
 package body STM32.Device is
 
    HSE_VALUE : constant := 24_000_000;
    --  High-Speed external oscillator in Hz
 
+   LSE_VALUE : constant := 32_768;
+   --  Low-Speed external oscillator in Hz
+
    HSI_VALUE : constant := 16_000_000;
    --  High-Speed internal oscillator in Hz
 
-   LSE_VALUE : constant := 32_768;
-   --  Low-Speed external oscillator in Hz
+   --  HSI48_VALUE : constant := 48_000_000;
+   --  High-Speed internal 48 MHz oscillator in Hz
 
    LSI_VALUE : constant := 32_000;
    --  Low-Speed internal oscillator in Hz

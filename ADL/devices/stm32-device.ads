@@ -838,26 +838,6 @@ package STM32.Device is
       PLLQCLK : UInt32; --  PLLQ
    end record;
 
-   --  RCC constants
-
-   type PLL_Source is
-     (PLL_No_Source_PWR_OFF,
-      PLL_No_Source,
-      PLL_SRC_HSI,
-      PLL_SRC_HSE)
-     with Size => 2;
-
-   type SYSCLK_Source is
-     (SYSCLK_SRC_HSI,
-      SYSCLK_SRC_HSE,
-      SYSCLK_SRC_PLL)
-     with Size => 2;
-
-   for SYSCLK_Source use
-     (SYSCLK_SRC_HSI => 2#01#,
-      SYSCLK_SRC_HSE => 2#10#,
-      SYSCLK_SRC_PLL => 2#11#);
-
    function System_Clock_Frequencies return RCC_System_Clocks;
    --  Returns each RCC system clock frequency in Hz.
 
