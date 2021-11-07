@@ -29,7 +29,6 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with ADL_Config;
 --  with System;          use System; --  Disable for SPI, COMP and OPAMP
 
 with STM32_SVD.RCC;   use STM32_SVD.RCC;
@@ -38,7 +37,7 @@ with STM32_SVD.LPTIM; use STM32_SVD.LPTIM;
 
 package body STM32.Device is
 
-   HSE_VALUE : constant := ADL_Config.High_Speed_External_Clock;
+   HSE_VALUE : constant := 24_000_000;
    --  High-Speed external oscillator in Hz
 
    HSI_VALUE : constant := 16_000_000;
