@@ -380,8 +380,8 @@ package STM32.Device is
 
    type ADC_Clock_Source is (SYSCLK, PLLP);
 
-   procedure Write_Clock_Source (This   : Analog_To_Digital_Converter;
-                                 Source : ADC_Clock_Source);
+   procedure Select_Clock_Source (This   : Analog_To_Digital_Converter;
+                                  Source : ADC_Clock_Source);
    --  Set ADC12 or ADC345 Clock Mux Source.
 
    function Read_Clock_Source (This : Analog_To_Digital_Converter)
@@ -426,8 +426,8 @@ package STM32.Device is
 
    type SAI_Clock_Source is (SYSCLK, PLLQ, I2S_CKIN, HSI16);
 
-   procedure Write_Clock_Source (This   : SAI_Port;
-                                 Source : SAI_Clock_Source);
+   procedure Select_Clock_Source (This   : SAI_Port;
+                                  Source : SAI_Clock_Source);
    --  Set SAI Clock Mux source.
 
    function Read_Clock_Source (This : SAI_Port) return SAI_Clock_Source;
@@ -529,8 +529,8 @@ package STM32.Device is
    --  Option   USART1    USART2345
    --  PCLK     PCLK2     PCLK1
 
-   procedure Write_Clock_Source (This   : aliased USART;
-                                 Source : USART_Clock_Source);
+   procedure Select_Clock_Source (This   : aliased USART;
+                                  Source : USART_Clock_Source);
 
    function Read_Clock_Source (This : aliased USART)
      return USART_Clock_Source;
@@ -574,11 +574,11 @@ package STM32.Device is
 
    type I2C_Clock_Source is (PCLK, SYSCLK, HSI16);
 
-   procedure Write_Clock_Source (This   : I2C_Port'Class;
-                                 Source : I2C_Clock_Source);
+   procedure Select_Clock_Source (This   : I2C_Port'Class;
+                                  Source : I2C_Clock_Source);
 
-   procedure Write_Clock_Source (This   : I2C_Port_Id;
-                                 Source : I2C_Clock_Source);
+   procedure Select_Clock_Source (This   : I2C_Port_Id;
+                                  Source : I2C_Clock_Source);
    --  Set I2C Clock Mux source.
 
    function Read_Clock_Source (This : I2C_Port'Class) return I2C_Clock_Source;
@@ -614,9 +614,10 @@ package STM32.Device is
 
    type SPI_Clock_Source is (SYSCLK, PLLQ, I2S_CKIN, HSI16);
 
-   procedure Write_Clock_Source (This   : SPI_Port'Class;
-                                 Source : SPI_Clock_Source)
-     with Pre => This'Address = SPI2_Base or This'Address = SPI3_Base;
+   procedure Select_Clock_Source (This   : SPI_Port'Class;
+                                  Source : SPI_Clock_Source)
+     with Pre => This'Address = SPI2_Base or This'Address = SPI3_Base,
+          Post => Read_Clock_Source (This) = Source;
    --  Set SPI Clock Mux source (the same source for SPI2 .. SPI3).
 
    function Read_Clock_Source (This : SPI_Port'Class) return SPI_Clock_Source
@@ -645,8 +646,9 @@ package STM32.Device is
 
    type I2S_Clock_Source is (SYSCLK, PLLQ, I2S_CKIN, HSI16);
 
-   procedure Write_Clock_Source (This   : I2S_Port'Class;
-                                 Source : I2S_Clock_Source);
+   procedure Select_Clock_Source (This   : I2S_Port'Class;
+                                  Source : I2S_Clock_Source)
+     with Post => Read_Clock_Source (This) = Source;
    --  Set I2S Clock Mux source (the same source for I2S2 .. I2S3).
 
    function Read_Clock_Source (This : I2S_Port'Class) return I2S_Clock_Source;
@@ -666,10 +668,10 @@ package STM32.Device is
    type RTC_Clock_Source is (No_Clock, LSE, LSI, HSE)
      with Size => 2;
 
-   procedure Write_Clock_Source
+   procedure Select_Clock_Source
      (This       : RTC_Device;
       Source     : RTC_Clock_Source)
-     with Post => Source = Read_Clock_Source (This);
+     with Post => Read_Clock_Source (This) = Source;
    --  Set RTC Clock Mux source. Once the RTC clock source has been selected,
    --  it cannot be changed anymore unless the RTC domain is reset, or unless
    --  a failure is detected on LSE (LSECSSD is set). The BDRST bit can be used
@@ -727,8 +729,8 @@ package STM32.Device is
       Clock    at 0 range 0 .. 1;
    end record;
 
-   procedure Write_Clock_Source (This   : LPTimer;
-                                 Source : LPTimer_Clock_Source);
+   procedure Select_Clock_Source (This   : LPTimer;
+                                  Source : LPTimer_Clock_Source);
    --  Set clock to any internal LPTIM Clock Mux source or external through
    --  Input1.
 
