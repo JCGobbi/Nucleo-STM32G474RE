@@ -64,6 +64,8 @@ begin
 
       Angle : Fraction_32 := 0.0;
       Modulus : constant UInt32 := 16#7FFFFFFF#; --  1 - 2**(-31)
+      --  For sine function, the first argument is the angle, while the second
+      --  argument is the modulus, that in this case doesn't change.
       Data_In : Block_32 := (0, Modulus);
       Data_Out : Block_32 := (0, 0);
 
@@ -88,7 +90,8 @@ begin
          Power_Control.Set_Duty_Cycle (Value);
 
          --  Data input to CORDIC must be between -1.0 and 1.0 - 1 / 2**(-31),
-         --  and this corresponds to -pi and pi.
+         --  and this corresponds to -pi and pi. When the angle value reaches
+         --  any of these maximum, it must be decremented.
          if (Angle + Increment > 1.0 - 1.0 / 4_194_304) or
            (Angle + Increment < -1.0)
          then
@@ -96,6 +99,7 @@ begin
          end if;
 
          Angle := Angle + Increment;
+         --  Write the new angle value into the first position of the buffer.
          Data_In (1) := Fraction_32_To_UInt32 (Angle);
       end loop;
    end;

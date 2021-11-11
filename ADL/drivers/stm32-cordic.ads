@@ -51,9 +51,9 @@ package STM32.CORDIC is
       Value : CORDIC_Iterations);
    --  The precision of the result is dependent on the number of CORDIC
    --  iterations. To determine the number of iterations needed for a given
-   --  accuracy refer to Table 115 at pg 479 of RM0440 rev 6. The value written
-   --  in this register is (Number of iterations) / 4. Note that for most
-   --  functions, the recommended range for this field is 3 to 6.
+   --  accuracy refer to RM0440 rev 6 Chapter 17.3.5 Table 115 at pg 479. The
+   --  value written in this register is (Number of iterations) / 4. Note that
+   --  for most functions, the recommended range for this field is 3 to 6.
 
    procedure Set_CORDIC_Scaling_Factor
      (This  : in out CORDIC_Coprocessor;
@@ -61,7 +61,7 @@ package STM32.CORDIC is
    --  The value of this field indicates the scaling factor applied to the
    --  arguments and/or results. A value n implies that the arguments have been
    --  multiplied by a factor 2**-n, and/or the results need to be multiplied by
-   --  2**n. Refer to Section 17.3.2, pg 469, RM0440 rev 6 for the applicability
+   --  2**n. Refer to RM0440 rev 6 Section 17.3.2 pg 469 for the applicability
    --  of the scaling factor for each function and the appropriate range.
 
    type CORDIC_Data_Size is (Data_32_Bit, Data_16_Bit);
@@ -104,8 +104,8 @@ package STM32.CORDIC is
       Scaling   : UInt3 := 0;
       Data_Size : CORDIC_Data_Size);
    --  Several functions take two input arguments (ARG1 and ARG2) and some
-   --  generate two results (RES1 and RES2) simultaneously. See table 102,
-   --  chapter 17.3.2, RM0440 rev 6.
+   --  generate two results (RES1 and RES2) simultaneously. See RM0440 rev 6
+   --  chapter 17.3.2 Table 102.
 
    type Block_32 is array (Positive range <>) of UInt32
      with Component_Size => 32;
@@ -114,17 +114,17 @@ package STM32.CORDIC is
      with Component_Size => 16;
 
    --  The CORDIC operates in fixed point signed integer format. Input and
-   --  output values can be either q1.31 or q1.15. See chapter 17.3.3, RM0440
-   --  rev 6.
+   --  output values can be either q1.31 or q1.15. See RM0440 rev 6 chapter
+   --  17.3.3.
+   type Fraction_32 is delta 2.0**(-31) range -1.0 .. 1.0 - 2.0**(-31);
    --  In q1.31 format, numbers are represented by one sign bit and 31
    --  fractional bits (binary decimal places). The numeric range is therefore
    --  -1 (0x80000000) to 1 - 2**-31 (0x7FFFFFFF).
-   type Fraction_32 is delta 2.0**(-31) range -1.0 .. 1.0 - 2.0**(-31);
+   type Fraction_16 is delta 2.0**(-15) range -1.0 .. 1.0 - 2.0**(-15);
    --  In q1.15 format, the numeric range is -1 (0x8000) to 1 - 2**-15 (0x7FFF).
    --  This format has the advantage that two input arguments can be packed
    --  into a single 32-bit write, and two results can be fetched in one 32-bit
    --  read.
-   type Fraction_16 is delta 2.0**(-15) range -1.0 .. 1.0 - 2.0**(-15);
 
    --  The input (WDATA) and output (RDATA) data of the CORDIC uses UInt32
    --  to represent the fixed point values. So we need to convert the type
