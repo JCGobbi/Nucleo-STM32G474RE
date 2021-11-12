@@ -62,18 +62,22 @@ begin
       --  In q1.15 format, the numeric range is 1 (0x8000) to 1 - 2**(-15)
       --  (0x7FFF).
 
-      Angle : Fraction_32 := 0.0;
+      Angle : Fraction_32 := -0.5;
+      --  The start angle is -0.5, that corresponds to -Pi/2, so the LED start
+      --  off.
       Modulus : constant UInt32 := 16#7FFFFFFF#; --  1 - 2**(-31)
       --  For sine function, the first argument is the angle, while the second
       --  argument is the modulus, that in this case doesn't change.
-      Data_In : Block_32 := (0, Modulus);
-      Data_Out : Block_32 := (0, 0);
-
-      Value : Percentage;
       Increment : Fraction_32 := 1.0 / 4_194_304; --  = 1.0 / 2**22
       --  This value must be a multiple of delta (2.0**(-31)).
       --  The Increment value controls the rate at which the brightness
       --  increases and decreases and depends on the CPU clock frequency.
+      Data_In : Block_32 := (Fraction_32_To_UInt32 (Angle), Modulus);
+      --  The sine function goes from -1.0 to 0.0 to 1.0 in a complete sine
+      --  period, that corresponds to -Pi to 0 to Pi.
+      Data_Out : Block_32 := (0, 0);
+
+      Value : Percentage;
    begin
       loop
          --  Calculate sine function
@@ -90,10 +94,13 @@ begin
          Power_Control.Set_Duty_Cycle (Value);
 
          --  Data input to CORDIC must be between -1.0 and 1.0 - 1 / 2**(-31),
-         --  and this corresponds to -pi and pi. When the angle value reaches
-         --  any of these maximum, it must be decremented.
-         if (Angle + Increment > 1.0 - 1.0 / 4_194_304) or
-           (Angle + Increment < -1.0)
+         --  and this corresponds to -pi and pi. The value calculation considers
+         --  that the LED is OFF when the Angle is -0.5 (-Pi/2), it is half
+         --  bright when the Angle is 0 and it is ON when the Angle is 0.5 (Pi/2).
+         --  When the angle value reaches any of these maximum, it must be
+         --  incremented/decremented.
+         if (Angle + Increment > 0.5) or
+           (Angle + Increment < -0.5)
          then
             Increment := -Increment;
          end if;

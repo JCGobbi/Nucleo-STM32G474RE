@@ -23,7 +23,7 @@ package Inverter_PWM is
    --  Describes where on the PWM waveform the signals shall be aligned.
 
    --  The final maximum amplitude for the sine voltage is defined by the
-   --  maximum sine table value, that is 10_000.
+   --  maximum sine value, that is 1.0.
    --  Considering that the battery nominal voltage is 12 Volts, this will
    --  be the peak AC value, which corresponds to a primary AC RMS voltage
    --  of 12 V / sqrt(2) = 8.485 V.
@@ -51,8 +51,8 @@ package Inverter_PWM is
    PWM_Frequency_Hz : Frequency_Hz := 30_000.0; -- for 60 Hz
 
    --  Actually the STM32G474 operates at 150 MHz with 150 MHz into Prescaler.
-   --  With 150 MHz and (10 - 1) for prescaler we have 15 MHz for counter
-   --  period, that have values of 600, 500 and 75 for 25, 30 and 200 KHz.
+   --  With (10 - 1) for prescaler we have 15 MHz for counter period, that has
+   --  values of 600, 500 and 75 for 25, 30 and 200 KHz.
 
    subtype Deadtime_Range is Float range 0.0 .. 400.0e-9;
    --  Maximum deadtime permissible is 126 us.
