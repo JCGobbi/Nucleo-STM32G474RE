@@ -148,7 +148,7 @@ package body Inverter_PWM is
    is
       Pulse : UInt16;
    begin
-      Pulse := UInt16 (Gain / Gain_Range'Last * Amplitude *
+      Pulse := UInt16 (Gain * Amplitude *
                        Float (Current_Autoreload (PWM_Timer_Ref.all)));
       Set_Compare_Value
         (This    => PWM_Timer_Ref.all,
