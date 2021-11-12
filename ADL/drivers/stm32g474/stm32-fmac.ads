@@ -62,8 +62,10 @@ package STM32.FMAC is
      (This  : in out FMAC_Accelerator;
       Start : Boolean)
      with Post => FMAC_Started (This) = Start;
-   --  Trigger the execution of the function selected in the FUNC bitfield.
-   --  Resetting it by software stops any ongoing function.
+   --  Triggers the execution of the function selected in the FUNC bitfield.
+   --  Resetting it by software stops any ongoing function. For initialization
+   --  functions (Load X1 buffer, Load X2 buffer, Load Y buffer), this bit is
+   --  reset by hardware.
 
    function FMAC_Started
      (This : FMAC_Accelerator) return Boolean;
@@ -89,10 +91,24 @@ package STM32.FMAC is
       Input_P   : UInt8;
       Input_Q   : UInt8 := 0;
       Input_R   : UInt8 := 0)
-     with Pre => FMAC_Started (This) = True;
-   --  See RM0440 rev 6 section 18.3.6 for detailed instructions about each
-   --  initialization functions (load X1, X2 and Y buffers) and section 18.3.6
+     with Pre => FMAC_Started (This) = False;
+   --  See RM0440 rev 6 section 18.3.5 for detailed instructions about each
+   --  initialization functions (Load X1, X2 and Y buffers) and section 18.3.6
    --  for filter functions (FIR and IIR).
+
+   procedure Set_FMAC_Start_Function
+     (This      : in out FMAC_Accelerator;
+      Start     : Boolean;
+      Operation : FMAC_Function;
+      Input_P   : UInt8;
+      Input_Q   : UInt8 := 0;
+      Input_R   : UInt8 := 0);
+   --  Trigger by writing the appropriate value in the FUNC bitfield of the
+   --  FMAC_PARAM register, with the START bit set. The P and Q bitfields must
+   --  also contain the appropriate parameter values for each function.
+   --  The R bitfield is not used. When the function completes, the START bit
+   --  is automatically reset by hardware. See RM0440 rev 6 Chapter 18.3.5
+   --  "Initialization functions".
 
    --  The FMAC operates in fixed point signed integer format. Input and output
    --  values are q1.15.
@@ -112,9 +128,16 @@ package STM32.FMAC is
    procedure Write_FMAC_Data
      (This : in out FMAC_Accelerator;
       Data : UInt16);
+   --  When a write access to this register occurs, the write data are
+   --  transferred to the address offset indicated by the write pointer. The
+   --  pointer address is automatically incremented after each write access.
 
    function Read_FMAC_Data
      (This : FMAC_Accelerator) return UInt16;
+   --  When a read access to this register occurs, the read data are the
+   --  contents of the Y output buffer at the address offset indicated by the
+   --  READ pointer. The pointer address is automatically incremented after
+   --  each read access.
 
    procedure Set_FMAC_Clipping
      (This   : in out FMAC_Accelerator;
@@ -168,4 +191,3 @@ private
    type FMAC_Accelerator is new STM32_SVD.FMAC.FMAC_Peripheral;
 
 end STM32.FMAC;
-

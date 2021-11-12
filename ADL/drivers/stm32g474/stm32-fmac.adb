@@ -137,6 +137,26 @@ package body STM32.FMAC is
       This.PARAM.R := Input_R;
    end Configure_FMAC_Parameters;
 
+   -----------------------------
+   -- Set_FMAC_Start_Function --
+   -----------------------------
+
+   procedure Set_FMAC_Start_Function
+     (This      : in out FMAC_Accelerator;
+      Start     : Boolean;
+      Operation : FMAC_Function;
+      Input_P   : UInt8;
+      Input_Q   : UInt8 := 0;
+      Input_R   : UInt8 := 0)
+   is
+   begin
+      This.PARAM.FUNC := Operation'Enum_Rep;
+      This.PARAM.P := Input_P;
+      This.PARAM.Q := Input_Q;
+      This.PARAM.R := Input_R;
+      This.PARAM.START := Start;
+   end Set_FMAC_Start_Function;
+
    ---------------------
    -- Write_FMAC_Data --
    ---------------------
