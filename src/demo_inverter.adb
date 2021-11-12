@@ -28,6 +28,8 @@ begin
    --  low level.
    Set_PWM_Gate_Power (False);
 
+   --  Initialize sine generator
+   Initialize_CORDIC;
    --  Initialize PWM generator
    Initialize_PWM (Frequency => PWM_Frequency_Hz,
                    Deadtime  => PWM_Deadtime,
@@ -49,7 +51,7 @@ begin
 
    --  Enter steady state
    loop
-      --  Set_Toggle (Green_LED);
+      Set_Toggle (Green_LED);
       delay until Clock + Milliseconds (3000);  -- arbitrary
    end loop;
 

@@ -1,6 +1,20 @@
-with HAL; use HAL;
+with STM32.Device; use STM32.Device;
 
 package body Inverter_PWM is
+
+   -----------------------
+   -- Initialize_CORDIC --
+   -----------------------
+
+   procedure Initialize_CORDIC is
+   begin
+      Enable_Clock (CORDIC_Unit);
+      Configure_CORDIC_Coprocessor
+        (CORDIC_Unit,
+         Operation => Sine,
+         Precision => Iteration_12,
+         Data_Size => Data_16_Bit);
+   end Initialize_CORDIC;
 
    --------------------
    -- Initialize_PWM --
@@ -129,13 +143,12 @@ package body Inverter_PWM is
    --------------------
 
    procedure Set_Duty_Cycle (This      : PWM_Phase;
-                             Amplitude : Table_Amplitude;
+                             Amplitude : Sine_Range;
                              Gain      : Gain_Range)
    is
       Pulse : UInt16;
    begin
-      Pulse := UInt16 (Gain / Gain_Range'Last *
-                       Float (Amplitude) / Float (Table_Amplitude'Last) *
+      Pulse := UInt16 (Gain / Gain_Range'Last * Amplitude *
                        Float (Current_Autoreload (PWM_Timer_Ref.all)));
       Set_Compare_Value
         (This    => PWM_Timer_Ref.all,
@@ -164,7 +177,7 @@ package body Inverter_PWM is
 
    procedure Reset_Sine_Step is
    begin
-      Sine_Step := 250;
+      Sine_Step := Sine_Step_Range'Last;
    end Reset_Sine_Step;
 
    ----------------
@@ -200,30 +213,44 @@ package body Inverter_PWM is
             if Interrupt_Enabled (PWM_Timer, Timer_Update_Interrupt) then
                Clear_Pending_Interrupt (PWM_Timer, Timer_Update_Interrupt);
 
-               if (Semi_Senoid = False) then --  First half cycle
+               --  Calculate sine function
+               Calculate_CORDIC_Function
+                 (CORDIC_Unit,
+                  Argument => Data_In,
+                  Result   => Data_Out);
+
+               Sine_Amplitude := Float (UInt16_To_Fraction_16 (Data_Out (1)));
+
+               if not Semi_Senoid then --  First half cycle
                   Set_Duty_Cycle (This      => A,
-                                  Amplitude => Sine_Table (Sine_Step),
+                                  Amplitude => Sine_Amplitude,
                                   Gain      => Sine_Gain);
                   --  Not necessary because the last value of B amplitude was 0
                   --  Set_Duty_Cycle (This      => B,
-                  --                  Amplitude => Table_Amplitude'Last, --  Value 0
+                  --                  Amplitude => Sine_Range'Last, --  Value 0
                   --                  Gain      => Gain_Range'First); --  Value 0
                else --  Second half cycle
                   Set_Duty_Cycle (This      => B,
-                                  Amplitude => Sine_Table (Sine_Step),
+                                  Amplitude => Sine_Amplitude,
                                   Gain      => Sine_Gain);
                   --  Not necessary because the last value of A amplitude was 0
                   --  Set_Duty_Cycle (This      => A,
-                  --                  Amplitude => Table_Amplitude'Last, --  Value 0
+                  --                  Amplitude => Sine_Range'Last, --  Value 0
                   --                  Gain      => Gain_Range'First); --  Value 0
                end if;
 
-               if (Sine_Step + 1) > Sine_Step_Range'Last then
-                  Sine_Step := 1;
+               --  We need to test if "Angle + Increment" is greater then
+               --  Fraction_16'Last before incrementing Angle, to not get
+               --  overflow.
+               if (Angle + Increment) > Fraction_16'Last then
+                  Angle := Initial_Angle;
                   Semi_Senoid := not Semi_Senoid;
                else
-                  Sine_Step := Sine_Step + 1;
+                  Angle := Angle + Increment;
                end if;
+
+               --  Write the new angle value into the first position of the buffer.
+               Data_In (1) := Fraction_16_To_UInt16 (Angle);
 
                --  Testing the 30 kHz output with 1 Hz LED blinking.
                --  if Counter = 15_000 then

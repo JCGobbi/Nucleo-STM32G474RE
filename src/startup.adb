@@ -39,6 +39,8 @@ package body Startup is
       --  low level.
       Set_PWM_Gate_Power (False);
 
+      --  Initialize sine generator
+      Initialize_CORDIC;
       --  Initialize PWM generator
       Initialize_PWM (Frequency => PWM_Frequency_Hz,
                       Deadtime  => PWM_Deadtime,
