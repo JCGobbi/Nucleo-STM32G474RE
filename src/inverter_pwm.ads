@@ -49,7 +49,6 @@ package Inverter_PWM is
    --  For 400 Hz we have 2 half senoids * 400 Hz * 250 points = 200000 Hz.
 
    PWM_Frequency_Hz : Frequency_Hz := 30_000.0; -- for 60 Hz
-
    --  Actually the STM32G474 operates at 150 MHz with 150 MHz into Prescaler.
    --  With (10 - 1) for prescaler we have 15 MHz for counter period, that has
    --  values of 600, 500 and 75 for 25, 30 and 200 KHz.
@@ -61,50 +60,6 @@ package Inverter_PWM is
    --  The delay exists in the rising edges.
    --  It depends on the electronic circuit rise and fall times.
    --  166.7e-9 * 30 kHz * 100 = 0.5% of the total period.
-
-   subtype Sine_Step_Range is Positive range 1 .. 256;
-   --  Number of steps for the half sine table.
-
-   --  A table for sine generation is produced knowing the number of points
-   --  to complete 1/2 sine period. The sine function goes from 0 to 1 to 0 in
-   --  1/2 sine period, that corresponds to 0 to Pi/2 to Pi.
-   --  The equation which defines each point is:
-   --
-   --  D = A * sin(pi * x/N)
-   --  D = Duty cycle at a given discrete point;
-   --  A = Signal amplitude of the maximum duty cycle. We adopt 1.
-   --  pi = 1/2 of the sine period
-   --  x = Step number
-   --  N = Number of points = 256
-
-   --  The STM32F474 CPU has hardware acceleration of mathematical functions
-   --  (mainly trigonometric ones), so we benefit of it with sine calculations
-   --  and, instead of using a sine table, we calculate it directly.
-   --  The values introduced into the CORDIC doesn't need the Pi multiplication,
-   --  so Pi corresponds to 1.0 and -Pi corresponds to -1.0. See the definition
-   --  for Fraction_16 and Fraction_32 in the stm32-cordic.ads file.
-   --  The only limitation is that any value introduced into the CORDIC must be
-   --  a multiple of 2**(-31) when using Fraction_32 or 2**(-15) when using
-   --  Fraction_16.
-
-   Increment : constant Fraction_16 := 1.0 / Sine_Step_Range'Last;
-   --  This value must be a multiple of delta (2.0**(-15)).
-   --  The Increment value determine the number of points to complete 1/2
-   --  sine period. The complete sinusoid or sine period is completed with
-   --  these same points but using the second half-bridge, so it will be 512
-   --  points.
-
-   --  For sine function, the first argument is the angle, while the second
-   --  argument is the modulus, that in this case doesn't change.
-   Angle : Fraction_16;
-   Modulus : constant UInt16 := 16#7FFF#; --  1 - 2**(-31)
-
-   --  The initial angle must be the first point after 0, and the last point
-   --  will be 0.
-   Initial_Angle : constant Fraction_16 := Increment;
-
-   Data_In : Block_16 := (Fraction_16_To_UInt16 (Initial_Angle), Modulus);
-   Data_Out : Block_16 := (0, 0);
 
    -----------------------------
    -- Procedures and function --
@@ -159,8 +114,8 @@ package Inverter_PWM is
    --  Enable or disable the output of the gate drivers.
 
    procedure Reset_Sine_Step;
-   --  Set the sine table step counter to the last position of the
-   --  table, or 250, whose amplitude value is 0.
+   --  Set the Sine_Step variable to the first angle value, or 0.0 whose
+   --  amplitude value is 0.
 
    procedure Safe_State;
    --  Forces the inverter into a state that is considered safe.
@@ -174,8 +129,56 @@ private
 
    Initialized : Boolean := False;
 
-   Sine_Step : Sine_Step_Range := 250;
-   --  The table last step value is 0.
+   --  A table for sine generation is produced knowing the number of points
+   --  to complete 1/2 sine period. The sine function goes from 0 to 1 to 0 in
+   --  1/2 sine period, that corresponds to 0 to Pi/2 to Pi.
+   --  The equation which defines the value of each point is:
+   --
+   --  D = A * sin(pi * x/N)
+   --  D = Duty cycle at a given discrete point;
+   --  A = Signal amplitude of the maximum duty cycle. We adopt 1.
+   --  pi = 1/2 of the sine period
+   --  x = Step number
+   --  N = Number of points = 256
+
+   --  The STM32F474 CPU has hardware acceleration of mathematical functions
+   --  (mainly trigonometric ones), so we benefit of it with sine calculations
+   --  and, instead of using a sine table, we calculate it directly.
+   --  The values introduced into the CORDIC doesn't need the Pi multiplication,
+   --  so Pi corresponds to 1.0 and -Pi corresponds to -1.0. See the definition
+   --  for Fraction_16 and Fraction_32 in the stm32-cordic.ads file.
+   --  The only limitation is that any value introduced into the CORDIC must be
+   --  a multiple of 2**(-31) when using Fraction_32 or 2**(-15) when using
+   --  Fraction_16.
+
+   Sine_Step_Number : constant Positive := 256;
+   --  Number of steps for the half-sine.
+   Increment : constant Fraction_16 := 1.0 / Sine_Step_Number;
+   --  This value must be a multiple of delta (2.0**(-15)).
+   --  The Increment value determine the number of points to complete 1/2
+   --  sine period, so the interval is between 0.0 and 1.0 (0 to Pi). The
+   --  complete sinusoid or sine period is completed with these same points but
+   --  using the second half-bridge, so it will be 512 points.
+
+   subtype Sine_Step_Range is Fraction_16 range 0.0 .. 1.0 - Increment;
+   --  This range gives exactly 256 x Increment values.
+
+   --  For sine function, the first argument is the angle, while the second
+   --  argument is the modulus, that in this case doesn't change.
+   Sine_Step : Sine_Step_Range;
+   Modulus : constant UInt16 := 16#7FFF#; --  1 - 2**(-31)
+
+   Initial_Step : constant Sine_Step_Range := Sine_Step_Range'Last;
+   --  The initial angle would be the first point after 0.0, and the last point
+   --  would be 1.0. But this CORDIC only accept values between -1.0 and
+   --  1.0 - 2**(-15), so the last point couldn't be 1.0. Then we choose to
+   --  count down from [1.0 - Increment] to 0.0 and restart this same count down
+   --  for the next semi-senoid. This way we have exactly 256 points for the
+   --  semi-senoid and the last point (0.0) will return a sine value of 0.0.
+
+   --  Buffers with the data in and out to the CORDIC.
+   Data_In : Block_16 := (Fraction_16_To_UInt16 (Initial_Step), Modulus);
+   Data_Out : Block_16 := (0, 0);
 
    PWM_Timer_Ref : access Timer := PWM_Timer'Access;
 

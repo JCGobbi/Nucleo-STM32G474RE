@@ -177,7 +177,7 @@ package body Inverter_PWM is
 
    procedure Reset_Sine_Step is
    begin
-      Sine_Step := Sine_Step_Range'Last;
+      Sine_Step := Sine_Step_Range'First;
    end Reset_Sine_Step;
 
    ----------------
@@ -239,18 +239,18 @@ package body Inverter_PWM is
                   --                  Gain      => Gain_Range'First); --  Value 0
                end if;
 
-               --  We need to test if "Angle + Increment" is greater then
-               --  Fraction_16'Last before incrementing Angle, to not get
+               --  We need to test if [Sine_Step - Increment] is lower then
+               --  Sine_Step_Range'First before decrementing Angle, to not get
                --  overflow.
-               if (Angle + Increment) > Fraction_16'Last then
-                  Angle := Initial_Angle;
+               if (Sine_Step - Increment) < Sine_Step_Range'First then
+                  Sine_Step := Initial_Step;
                   Semi_Senoid := not Semi_Senoid;
                else
-                  Angle := Angle + Increment;
+                  Sine_Step := Sine_Step - Increment;
                end if;
 
                --  Write the new angle value into the first position of the buffer.
-               Data_In (1) := Fraction_16_To_UInt16 (Angle);
+               Data_In (1) := Fraction_16_To_UInt16 (Sine_Step);
 
                --  Testing the 30 kHz output with 1 Hz LED blinking.
                --  if Counter = 15_000 then
