@@ -6,6 +6,7 @@ with STM32.PWM;    use STM32.PWM;
 with STM32.CORDIC; use STM32.CORDIC;
 
 with STM_Board;    use STM_Board;
+with Inverter_ADC; use Inverter_ADC;
 
 package Inverter_PWM is
 
@@ -35,10 +36,6 @@ package Inverter_PWM is
 
    subtype Sine_Range is Float range 0.0 .. 1.0;
    Sine_Amplitude : Sine_Range := 0.0;
-
-   subtype Gain_Range is Float range 0.0 .. 1.0;
-   --  For correcting battery voltage and AC output variation.
-   Sine_Gain : Gain_Range := 0.0;
 
    subtype Duty_Cycle is Float range 0.0 .. 100.0;
 
@@ -109,9 +106,10 @@ package Inverter_PWM is
 
    procedure Set_PWM_Gate_Power (Enabled : in Boolean)
    with
-      Pre => (if Enabled = False then STM_Board.Is_Initialized
-              else Is_Initialized and STM_Board.Is_Initialized);
-   --  Enable or disable the output of the gate drivers.
+       Pre => STM_Board.Is_Initialized and (if Enabled then Is_Initialized);
+   --  Enable or disable the output of the gate drivers. This routine must be
+   --  altered in accordance to your hardware because some chips enable with
+   --  True and others with False.
 
    procedure Reset_Sine_Step;
    --  Set the Sine_Step variable to the first angle value, or 0.0 whose

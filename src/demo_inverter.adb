@@ -1,6 +1,7 @@
 with Ada.Real_Time; use Ada.Real_Time;
 
 with STM_Board;     use STM_Board;
+with Inverter_ADC;  use Inverter_ADC;
 with Inverter_PWM;  use Inverter_PWM;
 
 with Last_Chance_Handler; pragma Unreferenced (Last_Chance_Handler);
@@ -18,11 +19,11 @@ begin
    --  Initialize GPIO ports
    Initialize_GPIO;
 
-   --  Select the AC frequency of the inverter
-   PWM_Frequency_Hz := 30_000.0;
-
    --  Select gain = 1.0 to see only sine table sinusoid
    Sine_Gain := 1.0;
+
+   --  Select the AC frequency of the inverter, 25_000 for 50 Hz, 30_000 for 60 Hz.
+   PWM_Frequency_Hz := 30_000.0;
 
    --  Disable PWM gate drivers because some gate drivers enable with
    --  low level.

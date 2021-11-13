@@ -19,13 +19,6 @@ package body Startup is
       --  Initialize GPIO ports
       Initialize_GPIO;
 
-      --  Select the AC frequency of the inverter
-      if Read_Input (AC_Frequency_Pin) then -- 50 Hz
-         PWM_Frequency_Hz := 25_000.0;
-      else -- 60 Hz
-         PWM_Frequency_Hz := 30_000.0;
-      end if;
-
       --  Select gain = 1.0 to see only sine table sinusoid
       Sine_Gain := 1.0;
 
@@ -34,6 +27,13 @@ package body Startup is
 
       --  Do not start while the battery voltage is outside maximum and minimum
       --  Wait_Until_V_Battery;
+
+      --  Select the AC frequency of the inverter
+      if Read_Input (AC_Frequency_Pin) then -- 50 Hz
+         PWM_Frequency_Hz := 25_000.0;
+      else -- 60 Hz
+         PWM_Frequency_Hz := 30_000.0;
+      end if;
 
       --  Disable PWM gate drivers because some gate drivers enable with
       --  low level.
