@@ -151,14 +151,14 @@ private
 
    Sine_Step_Number : constant Positive := 256;
    --  Number of steps for the half-sine.
-   Increment : constant Fraction_16 := 1.0 / Sine_Step_Number;
+   Increment : constant Q1_15 := 1.0 / Sine_Step_Number;
    --  This value must be a multiple of delta (2.0**(-15)).
    --  The Increment value determine the number of points to complete 1/2
    --  sine period, so the interval is between 0.0 and 1.0 (0 to Pi). The
    --  complete sinusoid or sine period is completed with these same points but
    --  using the second half-bridge, so it will be 512 points.
 
-   subtype Sine_Step_Range is Fraction_16 range 0.0 .. 1.0 - Increment;
+   subtype Sine_Step_Range is Q1_15 range 0.0 .. 1.0 - Increment;
    --  This range gives exactly 256 x Increment values.
 
    --  For sine function, the first argument is the angle, while the second
@@ -175,7 +175,7 @@ private
    --  semi-senoid and the last point (0.0) will return a sine value of 0.0.
 
    --  Buffers with the data in and out to the CORDIC.
-   Data_In : Block_16 := (Fraction_16_To_UInt16 (Initial_Step), Modulus);
+   Data_In : Block_16 := (Q1_15_To_UInt16 (Initial_Step), Modulus);
    Data_Out : Block_16 := (0, 0);
 
    PWM_Timer_Ref : access Timer := PWM_Timer'Access;

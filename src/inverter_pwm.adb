@@ -219,7 +219,7 @@ package body Inverter_PWM is
                   Argument => Data_In,
                   Result   => Data_Out);
 
-               Sine_Amplitude := Float (UInt16_To_Fraction_16 (Data_Out (1)));
+               Sine_Amplitude := Float (UInt16_To_Q1_15 (Data_Out (1)));
 
                if not Semi_Senoid then --  First half cycle
                   Set_Duty_Cycle (This      => A,
@@ -250,7 +250,7 @@ package body Inverter_PWM is
                end if;
 
                --  Write the new angle value into the first position of the buffer.
-               Data_In (1) := Fraction_16_To_UInt16 (Sine_Step);
+               Data_In (1) := Q1_15_To_UInt16 (Sine_Step);
 
                --  Testing the 30 kHz output with 1 Hz LED blinking.
                --  if Counter = 15_000 then

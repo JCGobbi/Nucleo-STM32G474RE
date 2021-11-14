@@ -115,15 +115,15 @@ package STM32.FMAC is
    --  In q1.15 format, numbers are represented by one sign bit and 15 fractional
    --  bits (binary decimal places). The numeric range is therefore -1 (0x8000)
    --  to 1 - 2**(-15) (0x7FFF).
-   type Fraction_16 is delta 2.0**(-15) range -1.0 .. 1.0 - 2.0**(-15);
+   type Q1_15 is delta 2.0**(-15) range -1.0 .. 1.0 - 2.0**(-15);
 
    --  The input (WDATA) and output (RDATA) data of the FMAC uses UInt16
    --  to represent the fixed point values. So we need to convert the type
    --  Fraction_16 to UInt16 and vice-versa.
-   function Fraction_16_To_UInt16 is new
-     Ada.Unchecked_Conversion (Fraction_16, UInt16);
-   function UInt16_To_Fraction_16 is new
-     Ada.Unchecked_Conversion (UInt16, Fraction_16);
+   function Q1_15_To_UInt16 is new
+     Ada.Unchecked_Conversion (Q1_15, UInt16);
+   function UInt16_To_Q1_15 is new
+     Ada.Unchecked_Conversion (UInt16, Q1_15);
 
    procedure Write_FMAC_Data
      (This : in out FMAC_Accelerator;

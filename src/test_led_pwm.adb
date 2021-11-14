@@ -62,17 +62,17 @@ begin
       --  In q1.15 format, the numeric range is 1 (0x8000) to 1 - 2**(-15)
       --  (0x7FFF).
 
-      Angle : Fraction_32 := -0.5;
+      Angle : Q1_31 := -0.5;
       --  The start angle is -0.5, that corresponds to -Pi/2, so the LED start
       --  off.
       Modulus : constant UInt32 := 16#7FFFFFFF#; --  1 - 2**(-31)
       --  For sine function, the first argument is the angle, while the second
       --  argument is the modulus, that in this case doesn't change.
-      Increment : Fraction_32 := 1.0 / 4_194_304; --  = 1.0 / 2**22
+      Increment : Q1_31 := 1.0 / 4_194_304; --  = 1.0 / 2**22
       --  This value must be a multiple of delta (2.0**(-31)).
       --  The Increment value controls the rate at which the brightness
       --  increases and decreases and depends on the CPU clock frequency.
-      Data_In : Block_32 := (Fraction_32_To_UInt32 (Angle), Modulus);
+      Data_In : Block_32 := (Q1_31_To_UInt32 (Angle), Modulus);
       --  The sine function goes from -1.0 to 0.0 to 1.0 in a complete sine
       --  period, that corresponds to -Pi to 0 to Pi.
       Data_Out : Block_32 := (0, 0);
@@ -90,7 +90,7 @@ begin
          --  to represent the fixed point values. So we need to convert the type
          --  Fraction_32 to UInt32 and vice-versa.
          Value := Percentage (50.0 * (1.0 +
-                              Float (UInt32_To_Fraction_32 (Data_Out (1)))));
+                              Float (UInt32_To_Q1_31 (Data_Out (1)))));
          Power_Control.Set_Duty_Cycle (Value);
 
          --  Data input to CORDIC must be between -1.0 and 1.0 - 1 / 2**(-31),
@@ -107,7 +107,7 @@ begin
 
          Angle := Angle + Increment;
          --  Write the new angle value into the first position of the buffer.
-         Data_In (1) := Fraction_32_To_UInt32 (Angle);
+         Data_In (1) := Q1_31_To_UInt32 (Angle);
       end loop;
    end;
 end Test_LED_PWM;

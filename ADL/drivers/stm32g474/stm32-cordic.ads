@@ -116,11 +116,11 @@ package STM32.CORDIC is
    --  The CORDIC operates in fixed point signed integer format. Input and
    --  output values can be either q1.31 or q1.15. See RM0440 rev 6 chapter
    --  17.3.3.
-   type Fraction_32 is delta 2.0**(-31) range -1.0 .. 1.0 - 2.0**(-31);
+   type Q1_31 is delta 2.0**(-31) range -1.0 .. 1.0 - 2.0**(-31);
    --  In q1.31 format, numbers are represented by one sign bit and 31
    --  fractional bits (binary decimal places). The numeric range is therefore
    --  -1 (0x80000000) to 1 - 2**-31 (0x7FFFFFFF).
-   type Fraction_16 is delta 2.0**(-15) range -1.0 .. 1.0 - 2.0**(-15);
+   type Q1_15 is delta 2.0**(-15) range -1.0 .. 1.0 - 2.0**(-15);
    --  In q1.15 format, the numeric range is -1 (0x8000) to 1 - 2**-15 (0x7FFF).
    --  This format has the advantage that two input arguments can be packed
    --  into a single 32-bit write, and two results can be fetched in one 32-bit
@@ -129,14 +129,14 @@ package STM32.CORDIC is
    --  The input (WDATA) and output (RDATA) data of the CORDIC uses UInt32
    --  to represent the fixed point values. So we need to convert the type
    --  Fraction to UInt and vice-versa.
-   function Fraction_32_To_UInt32 is new
-     Ada.Unchecked_Conversion (Fraction_32, UInt32);
-   function UInt32_To_Fraction_32 is new
-     Ada.Unchecked_Conversion (UInt32, Fraction_32);
-   function Fraction_16_To_UInt16 is new
-     Ada.Unchecked_Conversion (Fraction_16, UInt16);
-   function UInt16_To_Fraction_16 is new
-     Ada.Unchecked_Conversion (UInt16, Fraction_16);
+   function Q1_31_To_UInt32 is new
+     Ada.Unchecked_Conversion (Q1_31, UInt32);
+   function UInt32_To_Q1_31 is new
+     Ada.Unchecked_Conversion (UInt32, Q1_31);
+   function Q1_15_To_UInt16 is new
+     Ada.Unchecked_Conversion (Q1_15, UInt16);
+   function UInt16_To_Q1_15 is new
+     Ada.Unchecked_Conversion (UInt16, Q1_15);
 
    procedure Calculate_CORDIC_Function
      (This     : in out CORDIC_Coprocessor;
