@@ -74,16 +74,16 @@ package STM32.FMAC is
      (Load_X1_Buffer,
       Load_X2_Buffer,
       Load_Y_Buffer,
-      Convolution_FIR_Filter,
-      IIR_Filter)
+      FIR_Filter_Convolution,
+      IIR_Filter_Direct_Form_1)
      with Size => 7;
 
    for FMAC_Function use
-     (Load_X1_Buffer         => 16#01#,
-      Load_X2_Buffer         => 16#02#,
-      Load_Y_Buffer          => 16#03#,
-      Convolution_FIR_Filter => 16#08#,
-      IIR_Filter             => 16#09#);
+     (Load_X1_Buffer           => 16#01#,
+      Load_X2_Buffer           => 16#02#,
+      Load_Y_Buffer            => 16#03#,
+      FIR_Filter_Convolution   => 16#08#,
+      IIR_Filter_Direct_Form_1 => 16#09#);
 
    procedure Configure_FMAC_Parameters
      (This      : in out FMAC_Accelerator;
