@@ -1,4 +1,6 @@
-with STM32.Device; use STM32.Device;
+with STM32.Device;
+
+with STM32.CORDIC.Polling;
 
 package body Inverter_PWM is
 
@@ -7,8 +9,9 @@ package body Inverter_PWM is
    -----------------------
 
    procedure Initialize_CORDIC is
+      use STM32.Device;
    begin
-      Enable_Clock (CORDIC_Unit);
+      Polling.Initialize_CORDIC (CORDIC_Unit);
       Configure_CORDIC_Coprocessor
         (CORDIC_Unit,
          Operation => Sine,
@@ -208,13 +211,14 @@ package body Inverter_PWM is
       ---------------------
 
       procedure PWM_ISR_Handler is
+         use STM32.Device;
       begin
          if Status (PWM_Timer, Timer_Update_Indicated) then
             if Interrupt_Enabled (PWM_Timer, Timer_Update_Interrupt) then
                Clear_Pending_Interrupt (PWM_Timer, Timer_Update_Interrupt);
 
                --  Calculate sine function
-               Calculate_CORDIC_Function
+               Polling.Calculate_CORDIC_Function
                  (CORDIC_Unit,
                   Argument => Data_In,
                   Result   => Data_Out);

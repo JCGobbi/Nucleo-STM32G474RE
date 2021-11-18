@@ -9,13 +9,13 @@
 --  the LED via pulse-width-modulation. A timer is still used underneath, but
 --  the details are hidden.  For direct use of the timer see the other demo.
 
-with HAL;              use HAL;
+with HAL;                  use HAL;
 
-with STM32.Device;     use STM32.Device;
-with STM32.Timers.PWM; use STM32.Timers, STM32.Timers.PWM;
-with STM32.CORDIC;     use STM32.CORDIC;
+with STM32.Device;         use STM32.Device;
+with STM32.Timers.PWM;     use STM32.Timers, STM32.Timers.PWM;
+with STM32.CORDIC.Polling; use STM32.CORDIC;
 
-with STM_Board;        use STM_Board;
+with STM_Board;            use STM_Board;
 
 with Last_Chance_Handler; pragma Unreferenced (Last_Chance_Handler);
 --  The "last chance handler" is the user-defined routine that is called when
@@ -45,7 +45,7 @@ begin
    Power_Control.Enable_Output;
 
    --  Configure CORDIC coprocessor with sine function
-   Enable_Clock (CORDIC_Unit);
+   Polling.Initialize_CORDIC (CORDIC_Unit);
    Configure_CORDIC_Coprocessor
      (CORDIC_Unit,
       Operation => Sine,
@@ -80,7 +80,7 @@ begin
    begin
       loop
          --  Calculate sine function
-         Calculate_CORDIC_Function
+         Polling.Calculate_CORDIC_Function
            (CORDIC_Unit,
             Argument => Data_In,
             Result   => Data_Out);

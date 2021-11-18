@@ -138,16 +138,6 @@ package STM32.CORDIC is
    function UInt16_To_Q1_15 is new
      Ada.Unchecked_Conversion (UInt16, Q1_15);
 
-   procedure Calculate_CORDIC_Function
-     (This     : in out CORDIC_Coprocessor;
-      Argument : Block_32;
-      Result   : out Block_32);
-
-   procedure Calculate_CORDIC_Function
-     (This     : in out CORDIC_Coprocessor;
-      Argument : Block_16;
-      Result   : out Block_16);
-
    procedure Set_Interrupt
      (This   : in out CORDIC_Coprocessor;
       Enable : Boolean)
