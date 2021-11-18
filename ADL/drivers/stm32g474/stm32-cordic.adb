@@ -48,30 +48,30 @@ package body STM32.CORDIC is
       This.CSR.SCALE := Value;
    end Set_CORDIC_Scaling_Factor;
 
-   ---------------------------
-   -- Set_CORDIC_Data_Width --
-   ---------------------------
+   --------------------------
+   -- Set_CORDIC_Data_Size --
+   --------------------------
 
-   procedure Set_CORDIC_Data_Width
+   procedure Set_CORDIC_Data_Size
      (This  : in out CORDIC_Coprocessor;
       Value : CORDIC_Data_Size)
    is
    begin
       This.CSR.ARGSIZE := Value = Data_16_Bit;
       This.CSR.RESSIZE := Value = Data_16_Bit;
-   end Set_CORDIC_Data_Width;
+   end Set_CORDIC_Data_Size;
 
-   ---------------------------
-   -- Get_CORDIC_Data_Width --
-   ---------------------------
+   --------------------------
+   -- Get_CORDIC_Data_Size --
+   --------------------------
 
-   function Get_CORDIC_Data_Width
+   function Get_CORDIC_Data_Size
      (This  : CORDIC_Coprocessor)
       return CORDIC_Data_Size
    is
    begin
       return (if This.CSR.ARGSIZE then Data_16_Bit else Data_32_Bit);
-   end Get_CORDIC_Data_Width;
+   end Get_CORDIC_Data_Size;
 
    ---------------------------------
    -- Set_CORDIC_Arguments_Number --
@@ -85,17 +85,41 @@ package body STM32.CORDIC is
       This.CSR.NARGS := Value = Two_32_Bit;
    end Set_CORDIC_Arguments_Number;
 
-   ------------------------
-   -- Set_CORDIC_Results --
-   ------------------------
+   ---------------------------------
+   -- Get_CORDIC_Arguments_Number --
+   ---------------------------------
 
-   procedure Set_CORDIC_Results
+   function Get_CORDIC_Arguments_Number
+     (This  : CORDIC_Coprocessor)
+      return CORDIC_Arguments_Number
+   is
+   begin
+      return (if This.CSR.NARGS then Two_32_Bit else One_32_Bit);
+   end Get_CORDIC_Arguments_Number;
+
+   -------------------------------
+   -- Set_CORDIC_Results_Number --
+   -------------------------------
+
+   procedure Set_CORDIC_Results_Number
      (This  : in out CORDIC_Coprocessor;
       Value : CORDIC_Arguments_Number)
    is
    begin
       This.CSR.NRES := Value = Two_32_Bit;
-   end Set_CORDIC_Results;
+   end Set_CORDIC_Results_Number;
+
+   -------------------------------
+   -- Get_CORDIC_Results_Number --
+   -------------------------------
+
+   function Get_CORDIC_Results_Number
+     (This  : CORDIC_Coprocessor)
+      return CORDIC_Arguments_Number
+   is
+   begin
+      return (if This.CSR.NRES then Two_32_Bit else One_32_Bit);
+   end Get_CORDIC_Results_Number;
 
    -----------------------------------
    -- Configure_CORDIC_Coprocesssor --
@@ -119,33 +143,57 @@ package body STM32.CORDIC is
          when Cosine | Sine | Phase | Modulus =>
             case Data_Size is
                when Data_32_Bit =>
-                  This.CSR.NARGS := True; --  Two_32_Bit
-                  This.CSR.NRES := True; --  Two_32_Bit
+                  This.CSR.NARGS := True; --  Two_32_Bit Arguments
+                  This.CSR.NRES := True; --  Two_32_Bit Results
                when Data_16_Bit =>
-                  This.CSR.NARGS := False; --  One_32_Bit
-                  This.CSR.NRES := False; --  One_32_Bit
+                  This.CSR.NARGS := False; --  One_32_Bit Argument
+                  This.CSR.NRES := False; --  One_32_Bit Result
             end case;
          when Hyperbolic_Cosine | Hyperbolic_Sine =>
             case Data_Size is
                when Data_32_Bit =>
-                  This.CSR.NARGS := False; --  One_32_Bit
-                  This.CSR.NRES := True; --  Two_32_Bit
+                  This.CSR.NARGS := False; --  One_32_Bit Argument
+                  This.CSR.NRES := True; --  Two_32_Bit Results
                when Data_16_Bit =>
-                  This.CSR.NARGS := False; --  One_32_Bit
-                  This.CSR.NRES := False; --  One_32_Bit
+                  This.CSR.NARGS := False; --  One_32_Bit Argument
+                  This.CSR.NRES := False; --  One_32_Bit Result
             end case;
          when Arctangent | Hyperbolic_Arctangent | Natural_Logarithm | Square_Root =>
             case Data_Size is
                when Data_32_Bit =>
-                  This.CSR.NARGS := False; --  One_32_Bit
-                  This.CSR.NRES := False; --  One_32_Bit
+                  This.CSR.NARGS := False; --  One_32_Bit Argument
+                  This.CSR.NRES := False; --  One_32_Bit Result
                when Data_16_Bit =>
-                  This.CSR.NARGS := False; --  One_32_Bit
-                  This.CSR.NRES := False; --  One_32_Bit
+                  This.CSR.NARGS := False; --  One_32_Bit Argument
+                  This.CSR.NRES := False; --  One_32_Bit Result
             end case;
       end case;
 
    end Configure_CORDIC_Coprocessor;
+
+   ---------------------
+   -- Get_CORDIC_Data --
+   ---------------------
+
+   function Get_CORDIC_Data (This : CORDIC_Coprocessor) return UInt32 is
+   begin
+      return This.RDATA;
+   end Get_CORDIC_Data;
+
+   ------------
+   -- Status --
+   ------------
+
+   function Status
+     (This : CORDIC_Coprocessor;
+      Flag : CORDIC_Status) return Boolean
+   is
+   begin
+      case Flag is
+         when Result_Ready =>
+            return This.CSR.RRDY;
+      end case;
+   end Status;
 
    -------------------
    -- Set_Interrupt --
@@ -164,7 +212,7 @@ package body STM32.CORDIC is
    -----------------------
 
    function Interrupt_Enabled
-     (This   : in out CORDIC_Coprocessor) return Boolean
+     (This   : CORDIC_Coprocessor) return Boolean
    is
    begin
       return This.CSR.IEN;

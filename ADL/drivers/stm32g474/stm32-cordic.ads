@@ -66,12 +66,12 @@ package STM32.CORDIC is
 
    type CORDIC_Data_Size is (Data_32_Bit, Data_16_Bit);
 
-   procedure Set_CORDIC_Data_Width
+   procedure Set_CORDIC_Data_Size
      (This  : in out CORDIC_Coprocessor;
       Value : CORDIC_Data_Size)
-     with Post => Get_CORDIC_Data_Width (This) = Value;
+     with Post => Get_CORDIC_Data_Size (This) = Value;
 
-   function Get_CORDIC_Data_Width
+   function Get_CORDIC_Data_Size
      (This  : CORDIC_Coprocessor)
       return CORDIC_Data_Size;
 
@@ -79,16 +79,22 @@ package STM32.CORDIC is
 
    procedure Set_CORDIC_Arguments_Number
      (This  : in out CORDIC_Coprocessor;
-      Value : CORDIC_Arguments_Number);
+      Value : CORDIC_Arguments_Number)
+     with Post => Get_CORDIC_Arguments_Number (This) = Value;
    --  Set the number of arguments expected by the CORDIC_WDATA register:
    --  Only one 32-bit write (or two 16-bit values if ARGSIZE = 1) is needed
    --  for the next calculation.
    --  Two 32-bit values must be written to the CORDIC_WDATA register to
    --  trigger the next calculation.
 
-   procedure Set_CORDIC_Results
+   function Get_CORDIC_Arguments_Number
+     (This  : CORDIC_Coprocessor)
+      return CORDIC_Arguments_Number;
+
+   procedure Set_CORDIC_Results_Number
      (This  : in out CORDIC_Coprocessor;
-      Value : CORDIC_Arguments_Number);
+      Value : CORDIC_Arguments_Number)
+     with Post => Get_CORDIC_Results_Number (This) = Value;
    --  Set the number of results in the CORDIC_RDATA register:
    --  Only one 32-bit value (or two 16-bit values if RESSIZE = 1) is
    --  transferred to the CORDIC_RDATA register on completion of the next
@@ -96,6 +102,10 @@ package STM32.CORDIC is
    --  Two 32-bit values are transferred to the CORDIC_RDATA register on
    --  completion of the next calculation. Two reads from CORDIC_RDATA are
    --  necessary to reset the RRDY flag.
+
+   function Get_CORDIC_Results_Number
+     (This  : CORDIC_Coprocessor)
+      return CORDIC_Arguments_Number;
 
    procedure Configure_CORDIC_Coprocessor
      (This      : in out CORDIC_Coprocessor;
@@ -106,6 +116,8 @@ package STM32.CORDIC is
    --  Several functions take two input arguments (ARG1 and ARG2) and some
    --  generate two results (RES1 and RES2) simultaneously. See RM0440 rev 6
    --  chapter 17.3.2 Table 102.
+
+   function Get_CORDIC_Data (This : CORDIC_Coprocessor) return UInt32;
 
    type Block_32 is array (Positive range <>) of UInt32
      with Component_Size => 32;
@@ -138,6 +150,12 @@ package STM32.CORDIC is
    function UInt16_To_Q1_15 is new
      Ada.Unchecked_Conversion (UInt16, Q1_15);
 
+   type CORDIC_Status is (Result_Ready);
+
+   function Status
+     (This : CORDIC_Coprocessor;
+      Flag : CORDIC_Status) return Boolean;
+
    procedure Set_Interrupt
      (This   : in out CORDIC_Coprocessor;
       Enable : Boolean)
@@ -145,7 +163,7 @@ package STM32.CORDIC is
    --  An interrupt request is generated whenever the RRDY flag is set.
 
    function Interrupt_Enabled
-     (This : in out CORDIC_Coprocessor) return Boolean;
+     (This : CORDIC_Coprocessor) return Boolean;
 
    type CORDIC_DMA is (Read_DMA, Write_DMA);
 
