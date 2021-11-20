@@ -40,14 +40,15 @@ package Inverter_PWM is
 
    --  The upload frequency of the duty cycle is defined by the number of points
    --  for each semi-sinusoid.
-   --  For 50 Hz we have 2 half senoids * 50 Hz * 250 points = 25000 Hz.
-   --  For 60 Hz we have 2 half senoids * 60 Hz * 250 points = 30000 Hz.
-   --  For 400 Hz we have 2 half senoids * 400 Hz * 250 points = 200000 Hz.
+   --  For 50 Hz we have 2 half senoids * 50 Hz * 256 points = 25600 Hz.
+   --  For 60 Hz we have 2 half senoids * 60 Hz * 256 points = 30720 Hz.
+   --  For 400 Hz we have 2 half senoids * 400 Hz * 256 points = 204800 Hz.
 
-   PWM_Frequency_Hz : Frequency_Hz := 30_000.0; -- for 60 Hz
+   PWM_Frequency_Hz : Frequency_Hz := 30_720.0; -- for 60 Hz
    --  Actually the STM32G474 operates at 150 MHz with 150 MHz into Prescaler.
    --  With (10 - 1) for prescaler we have 15 MHz for counter period, that has
-   --  values of 600, 500 and 75 for 25, 30 and 200 KHz.
+   --  values of 586, 488 and 73 for 25.597, 30.7377 and 205.479 KHz, that
+   --  will result in 49.99, 60.035 and 401.327 Hz.
 
    subtype Deadtime_Range is Float range 0.0 .. 400.0e-9;
    --  Maximum deadtime permissible is 126 us.
