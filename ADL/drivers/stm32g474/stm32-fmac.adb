@@ -150,11 +150,11 @@ package body STM32.FMAC is
       Input_R   : UInt8 := 0)
    is
    begin
+      This.PARAM.START := Start;
       This.PARAM.FUNC := Operation'Enum_Rep;
       This.PARAM.P := Input_P;
       This.PARAM.Q := Input_Q;
       This.PARAM.R := Input_R;
-      This.PARAM.START := Start;
    end Set_FMAC_Start_Function;
 
    ---------------------
@@ -192,16 +192,16 @@ package body STM32.FMAC is
       This.CR.CLIPEN := Enable;
    end Set_FMAC_Clipping;
 
-   ----------------------
-   -- Read_FMAC_Status --
-   ----------------------
+   ------------
+   -- Status --
+   ------------
 
-   function Read_FMAC_Status
-     (This   : FMAC_Accelerator;
-      Status : FMAC_Status) return Boolean
+   function Status
+     (This : FMAC_Accelerator;
+      Flag : FMAC_Status) return Boolean
    is
    begin
-      case Status is
+      case Flag is
          when Y_Buffer_Empty =>
             return This.SR.YEMPTY;
          when X1_Buffer_Full =>
@@ -213,7 +213,7 @@ package body STM32.FMAC is
          when Saturation_Error =>
             return This.SR.SAT;
       end case;
-   end Read_FMAC_Status;
+   end Status;
 
    -------------------
    -- Set_Interrupt --

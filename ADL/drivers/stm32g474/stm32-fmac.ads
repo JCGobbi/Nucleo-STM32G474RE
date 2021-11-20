@@ -8,6 +8,10 @@ package STM32.FMAC is
    type FMAC_Accelerator is limited private;
 
    procedure Reset_FMAC (This : in out FMAC_Accelerator);
+   --  Resets the write and read pointers, the internal control logic,
+   --  the FMAC_SR register and the FMAC_PARAM register, including the START
+   --  bit if active. Other register settings are not affected. This bit is
+   --  reset by hardware.
 
    type FMAC_Buffer is (X1, X2, Y);
 
@@ -92,6 +96,14 @@ package STM32.FMAC is
       Input_Q   : UInt8 := 0;
       Input_R   : UInt8 := 0)
      with Pre => FMAC_Started (This) = False;
+   --  Trigger by writing the appropriate value in the FUNC bitfield of the
+   --  FMAC_PARAM register, with the START bit set. The P, Q and R bitfields
+   --  must also contain the appropriate parameter values for each function.
+   --  For initialization functions (load X1, X2 or Y buffers), the function
+   --  completes when N writes have been performed to the FMAC_WDATA register,
+   --  then the START bit is automatically reset by hardware.
+   --  For filter functions (FIR or IIR), the filter functions continue to run
+   --  until the START bit is reset by software.
    --  See RM0440 rev 6 section 18.3.5 for detailed instructions about each
    --  initialization functions (Load X1, X2 and Y buffers) and section 18.3.6
    --  for filter functions (FIR and IIR).
@@ -104,18 +116,24 @@ package STM32.FMAC is
       Input_Q   : UInt8 := 0;
       Input_R   : UInt8 := 0);
    --  Trigger by writing the appropriate value in the FUNC bitfield of the
-   --  FMAC_PARAM register, with the START bit set. The P and Q bitfields must
-   --  also contain the appropriate parameter values for each function.
-   --  The R bitfield is not used. When the function completes, the START bit
-   --  is automatically reset by hardware. See RM0440 rev 6 Chapter 18.3.5
-   --  "Initialization functions".
+   --  FMAC_PARAM register, with the START bit set. The P, Q and R bitfields
+   --  must also contain the appropriate parameter values for each function.
+   --  For initialization functions (load X1, X2 or Y buffers), the function
+   --  completes when N writes have been performed to the FMAC_WDATA register,
+   --  then the START bit is automatically reset by hardware.
+   --  For filter functions (FIR or IIR), the filter functions continue to run
+   --  until the START bit is reset by software.
+   --  See RM0440 rev 6 section 18.3.5 for detailed instructions about each
+   --  initialization functions (Load X1, X2 and Y buffers) and section 18.3.6
+   --  for filter functions (FIR and IIR).
 
    --  The FMAC operates in fixed point signed integer format. Input and output
    --  values are q1.15.
    --  In q1.15 format, numbers are represented by one sign bit and 15 fractional
    --  bits (binary decimal places). The numeric range is therefore -1 (0x8000)
    --  to 1 - 2**(-15) (0x7FFF).
-   type Q1_15 is delta 2.0**(-15) range -1.0 .. 1.0 - 2.0**(-15);
+   type Q1_15 is delta 2.0**(-15) range -1.0 .. 1.0 - 2.0**(-15)
+     with Size => 16;
 
    --  The input (WDATA) and output (RDATA) data of the FMAC uses UInt16
    --  to represent the fixed point values. So we need to convert the type
@@ -153,9 +171,9 @@ package STM32.FMAC is
       Underflow_Error,
       Saturation_Error);
 
-   function Read_FMAC_Status
-     (This   : FMAC_Accelerator;
-      Status : FMAC_Status) return Boolean;
+   function Status
+     (This : FMAC_Accelerator;
+      Flag : FMAC_Status) return Boolean;
 
    type FMAC_Interrupt is
      (Read_Interrupt,

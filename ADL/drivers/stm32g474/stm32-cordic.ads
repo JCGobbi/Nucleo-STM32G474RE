@@ -128,11 +128,13 @@ package STM32.CORDIC is
    --  The CORDIC operates in fixed point signed integer format. Input and
    --  output values can be either q1.31 or q1.15. See RM0440 rev 6 chapter
    --  17.3.3.
-   type Q1_31 is delta 2.0**(-31) range -1.0 .. 1.0 - 2.0**(-31);
+   type Q1_31 is delta 2.0**(-31) range -1.0 .. 1.0 - 2.0**(-31)
+     with Size => 32;
    --  In q1.31 format, numbers are represented by one sign bit and 31
    --  fractional bits (binary decimal places). The numeric range is therefore
    --  -1 (0x80000000) to 1 - 2**-31 (0x7FFFFFFF).
-   type Q1_15 is delta 2.0**(-15) range -1.0 .. 1.0 - 2.0**(-15);
+   type Q1_15 is delta 2.0**(-15) range -1.0 .. 1.0 - 2.0**(-15)
+     with Size => 16;
    --  In q1.15 format, the numeric range is -1 (0x8000) to 1 - 2**-15 (0x7FFF).
    --  This format has the advantage that two input arguments can be packed
    --  into a single 32-bit write, and two results can be fetched in one 32-bit
