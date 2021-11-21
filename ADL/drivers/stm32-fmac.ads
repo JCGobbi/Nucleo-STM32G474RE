@@ -14,12 +14,37 @@ package STM32.FMAC is
    --  reset by hardware.
 
    type FMAC_Buffer is (X1, X2, Y);
+   --  Implementing FIR filters with FMAC (RM0440 rev 6 Chapter 18.3.8)
+   --
+   --  The FMAC supports FIR filters of length N, where N is the number of taps
+   --  or coefficients. The minimum local memory requirement for a FIR filter of
+   --  length N is 2N + 1: N coefficients, N input samples and 1 output sample.
+   --  Since the local memory size is 256, the maximum value for N is 127.
+   --  If maximum throughput is required, it may be necessary to allocate a
+   --  small amount of extra space, d1 and d2, to the input and output sample
+   --  buffers respectively, to ensure that the filter never stalls waiting for
+   --  a new input sample, or waiting for the output sample to be read. In this
+   --  case, the local memory requirement is 2N + d1 + d2.
+   --
+   --  Implementing IIR filters with FMAC (RM0440 rev 6 Chapter 18.3.9)
+   --
+   --  The FMAC supports IIR filters of length N, where N is the number of
+   --  feed-forward taps or coefficients. The number of feedback coefficients,
+   --  M, can be any value from 1 to N-1. Only direct form 1 implementations can
+   --  be realized, so filters designed for other forms need to be converted.
+   --  The minimum memory requirement for an IIR filter with N feed-forward
+   --  coefficients and M feed-back coefficients is 2N + 2M: N + M coefficients,
+   --  N input samples and M output samples. If M = N-1, then the maximum filter
+   --  length that can be implemented is N = 64.
+   --  As for the FIR, for maximum throughput a small amount of additional
+   --  space, d1 and d2, should be allowed in the input and output buffer size
+   --  respectively, making the total memory requirement 2M + 2N + d1 + d2.
 
    procedure Set_FMAC_Buffer_Address
      (This         : in out FMAC_Accelerator;
       Buffer       : FMAC_Buffer;
       Base_Address : UInt8);
-   --  Define the base address for the buffers.
+   --  Define the base address for the X1, X2 and Y buffers.
 
    procedure Set_FMAC_Buffer_Size
      (This         : in out FMAC_Accelerator;
@@ -92,10 +117,10 @@ package STM32.FMAC is
    procedure Configure_FMAC_Parameters
      (This      : in out FMAC_Accelerator;
       Operation : FMAC_Function;
-      Input_P   : UInt8;
-      Input_Q   : UInt8 := 0;
-      Input_R   : UInt8 := 0)
-     with Pre => FMAC_Started (This) = False;
+      Input_P   : UInt8; --  Length N + 1 of the coefficient vector B
+      Input_Q   : UInt8 := 0; --  Length M of the coefficient vector A
+      Input_R   : UInt8 := 1) --  Gain applied to the accumulator output
+     with Pre => FMAC_Started (This) = True;
    --  Trigger by writing the appropriate value in the FUNC bitfield of the
    --  FMAC_PARAM register, with the START bit set. The P, Q and R bitfields
    --  must also contain the appropriate parameter values for each function.
@@ -110,11 +135,11 @@ package STM32.FMAC is
 
    procedure Set_FMAC_Start_Function
      (This      : in out FMAC_Accelerator;
-      Start     : Boolean;
+      Start     : Boolean; --  When True, start; when False, stop and start
       Operation : FMAC_Function;
-      Input_P   : UInt8;
-      Input_Q   : UInt8 := 0;
-      Input_R   : UInt8 := 0);
+      Input_P   : UInt8; --  Length N + 1 of the coefficient vector B
+      Input_Q   : UInt8 := 0; --  Length M of the coefficient vector A
+      Input_R   : UInt8 := 1); --  Gain applied to the accumulator output
    --  Trigger by writing the appropriate value in the FUNC bitfield of the
    --  FMAC_PARAM register, with the START bit set. The P, Q and R bitfields
    --  must also contain the appropriate parameter values for each function.
@@ -126,6 +151,9 @@ package STM32.FMAC is
    --  See RM0440 rev 6 section 18.3.5 for detailed instructions about each
    --  initialization functions (Load X1, X2 and Y buffers) and section 18.3.6
    --  for filter functions (FIR and IIR).
+
+   type Block_16 is array (Positive range <>) of UInt16
+     with Component_Size => 16;
 
    --  The FMAC operates in fixed point signed integer format. Input and output
    --  values are q1.15.

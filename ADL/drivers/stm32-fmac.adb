@@ -128,7 +128,7 @@ package body STM32.FMAC is
       Operation : FMAC_Function;
       Input_P   : UInt8;
       Input_Q   : UInt8 := 0;
-      Input_R   : UInt8 := 0)
+      Input_R   : UInt8 := 1)
    is
    begin
       This.PARAM.FUNC := Operation'Enum_Rep;
@@ -147,10 +147,20 @@ package body STM32.FMAC is
       Operation : FMAC_Function;
       Input_P   : UInt8;
       Input_Q   : UInt8 := 0;
-      Input_R   : UInt8 := 0)
+      Input_R   : UInt8 := 1)
    is
    begin
-      This.PARAM.START := Start;
+      if Start then
+         if not This.PARAM.START then
+            This.PARAM.START := True;
+         end if;
+      else
+         if This.PARAM.START then
+            This.PARAM.START := False;
+         end if;
+         This.PARAM.START := True;
+      end if;
+
       This.PARAM.FUNC := Operation'Enum_Rep;
       This.PARAM.P := Input_P;
       This.PARAM.Q := Input_Q;
