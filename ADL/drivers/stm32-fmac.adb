@@ -119,6 +119,18 @@ package body STM32.FMAC is
       return This.PARAM.START;
    end FMAC_Started;
 
+   -----------------------
+   -- Set_FMAC_Function --
+   -----------------------
+
+   procedure Set_FMAC_Function
+     (This      : in out FMAC_Accelerator;
+      Operation : FMAC_Filter_Function)
+   is
+   begin
+      This.PARAM.FUNC := Operation'Enum_Rep;
+   end Set_FMAC_Function;
+
    -------------------------------
    -- Configure_FMAC_Parameters --
    -------------------------------
@@ -128,44 +140,65 @@ package body STM32.FMAC is
       Operation : FMAC_Function;
       Input_P   : UInt8;
       Input_Q   : UInt8 := 0;
-      Input_R   : UInt8 := 1)
+      Input_R   : UInt8 := 0)
    is
    begin
-      This.PARAM.FUNC := Operation'Enum_Rep;
       This.PARAM.P := Input_P;
-      This.PARAM.Q := Input_Q;
-      This.PARAM.R := Input_R;
+
+      case Operation is
+         when Load_X2_Buffer =>
+            This.PARAM.Q := Input_Q;
+         when FIR_Filter_Convolution =>
+            This.PARAM.R := Input_R;
+         when IIR_Filter_Direct_Form_1 =>
+            This.PARAM.Q := Input_Q;
+            This.PARAM.R := Input_R;
+         when others => null;
+      end case;
+
+      This.PARAM.FUNC := Operation'Enum_Rep;
    end Configure_FMAC_Parameters;
 
-   -----------------------------
-   -- Set_FMAC_Start_Function --
-   -----------------------------
+   -------------------------------------
+   -- Configure_FMAC_Start_Parameters --
+   -------------------------------------
 
-   procedure Set_FMAC_Start_Function
-     (This      : in out FMAC_Accelerator;
-      Start     : Boolean;
-      Operation : FMAC_Function;
-      Input_P   : UInt8;
-      Input_Q   : UInt8 := 0;
-      Input_R   : UInt8 := 1)
+   procedure Configure_FMAC_Start_Parameters
+     (This       : in out FMAC_Accelerator;
+      Initialize : FMAC_Start;
+      Operation  : FMAC_Function;
+      Input_P    : UInt8;
+      Input_Q    : UInt8 := 0;
+      Input_R    : UInt8 := 0)
    is
    begin
-      if Start then
-         if not This.PARAM.START then
-            This.PARAM.START := True;
-         end if;
-      else
-         if This.PARAM.START then
-            This.PARAM.START := False;
-         end if;
-         This.PARAM.START := True;
-      end if;
+      This.PARAM.P := Input_P;
+
+      case Operation is
+         when Load_X2_Buffer =>
+            This.PARAM.Q := Input_Q;
+         when FIR_Filter_Convolution =>
+            This.PARAM.R := Input_R;
+         when IIR_Filter_Direct_Form_1 =>
+            This.PARAM.Q := Input_Q;
+            This.PARAM.R := Input_R;
+         when others => null;
+      end case;
 
       This.PARAM.FUNC := Operation'Enum_Rep;
-      This.PARAM.P := Input_P;
-      This.PARAM.Q := Input_Q;
-      This.PARAM.R := Input_R;
-   end Set_FMAC_Start_Function;
+
+      case Initialize is
+         when Start =>
+            if not This.PARAM.START then
+               This.PARAM.START := True;
+            end if;
+         when Restart =>
+            if This.PARAM.START then
+               This.PARAM.START := False;
+            end if;
+            This.PARAM.START := True;
+      end case;
+   end Configure_FMAC_Start_Parameters;
 
    ---------------------
    -- Write_FMAC_Data --
@@ -189,6 +222,20 @@ package body STM32.FMAC is
    begin
       return This.RDATA.RDATA;
    end Read_FMAC_Data;
+
+   ---------------------
+   -- Write_FMAC_Buffer --
+   ---------------------
+
+   procedure Write_FMAC_Buffer
+     (This   : in out FMAC_Accelerator;
+      Vector : Block_Q1_15)
+   is
+   begin
+      for N in Vector'Range loop
+         This.WDATA.WDATA := Q1_15_To_UInt16 (Vector (N));
+      end loop;
+   end Write_FMAC_Buffer;
 
    -----------------------
    -- Set_FMAC_Clipping --

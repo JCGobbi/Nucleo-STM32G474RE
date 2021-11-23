@@ -54,16 +54,20 @@ package STM32.FMAC is
    --  Define the size of buffers in 16-bit words.
    --  For X1 buffer the minimum buffer size is the number of feed-forward taps
    --  in the filter (+ the watermark threshold - 1).
+   --  For X2 buffer and FIR filters, the minimum size is the number of filter
+   --  coeficients B with fixed length (N + 1) (b0, b1, b2..., bN). For IIR
+   --  filter, the minimum size is the number of coeficients B and A concatenated
+   --  with fixed length (M + N + 1) (b0, b1, b2..., bN, a1, a2, ..., aM).
    --  For Y buffer and for FIR filters, the minimum buffer size is 1 (+ the
    --  watermark threshold). For IIR filters the minimum buffer size is the
    --  number of feedback taps (+ the watermark threshold).
-   --  See buffer configuration at pg 490, chapter 18.3.2 RM0440 rev 6.
+   --  See RM0440 rev 6, Chapter 18.3.2 and 18.3.5.
 
    type FMAC_Watermark is
      (Threshold_1,
       Threshold_2,
-      Threshold_3,
-      Threshold_4);
+      Threshold_4,
+      Threshold_8);
 
    procedure Set_FMAC_Buffer_Watermark
      (This         : in out FMAC_Accelerator;
@@ -85,7 +89,8 @@ package STM32.FMAC is
       Base_Address : UInt8;
       Size         : UInt8;
       Watermark    : FMAC_Watermark := Threshold_1);
-   --  See buffer configuration at pg 490, chapter 18.3.2 RM0440 rev 6.
+   --  See RM0440 rev 6, Chapter 18.3.2 "Local memory and buffers" and 18.3.5
+   --  "Initialization functions".
 
    procedure Set_FMAC_Start
      (This  : in out FMAC_Accelerator;
@@ -93,8 +98,7 @@ package STM32.FMAC is
      with Post => FMAC_Started (This) = Start;
    --  Triggers the execution of the function selected in the FUNC bitfield.
    --  Resetting it by software stops any ongoing function. For initialization
-   --  functions (Load X1 buffer, Load X2 buffer, Load Y buffer), this bit is
-   --  reset by hardware.
+   --  functions (Load X1, X2 and Y buffers), this bit is reset by hardware.
 
    function FMAC_Started
      (This : FMAC_Accelerator) return Boolean;
@@ -114,12 +118,22 @@ package STM32.FMAC is
       FIR_Filter_Convolution   => 16#08#,
       IIR_Filter_Direct_Form_1 => 16#09#);
 
+   subtype FMAC_Filter_Function is FMAC_Function range
+     FIR_Filter_Convolution .. IIR_Filter_Direct_Form_1;
+
+   procedure Set_FMAC_Function
+     (This      : in out FMAC_Accelerator;
+      Operation : FMAC_Filter_Function);
+
+   subtype FMAC_Init_Function is FMAC_Function range
+     Load_X1_Buffer .. Load_Y_Buffer;
+
    procedure Configure_FMAC_Parameters
      (This      : in out FMAC_Accelerator;
       Operation : FMAC_Function;
-      Input_P   : UInt8; --  Length N + 1 of the coefficient vector B
+      Input_P   : UInt8; --  Length N of the coefficient vector B
       Input_Q   : UInt8 := 0; --  Length M of the coefficient vector A
-      Input_R   : UInt8 := 1) --  Gain applied to the accumulator output
+      Input_R   : UInt8 := 0) --  Gain applied to the accumulator output
      with Pre => FMAC_Started (This) = True;
    --  Trigger by writing the appropriate value in the FUNC bitfield of the
    --  FMAC_PARAM register, with the START bit set. The P, Q and R bitfields
@@ -133,13 +147,16 @@ package STM32.FMAC is
    --  initialization functions (Load X1, X2 and Y buffers) and section 18.3.6
    --  for filter functions (FIR and IIR).
 
-   procedure Set_FMAC_Start_Function
-     (This      : in out FMAC_Accelerator;
-      Start     : Boolean; --  When True, start; when False, stop and start
-      Operation : FMAC_Function;
-      Input_P   : UInt8; --  Length N + 1 of the coefficient vector B
-      Input_Q   : UInt8 := 0; --  Length M of the coefficient vector A
-      Input_R   : UInt8 := 1); --  Gain applied to the accumulator output
+   type FMAC_Start is (Start, Restart);
+   --  The restart stop and start again.
+
+   procedure Configure_FMAC_Start_Parameters
+     (This       : in out FMAC_Accelerator;
+      Initialize : FMAC_Start;
+      Operation  : FMAC_Function;
+      Input_P    : UInt8; --  Length N of the coefficient vector B
+      Input_Q    : UInt8 := 0; --  Length M of the coefficient vector A
+      Input_R    : UInt8 := 0); --  Gain applied to the accumulator output
    --  Trigger by writing the appropriate value in the FUNC bitfield of the
    --  FMAC_PARAM register, with the START bit set. The P, Q and R bitfields
    --  must also contain the appropriate parameter values for each function.
@@ -162,6 +179,7 @@ package STM32.FMAC is
    --  to 1 - 2**(-15) (0x7FFF).
    type Q1_15 is delta 2.0**(-15) range -1.0 .. 1.0 - 2.0**(-15)
      with Size => 16;
+   type Block_Q1_15 is array (Positive range <>) of Q1_15;
 
    --  The input (WDATA) and output (RDATA) data of the FMAC uses UInt16
    --  to represent the fixed point values. So we need to convert the type
@@ -184,6 +202,13 @@ package STM32.FMAC is
    --  contents of the Y output buffer at the address offset indicated by the
    --  READ pointer. The pointer address is automatically incremented after
    --  each read access.
+
+   procedure Write_FMAC_Buffer
+     (This   : in out FMAC_Accelerator;
+      Vector : Block_Q1_15);
+   --  Write the values of Vector into the X1, X2 or Y buffers pre-selected by
+   --  Configure_FMAC_Parameters and Set_FMAC_Start to True or
+   --  Configure_FMAC_Start_Parameters.
 
    procedure Set_FMAC_Clipping
      (This   : in out FMAC_Accelerator;
