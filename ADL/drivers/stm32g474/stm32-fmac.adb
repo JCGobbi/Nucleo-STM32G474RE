@@ -1,3 +1,4 @@
+with STM32.Device;
 
 package body STM32.FMAC is
 
@@ -97,6 +98,30 @@ package body STM32.FMAC is
       end case;
    end Configure_FMAC_Buffer;
 
+   ---------------------
+   -- Initialize_FMAC --
+   ---------------------
+
+   procedure Initialize_FMAC
+     (This   : in out FMAC_Accelerator;
+      Config : FMAC_Configuration)
+   is
+   begin
+      STM32.Device.Enable_Clock (This);
+      --  Configure X1 buffer
+      This.X1BUFCFG.X1_BASE := Config.Input_Base_Address;
+      This.X1BUFCFG.X1_BUF_SIZE := Config.Input_Buffer_Size;
+      --  Configure X2 buffer
+      This.X1BUFCFG.FULL_WM := Config.Input_Buffer_Threshold'Enum_Rep;
+      This.X2BUFCFG.X2_BASE := Config.Coeff_Base_Address;
+      This.X2BUFCFG.X2_BUF_SIZE := Config.Coeff_Base_Size;
+      --  Configure Y buffer
+      This.YBUFCFG.Y_BASE := Config.Output_Base_Address;
+      This.YBUFCFG.Y_BUF_SIZE := Config.Output_Buffer_Size;
+      This.YBUFCFG.EMPTY_WM := Config.Output_Buffer_Threshold'Enum_Rep;
+
+      This.CR.CLIPEN := Config.Clipping;
+   end Initialize_FMAC;
 
    --------------------
    -- Set_FMAC_Start --
@@ -158,47 +183,6 @@ package body STM32.FMAC is
 
       This.PARAM.FUNC := Operation'Enum_Rep;
    end Configure_FMAC_Parameters;
-
-   -------------------------------------
-   -- Configure_FMAC_Start_Parameters --
-   -------------------------------------
-
-   procedure Configure_FMAC_Start_Parameters
-     (This       : in out FMAC_Accelerator;
-      Initialize : FMAC_Start;
-      Operation  : FMAC_Function;
-      Input_P    : UInt8;
-      Input_Q    : UInt8 := 0;
-      Input_R    : UInt8 := 0)
-   is
-   begin
-      This.PARAM.P := Input_P;
-
-      case Operation is
-         when Load_X2_Buffer =>
-            This.PARAM.Q := Input_Q;
-         when FIR_Filter_Convolution =>
-            This.PARAM.R := Input_R;
-         when IIR_Filter_Direct_Form_1 =>
-            This.PARAM.Q := Input_Q;
-            This.PARAM.R := Input_R;
-         when others => null;
-      end case;
-
-      This.PARAM.FUNC := Operation'Enum_Rep;
-
-      case Initialize is
-         when Start =>
-            if not This.PARAM.START then
-               This.PARAM.START := True;
-            end if;
-         when Restart =>
-            if This.PARAM.START then
-               This.PARAM.START := False;
-            end if;
-            This.PARAM.START := True;
-      end case;
-   end Configure_FMAC_Start_Parameters;
 
    ---------------------
    -- Write_FMAC_Data --

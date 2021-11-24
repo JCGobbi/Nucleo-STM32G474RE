@@ -92,6 +92,24 @@ package STM32.FMAC is
    --  See RM0440 rev 6, Chapter 18.3.2 "Local memory and buffers" and 18.3.5
    --  "Initialization functions".
 
+   type FMAC_Configuration is record
+      Input_Base_Address      : UInt8; --  X1 buffer
+      Input_Buffer_Size       : UInt8; --  N + d1
+      Input_Buffer_Threshold  : FMAC_Watermark; --  <= d1
+      Coeff_Base_Address      : UInt8; --  X2 buffer
+      Coeff_Base_Size         : UInt8; --  N + M
+      Output_Base_Address     : UInt8; --  Y buffer
+      Output_Buffer_Size      : UInt8; --  N + d2
+      Output_Buffer_Threshold : FMAC_Watermark; --  < d2
+      Clipping                : Boolean;
+   end record;
+
+   procedure Initialize_FMAC
+     (This   : in out FMAC_Accelerator;
+      Config : FMAC_Configuration);
+   --  Enable the clock and configure all the input, coefficient and output
+   --  parameters.
+
    procedure Set_FMAC_Start
      (This  : in out FMAC_Accelerator;
       Start : Boolean)
@@ -135,28 +153,6 @@ package STM32.FMAC is
       Input_Q   : UInt8 := 0; --  Length M of the coefficient vector A
       Input_R   : UInt8 := 0) --  Gain applied to the accumulator output
      with Pre => FMAC_Started (This) = True;
-   --  Trigger by writing the appropriate value in the FUNC bitfield of the
-   --  FMAC_PARAM register, with the START bit set. The P, Q and R bitfields
-   --  must also contain the appropriate parameter values for each function.
-   --  For initialization functions (load X1, X2 or Y buffers), the function
-   --  completes when N writes have been performed to the FMAC_WDATA register,
-   --  then the START bit is automatically reset by hardware.
-   --  For filter functions (FIR or IIR), the filter functions continue to run
-   --  until the START bit is reset by software.
-   --  See RM0440 rev 6 section 18.3.5 for detailed instructions about each
-   --  initialization functions (Load X1, X2 and Y buffers) and section 18.3.6
-   --  for filter functions (FIR and IIR).
-
-   type FMAC_Start is (Start, Restart);
-   --  The restart stop and start again.
-
-   procedure Configure_FMAC_Start_Parameters
-     (This       : in out FMAC_Accelerator;
-      Initialize : FMAC_Start;
-      Operation  : FMAC_Function;
-      Input_P    : UInt8; --  Length N of the coefficient vector B
-      Input_Q    : UInt8 := 0; --  Length M of the coefficient vector A
-      Input_R    : UInt8 := 0); --  Gain applied to the accumulator output
    --  Trigger by writing the appropriate value in the FUNC bitfield of the
    --  FMAC_PARAM register, with the START bit set. The P, Q and R bitfields
    --  must also contain the appropriate parameter values for each function.
