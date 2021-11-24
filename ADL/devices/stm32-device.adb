@@ -532,6 +532,7 @@ package body STM32.Device is
       else
          raise Unknown_Device;
       end if;
+      RCC_Periph.AHB1ENR.DMAMUXEN := True;
    end Enable_Clock;
 
    -----------
@@ -549,6 +550,8 @@ package body STM32.Device is
       else
          raise Unknown_Device;
       end if;
+      RCC_Periph.AHB1RSTR.DMAMUX1RST := True;
+      RCC_Periph.AHB1RSTR.DMAMUX1RST := False;
    end Reset;
 
    ------------------
