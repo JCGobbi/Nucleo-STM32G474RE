@@ -14,7 +14,7 @@ package STM32.FMAC is
    --  reset by hardware.
 
    type FMAC_Buffer is (X1, X2, Y);
-   --  Implementing FIR filters with FMAC (RM0440 rev 6 Chapter 18.3.8)
+   --  Implementing FIR filters with FMAC (RM0440 rev 6 Chapter 18.3.8):
    --
    --  The FMAC supports FIR filters of length N, where N is the number of taps
    --  or coefficients. The minimum local memory requirement for a FIR filter of
@@ -26,7 +26,7 @@ package STM32.FMAC is
    --  a new input sample, or waiting for the output sample to be read. In this
    --  case, the local memory requirement is 2N + d1 + d2.
    --
-   --  Implementing IIR filters with FMAC (RM0440 rev 6 Chapter 18.3.9)
+   --  Implementing IIR filters with FMAC (RM0440 rev 6 Chapter 18.3.9):
    --
    --  The FMAC supports IIR filters of length N, where N is the number of
    --  feed-forward taps or coefficients. The number of feedback coefficients,
@@ -136,15 +136,11 @@ package STM32.FMAC is
       FIR_Filter_Convolution   => 16#08#,
       IIR_Filter_Direct_Form_1 => 16#09#);
 
-   subtype FMAC_Filter_Function is FMAC_Function range
-     FIR_Filter_Convolution .. IIR_Filter_Direct_Form_1;
-
-   procedure Set_FMAC_Function
-     (This      : in out FMAC_Accelerator;
-      Operation : FMAC_Filter_Function);
-
    subtype FMAC_Init_Function is FMAC_Function range
      Load_X1_Buffer .. Load_Y_Buffer;
+
+   subtype FMAC_Filter_Function is FMAC_Function range
+     FIR_Filter_Convolution .. IIR_Filter_Direct_Form_1;
 
    procedure Configure_FMAC_Parameters
      (This      : in out FMAC_Accelerator;
@@ -152,7 +148,7 @@ package STM32.FMAC is
       Input_P   : UInt8; --  Length N of the coefficient vector B
       Input_Q   : UInt8 := 0; --  Length M of the coefficient vector A
       Input_R   : UInt8 := 0) --  Gain applied to the accumulator output
-     with Pre => FMAC_Started (This) = True;
+     with Pre => not FMAC_Started (This);
    --  Trigger by writing the appropriate value in the FUNC bitfield of the
    --  FMAC_PARAM register, with the START bit set. The P, Q and R bitfields
    --  must also contain the appropriate parameter values for each function.

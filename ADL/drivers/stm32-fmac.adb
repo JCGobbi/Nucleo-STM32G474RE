@@ -144,18 +144,6 @@ package body STM32.FMAC is
       return This.PARAM.START;
    end FMAC_Started;
 
-   -----------------------
-   -- Set_FMAC_Function --
-   -----------------------
-
-   procedure Set_FMAC_Function
-     (This      : in out FMAC_Accelerator;
-      Operation : FMAC_Filter_Function)
-   is
-   begin
-      This.PARAM.FUNC := Operation'Enum_Rep;
-   end Set_FMAC_Function;
-
    -------------------------------
    -- Configure_FMAC_Parameters --
    -------------------------------
