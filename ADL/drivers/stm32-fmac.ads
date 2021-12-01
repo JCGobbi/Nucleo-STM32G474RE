@@ -92,24 +92,6 @@ package STM32.FMAC is
    --  See RM0440 rev 6, Chapter 18.3.2 "Local memory and buffers" and 18.3.5
    --  "Initialization functions".
 
-   type FMAC_Configuration is record
-      Input_Base_Address      : UInt8; --  X1 buffer
-      Input_Buffer_Size       : UInt8; --  N + d1
-      Input_Buffer_Threshold  : FMAC_Watermark; --  <= d1
-      Coeff_Base_Address      : UInt8; --  X2 buffer
-      Coeff_Base_Size         : UInt8; --  N + M
-      Output_Base_Address     : UInt8; --  Y buffer
-      Output_Buffer_Size      : UInt8; --  N + d2
-      Output_Buffer_Threshold : FMAC_Watermark; --  < d2
-      Clipping                : Boolean;
-   end record;
-
-   procedure Initialize_FMAC
-     (This   : in out FMAC_Accelerator;
-      Config : FMAC_Configuration);
-   --  Enable the clock and configure all the input, coefficient and output
-   --  parameters.
-
    procedure Set_FMAC_Start
      (This  : in out FMAC_Accelerator;
       Start : Boolean)
@@ -199,8 +181,10 @@ package STM32.FMAC is
      (This   : in out FMAC_Accelerator;
       Vector : Block_Q1_15);
    --  Write the values of Vector into the X1, X2 or Y buffers pre-selected by
-   --  Configure_FMAC_Parameters and Set_FMAC_Start to True or
-   --  Configure_FMAC_Start_Parameters.
+   --  Configure_FMAC_Parameters and Set_FMAC_Start to True. This is useful when
+   --  we want to preload the X1, X2 or Y FMAC buffers with initial values. Note
+   --  that the length of Vector must coincide with the specified length of each
+   --  FMAC buffer.
 
    procedure Set_FMAC_Clipping
      (This   : in out FMAC_Accelerator;
@@ -248,6 +232,45 @@ package STM32.FMAC is
    function DMA_Enabled
      (This : FMAC_Accelerator;
       DMA  : FMAC_DMA) return Boolean;
+
+   type FMAC_Buffer_Configuration is record
+      Coeff_Base_Address      : UInt8 := 0; --  X2 buffer base
+      Coeff_Buffer_Size       : UInt8; --  N + M
+      Input_Base_Address      : UInt8; --  X1 buffer base = Coeff_Buffer_Size
+      Input_Buffer_Size       : UInt8; --  N + d1
+      Input_Buffer_Threshold  : FMAC_Watermark; --  <= d1
+      Output_Base_Address     : UInt8; --  Y buffer base = Coeff_Buffer_Size + Input_Buffer_Size
+      Output_Buffer_Size      : UInt8; --  N + d2
+      Output_Buffer_Threshold : FMAC_Watermark; --  < d2
+      Clipping                : Boolean;
+   end record;
+
+   procedure Initialize_FMAC
+     (This   : in out FMAC_Accelerator;
+      Config : FMAC_Buffer_Configuration);
+   --  Enable the FMAC clock and configure the input, coefficient and output
+   --  parameters.
+
+   procedure Preload_Buffers
+     (This           : in out FMAC_Accelerator;
+      Filter         : FMAC_Filter_Function;
+      Input_Vector   : Block_Q1_15; --  X1 buffer
+      Coeff_Vector_B : Block_Q1_15; --  X2 buffer (first part, feed-foward taps)
+      Coeff_Vector_A : Block_Q1_15; --  X2 buffer (second part, feedback taps)
+      Output_Vector  : Block_Q1_15) --  Y buffer
+     with Pre => Coeff_Vector_B'Length /= 0,
+          Post => not Interrupt_Enabled (This, Read_Interrupt) and
+                  not Interrupt_Enabled (This, Write_Interrupt) and
+                  not DMA_Enabled (This, Read_DMA) and
+                  not DMA_Enabled (This, Write_DMA);
+   --  Preload the X1, X2 and Y FMAC buffers with polling. For FIR, The X2
+   --  buffer has only b0 .. bN coefficients from Coeff_Vector_B, so
+   --  Coeff_Vector_A don't care; for IIR, X2 has b0 .. bN concatenated with
+   --  a1 .. aM from Coeff_Vector_A. It is optional to preload X1 because when
+   --  the FMAC start it will only calculate the first filter output when it has
+   --  reached X1 buffer size. For IIR, the Y buffer preload may be necessary.
+   --  If the preload of X1 or Y are not done, these buffers must have zero
+   --  length.
 
 private
 

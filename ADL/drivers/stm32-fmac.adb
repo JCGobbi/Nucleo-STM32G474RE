@@ -98,31 +98,6 @@ package body STM32.FMAC is
       end case;
    end Configure_FMAC_Buffer;
 
-   ---------------------
-   -- Initialize_FMAC --
-   ---------------------
-
-   procedure Initialize_FMAC
-     (This   : in out FMAC_Accelerator;
-      Config : FMAC_Configuration)
-   is
-   begin
-      STM32.Device.Enable_Clock (This);
-      --  Configure X1 buffer
-      This.X1BUFCFG.X1_BASE := Config.Input_Base_Address;
-      This.X1BUFCFG.X1_BUF_SIZE := Config.Input_Buffer_Size;
-      --  Configure X2 buffer
-      This.X1BUFCFG.FULL_WM := Config.Input_Buffer_Threshold'Enum_Rep;
-      This.X2BUFCFG.X2_BASE := Config.Coeff_Base_Address;
-      This.X2BUFCFG.X2_BUF_SIZE := Config.Coeff_Base_Size;
-      --  Configure Y buffer
-      This.YBUFCFG.Y_BASE := Config.Output_Base_Address;
-      This.YBUFCFG.Y_BUF_SIZE := Config.Output_Buffer_Size;
-      This.YBUFCFG.EMPTY_WM := Config.Output_Buffer_Threshold'Enum_Rep;
-
-      This.CR.CLIPEN := Config.Clipping;
-   end Initialize_FMAC;
-
    --------------------
    -- Set_FMAC_Start --
    --------------------
@@ -326,5 +301,112 @@ package body STM32.FMAC is
             return This.CR.DMAWEN;
       end case;
    end DMA_Enabled;
+
+   ---------------------
+   -- Initialize_FMAC --
+   ---------------------
+
+   procedure Initialize_FMAC
+     (This   : in out FMAC_Accelerator;
+      Config : FMAC_Buffer_Configuration)
+   is
+   begin
+      STM32.Device.Enable_Clock (This);
+
+      --  Configure X2 buffer for coefficients
+      This.X2BUFCFG.X2_BASE := Config.Coeff_Base_Address;
+      This.X2BUFCFG.X2_BUF_SIZE := Config.Coeff_Buffer_Size;
+
+      --  Configure X1 buffer for input values
+      This.X1BUFCFG.X1_BASE := Config.Input_Base_Address;
+      This.X1BUFCFG.X1_BUF_SIZE := Config.Input_Buffer_Size;
+      This.X1BUFCFG.FULL_WM := Config.Input_Buffer_Threshold'Enum_Rep;
+
+      --  Configure Y buffer for output values
+      This.YBUFCFG.Y_BASE := Config.Output_Base_Address;
+      This.YBUFCFG.Y_BUF_SIZE := Config.Output_Buffer_Size;
+      This.YBUFCFG.EMPTY_WM := Config.Output_Buffer_Threshold'Enum_Rep;
+
+      This.CR.CLIPEN := Config.Clipping;
+   end Initialize_FMAC;
+
+   ----------------------
+   --  Preload_Buffers --
+   ----------------------
+
+   procedure Preload_Buffers
+     (This           : in out FMAC_Accelerator;
+      Filter         : FMAC_Filter_Function;
+      Input_Vector   : Block_Q1_15;
+      Coeff_Vector_B : Block_Q1_15;
+      Coeff_Vector_A : Block_Q1_15;
+      Output_Vector  : Block_Q1_15)
+   is
+   begin
+      --  Make shure there is no DMA nor interrupt enabled since no flow
+      --  control is required.
+      if This.CR.RIEN then
+         This.CR.RIEN := False;
+      end if;
+      if This.CR.WIEN then
+         This.CR.WIEN := False;
+      end if;
+      if This.CR.DMAREN then
+         This.CR.DMAREN := False;
+      end if;
+      if This.CR.DMAWEN then
+         This.CR.DMAWEN := False;
+      end if;
+
+      --  Preload X1 buffer
+      if Input_Vector'Length /= 0 then
+         This.PARAM.P := Input_Vector'Size;
+         This.PARAM.FUNC := Load_X1_Buffer'Enum_Rep;
+         This.PARAM.START := True;
+
+         for N in Input_Vector'Range loop
+            This.WDATA.WDATA := Q1_15_To_UInt16 (Input_Vector (N));
+         end loop;
+
+         --  Test if START bit is reset
+         pragma Assert (This.PARAM.START = True, "Preload X1 not done");
+      end if;
+
+      --  Preload X2 buffer
+      This.PARAM.P := Coeff_Vector_B'Length;
+
+      if Filter = IIR_Filter_Direct_Form_1 then
+         This.PARAM.Q := Coeff_Vector_A'Length;
+      end if;
+
+      This.PARAM.FUNC := Load_X2_Buffer'Enum_Rep;
+      This.PARAM.START := True;
+      for N in Coeff_Vector_B'Range loop
+         This.WDATA.WDATA := Q1_15_To_UInt16 (Coeff_Vector_B (N));
+      end loop;
+
+      if Filter = IIR_Filter_Direct_Form_1 then
+         for M in Coeff_Vector_A'Range loop
+            This.WDATA.WDATA := Q1_15_To_UInt16 (Coeff_Vector_A (M));
+         end loop;
+      end if;
+
+      --  Test if START bit is reset
+      pragma Assert (This.PARAM.START = True, "Preload X2 not done");
+
+      --  Preload Y buffer
+      if Output_Vector'Length /= 0 then
+         This.PARAM.P := Output_Vector'Size;
+         This.PARAM.FUNC := Load_Y_Buffer'Enum_Rep;
+         This.PARAM.START := True;
+
+         for N in Output_Vector'Range loop
+            This.WDATA.WDATA := Q1_15_To_UInt16 (Output_Vector (N));
+         end loop;
+
+         --  Test if START bit is reset
+         pragma Assert (This.PARAM.START = True, "Preload Y not done");
+      end if;
+   end Preload_Buffers;
 
 end STM32.FMAC;
