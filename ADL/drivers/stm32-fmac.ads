@@ -219,11 +219,12 @@ package STM32.FMAC is
    --  Preload the X1, X2 and Y FMAC buffers with polling. For FIR, The X2
    --  buffer has only b0 .. bN coefficients from Coeff_Vector_B, so
    --  Coeff_Vector_A don't care; for IIR, X2 has b0 .. bN concatenated with
-   --  a1 .. aM from Coeff_Vector_A. It is optional to preload X1 because when
-   --  the FMAC start it will only calculate the first filter output when it has
-   --  reached X1 buffer size. For IIR, the Y buffer preload may be necessary.
-   --  If the preload of X1 or Y are not done, these buffers must have zero
-   --  length.
+   --  a1 .. aM from Coeff_Vector_A.
+   --  It is optional to preload X1 because when the FMAC start it will only
+   --  calculate the first filter output when it has reached X1 buffer size.
+   --  If the preload of X1 is not done, this buffer must have zero length.
+   --  For IIR, it is recommended to preload the Y buffer with zeros to avoid
+   --  unpredictable transient values at the outset.
 
    procedure Set_FMAC_Clipping
      (This   : in out FMAC_Accelerator;
