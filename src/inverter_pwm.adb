@@ -11,7 +11,7 @@ package body Inverter_PWM is
    procedure Initialize_CORDIC is
       use STM32.Device;
    begin
-      Polling.Initialize_CORDIC (CORDIC_Unit);
+      Enable_Clock (CORDIC_Unit);
       Configure_CORDIC_Coprocessor
         (CORDIC_Unit,
          Operation => Sine,

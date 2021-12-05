@@ -1,11 +1,4 @@
-with STM32.Device;
-
 package body STM32.CORDIC.Polling is
-
-   procedure Initialize_CORDIC (This : in out CORDIC_Coprocessor) is
-   begin
-      STM32.Device.Enable_Clock (This);
-   end Initialize_CORDIC;
 
    -------------------------------
    -- Calculate_CORDIC_Function --

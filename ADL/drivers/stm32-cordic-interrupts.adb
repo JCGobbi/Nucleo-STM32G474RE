@@ -2,12 +2,6 @@ with STM32.Device;
 
 package body STM32.CORDIC.Interrupts is
 
-   procedure Initialize_CORDIC (This : in out CORDIC_Coprocessor) is
-   begin
-      STM32.Device.Enable_Clock (This);
-      This.CSR.IEN := True;
-   end Initialize_CORDIC;
-
    -------------------------------
    -- Calculate_CORDIC_Function --
    -------------------------------

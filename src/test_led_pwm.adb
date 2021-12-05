@@ -45,7 +45,7 @@ begin
    Power_Control.Enable_Output;
 
    --  Configure CORDIC coprocessor with sine function
-   Polling.Initialize_CORDIC (CORDIC_Unit);
+   Enable_Clock (CORDIC_Unit);
    Configure_CORDIC_Coprocessor
      (CORDIC_Unit,
       Operation => Sine,
