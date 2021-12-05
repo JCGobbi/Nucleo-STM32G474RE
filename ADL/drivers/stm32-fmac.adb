@@ -1,5 +1,3 @@
-with STM32.Device;
-
 package body STM32.FMAC is
 
    ----------------
@@ -107,8 +105,6 @@ package body STM32.FMAC is
       Config : FMAC_Buffer_Configuration)
    is
    begin
-      STM32.Device.Enable_Clock (This);
-
       --  Configure X2 buffer for coefficients
       This.X2BUFCFG.X2_BASE := Config.Coeff_Base_Address;
       This.X2BUFCFG.X2_BUF_SIZE := Config.Coeff_Buffer_Size;
