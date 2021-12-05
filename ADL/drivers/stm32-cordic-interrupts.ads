@@ -9,15 +9,15 @@ package STM32.CORDIC.Interrupts is
 
    procedure Calculate_CORDIC_Function
      (This     : in out CORDIC_Coprocessor;
-      Argument : Block_32;
-      Result   : out Block_32);
-   --  Uses the interrupt interface to get the the calculated funtion result.
+      Argument : UInt32_Array;
+      Result   : out UInt32_Array);
+   --  Uses the interrupt interface to get the calculated funtion result.
 
    procedure Calculate_CORDIC_Function
      (This     : in out CORDIC_Coprocessor;
-      Argument : Block_16;
-      Result   : out Block_16);
-   --  Uses the interrupt interface to get the the calculated funtion result.
+      Argument : UInt16_Array;
+      Result   : out UInt16_Array);
+   --  Uses the interrupt interface to get the calculated funtion result.
 
 private
    type Buffer_Content is array (Integer range <>) of UInt32;

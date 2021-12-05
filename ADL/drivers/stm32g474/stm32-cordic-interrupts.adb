@@ -14,8 +14,8 @@ package body STM32.CORDIC.Interrupts is
 
    procedure Calculate_CORDIC_Function
      (This     : in out CORDIC_Coprocessor;
-      Argument : Block_32;
-      Result   : out Block_32)
+      Argument : UInt32_Array;
+      Result   : out UInt32_Array)
    is
       --  Test if data width is 32 bit
       pragma Assert (This.CSR.ARGSIZE = True, "Invalid data size");
@@ -52,8 +52,8 @@ package body STM32.CORDIC.Interrupts is
 
    procedure Calculate_CORDIC_Function
      (This     : in out CORDIC_Coprocessor;
-      Argument : Block_16;
-      Result   : out Block_16)
+      Argument : UInt16_Array;
+      Result   : out UInt16_Array)
    is
       --  Test if data width is 16 bit
       pragma Assert (This.CSR.ARGSIZE = False, "Invalid data size");
@@ -134,7 +134,7 @@ package body STM32.CORDIC.Interrupts is
                   Buffer.Head := (Buffer.Head + 1) mod Buffer.Content'Length;
                   Buffer.Content (Buffer.Head) := Get_CORDIC_Data (CORDIC_Unit);
 
-                  -- Test if the function has two 32 bits results
+                  --  Test if the function has two 32 bits results
                   if Get_CORDIC_Results_Number (CORDIC_Unit) = Two_32_Bit then
                      if (Buffer.Head + 1) mod Buffer.Content'Length = Buffer.Tail
                      then

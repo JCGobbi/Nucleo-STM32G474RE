@@ -13,8 +13,8 @@ package body STM32.CORDIC.Polling is
 
    procedure Calculate_CORDIC_Function
      (This     : in out CORDIC_Coprocessor;
-      Argument : Block_32;
-      Result   : out Block_32)
+      Argument : UInt32_Array;
+      Result   : out UInt32_Array)
    is
       --  Test if data width is 32 bit
       pragma Assert (This.CSR.ARGSIZE = True, "Invalid data size");
@@ -54,8 +54,8 @@ package body STM32.CORDIC.Polling is
 
    procedure Calculate_CORDIC_Function
      (This     : in out CORDIC_Coprocessor;
-      Argument : Block_16;
-      Result   : out Block_16)
+      Argument : UInt16_Array;
+      Result   : out UInt16_Array)
    is
       --  Test if data width is 16 bit
       pragma Assert (This.CSR.ARGSIZE = False, "Invalid data size");

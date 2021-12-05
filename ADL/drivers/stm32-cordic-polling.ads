@@ -7,14 +7,14 @@ package STM32.CORDIC.Polling is
 
    procedure Calculate_CORDIC_Function
      (This     : in out CORDIC_Coprocessor;
-      Argument : Block_32;
-      Result   : out Block_32);
-   --  Polls the CORDIC directly to get the the calculated funtion result.
+      Argument : UInt32_Array;
+      Result   : out UInt32_Array);
+   --  Polls the CORDIC directly to get the calculated funtion result.
 
    procedure Calculate_CORDIC_Function
      (This     : in out CORDIC_Coprocessor;
-      Argument : Block_16;
-      Result   : out Block_16);
-   --  Polls the CORDIC directly to get the the calculated funtion result.
+      Argument : UInt16_Array;
+      Result   : out UInt16_Array);
+   --  Polls the CORDIC directly to get the calculated funtion result.
 
 end STM32.CORDIC.Polling;

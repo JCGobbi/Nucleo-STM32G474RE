@@ -175,8 +175,8 @@ private
    --  semi-senoid and the last point (0.0) will return a sine value of 0.0.
 
    --  Buffers with the data in and out to the CORDIC.
-   Data_In : Block_16 := (Q1_15_To_UInt16 (Initial_Step), Modulus);
-   Data_Out : Block_16 := (0, 0);
+   Data_In : UInt16_Array := (Q1_15_To_UInt16 (Initial_Step), Modulus);
+   Data_Out : UInt16_Array := (0, 0);
 
    PWM_Timer_Ref : access Timer := PWM_Timer'Access;
 

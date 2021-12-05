@@ -71,10 +71,10 @@ begin
       --  This value must be a multiple of delta (2.0**(-31)).
       --  The Increment value controls the rate at which the brightness
       --  increases and decreases and depends on the CPU clock frequency.
-      Data_In : Block_32 := (Q1_31_To_UInt32 (Angle), Modulus);
+      Data_In : UInt32_Array := (Q1_31_To_UInt32 (Angle), Modulus);
       --  The sine function goes from -1.0 to 0.0 to 1.0 in a complete sine
       --  period, that corresponds to -Pi to 0 to Pi.
-      Data_Out : Block_32 := (0, 0);
+      Data_Out : UInt32_Array := (0, 0);
 
       Value : Percentage;
    begin

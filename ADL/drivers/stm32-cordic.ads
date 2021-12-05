@@ -104,7 +104,7 @@ package STM32.CORDIC is
    --  necessary to reset the RRDY flag.
 
    function Get_CORDIC_Results_Number
-     (This  : CORDIC_Coprocessor)
+     (This : CORDIC_Coprocessor)
       return CORDIC_Arguments_Number;
 
    procedure Configure_CORDIC_Coprocessor
@@ -118,12 +118,6 @@ package STM32.CORDIC is
    --  chapter 17.3.2 Table 102.
 
    function Get_CORDIC_Data (This : CORDIC_Coprocessor) return UInt32;
-
-   type Block_32 is array (Positive range <>) of UInt32
-     with Component_Size => 32;
-
-   type Block_16 is array (Positive range <>) of UInt16
-     with Component_Size => 16;
 
    --  The CORDIC operates in fixed point signed integer format. Input and
    --  output values can be either q1.31 or q1.15. See RM0440 rev 6 chapter
