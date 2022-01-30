@@ -106,6 +106,20 @@ SECTIONS
   } > ccm_da
   __ccmdata_words = (__ccmdata_end - __ccmdata_start) >> 2;
 
+  .ccmbss (NOLOAD): {
+   . = ALIGN(0x8);
+   __ccmbss_start = .;
+   *(.ccmbss .ccmbss.*)
+
+   __stack_start = .;
+   . += DEFINED (__stack_size) ? __stack_size : _DEFAULT_STACK_SIZE;
+   . = ALIGN(0x8);
+   __stack_end = .;
+
+    __ccmbss_end = .;
+  } > ccm_bs
+  __ccmbss_words = (__ccmbss_end - __ccmbss_start) >> 2;
+
   .bss (NOLOAD): {
    . = ALIGN(0x8);
    __bss_start = .;
@@ -120,11 +134,6 @@ SECTIONS
    *(.interrupt_stacks)
    . = ALIGN(0x8);
    __interrupt_stack_end = .;
-
-   __stack_start = .;
-   . += DEFINED (__stack_size) ? __stack_size : _DEFAULT_STACK_SIZE;
-   . = ALIGN(0x8);
-   __stack_end = .;
 
    _end = .;
    __heap_start = .;

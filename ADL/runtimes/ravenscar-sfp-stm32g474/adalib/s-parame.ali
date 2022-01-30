@@ -28,9 +28,9 @@ W system%s		system.ads		system.ali
 U system.parameters%s	s-parame.ads		015f4e74 NE OL PU PK
 W system%s		system.ads		system.ali
 
-D system.ads		20211107195435 8fcf39fb system%s
-D s-parame.ads		20211107195435 8e90778f system.parameters%s
-D s-parame.adb		20211107195435 09556a15 system.parameters%b
+D system.ads		20220130174459 8fcf39fb system%s
+D s-parame.ads		20220130174459 8e90778f system.parameters%s
+D s-parame.adb		20220130174459 09556a15 system.parameters%b
 G a e
 G c Z s b [adjust_storage_size system__parameters 74 13 none]
 X 1 system.ads

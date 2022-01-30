@@ -37,14 +37,14 @@ W system%s		system.ads		system.ali
 W system.libm_double%s	s-libdou.adb		s-libdou.ali
 W system.libm_prefix%s	s-libpre.ads		s-libpre.ali
 
-D ada.ads		20211107195435 76789da1 ada%s
-D a-unccon.ads		20211107195435 0e9b276f ada.unchecked_conversion%s
-D system.ads		20211107195436 5ad4ef55 system%s
-D s-libdou.ads		20211107195435 642b3a67 system.libm_double%s
-D s-lidosq.ads		20211107195435 8581fdd1 system.libm_double.squareroot%s
-D s-lidosq.adb		20211107195435 e68d5e99 system.libm_double.squareroot%b
-D s-libpre.ads		20211107195435 f93cda94 system.libm_prefix%s
-D s-maccod.ads		20211107195435 6d68a701 system.machine_code%s
+D ada.ads		20220130174459 76789da1 ada%s
+D a-unccon.ads		20220130174459 0e9b276f ada.unchecked_conversion%s
+D system.ads		20220130174459 5ad4ef55 system%s
+D s-libdou.ads		20220130174459 642b3a67 system.libm_double%s
+D s-lidosq.ads		20220130174459 8581fdd1 system.libm_double.squareroot%s
+D s-lidosq.adb		20220130174459 e68d5e99 system.libm_double.squareroot%b
+D s-libpre.ads		20220130174459 f93cda94 system.libm_prefix%s
+D s-maccod.ads		20220130174459 6d68a701 system.machine_code%s
 G a e
 G c Z s b [sqrt system__libm_double__squareroot 40 13 none]
 G c Z b b [rsqrt system__libm_double__squareroot 40 13 none]

@@ -27,9 +27,9 @@ W system%s		system.ads		system.ali
 U system.fore_d%s	s-fore_d.ads		57792d6c BN NE OL PU PK GE
 W system%s		system.ads		system.ali
 
-D system.ads		20211107195436 5ad4ef55 system%s
-D s-fore_d.ads		20211107195436 0dadc239 system.fore_d%s
-D s-fore_d.adb		20211107195436 3c30d9e3 system.fore_d%b
+D system.ads		20220130174459 5ad4ef55 system%s
+D s-fore_d.ads		20220130174459 0dadc239 system.fore_d%s
+D s-fore_d.adb		20220130174459 3c30d9e3 system.fore_d%b
 G a e
 G c Z s b [fore_d system 39 16 none]
 X 1 system.ads

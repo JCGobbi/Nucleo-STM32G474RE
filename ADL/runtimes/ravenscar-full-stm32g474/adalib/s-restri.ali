@@ -28,10 +28,10 @@ U system.restrictions%s	s-restri.ads		3084f6a0 BN NE OL PR PK
 W system%s		system.ads		system.ali
 W system.rident%s
 
-D system.ads		20211107195436 5ad4ef55 system%s
-D s-restri.ads		20211107195436 1b9d0672 system.restrictions%s
-D s-restri.adb		20211107195436 0b93a92a system.restrictions%b
-D s-rident.ads		20211107195436 71cd1f87 system.rident%s
+D system.ads		20220130174459 5ad4ef55 system%s
+D s-restri.ads		20220130174459 1b9d0672 system.restrictions%s
+D s-restri.adb		20220130174459 0b93a92a system.restrictions%b
+D s-rident.ads		20220130174459 71cd1f87 system.rident%s
 G a e
 G c Z s s [Trestriction_flagsBIP system__restrictions__rident 322 4 49_4]
 G c Z s s [Trestriction_valuesBIP system__restrictions__rident 323 4 49_4]
