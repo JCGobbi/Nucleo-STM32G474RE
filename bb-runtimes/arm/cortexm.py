@@ -814,10 +814,10 @@ class Stm32CommonArchSupport(ArchSupport):
     def __init__(self):
         super(Stm32CommonArchSupport, self).__init__()
 
-        self.add_linker_script('arm/stm32/common-RAM.ld', loader='RAM')
-        self.add_linker_script('arm/stm32/common-ROM.ld', loader='ROM')
-
 # Changed for stm32g474
+#        self.add_linker_script('arm/stm32/common-RAM.ld', loader='RAM')
+#        self.add_linker_script('arm/stm32/common-ROM.ld', loader='ROM')
+
         self.add_gnat_sources(
 #            'src/s-bbpara__stm32f4.ads',
 #            'arm/stm32/s-stm32.ads',
@@ -959,13 +959,17 @@ class Stm32(ArmV7MTarget):
                'arm/stm32/stm32g474/setup_pll.adb',
                'arm/stm32/stm32g474/setup_pll.ads',
                'arm/stm32/stm32g474/s-bbbopa.ads')
+           self.add_linker_script('arm/stm32/stm32g474/common-RAM.ld', loader='RAM')
+           self.add_linker_script('arm/stm32/stm32g474/common-ROM.ld', loader='ROM')
         else:
-# End
            self.add_gnat_sources(
                'src/s-bbpara__stm32f4.ads',
                'arm/stm32/s-stm32.ads',
                'arm/stm32/setup_pll.adb',
                'arm/stm32/setup_pll.ads')
+           self.add_linker_script('arm/stm32/common-RAM.ld', loader='RAM')
+           self.add_linker_script('arm/stm32/common-ROM.ld', loader='ROM')
+# End
 
         # Add board template configuration
         for key, value in stm32_board_configuration[self.board].items():
