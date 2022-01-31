@@ -111,12 +111,20 @@ SECTIONS
    __ccmbss_start = .;
    *(.ccmbss .ccmbss.*)
 
+   . = ALIGN(0x8);    /* Align the stack to 64 bits */
+    __ccmbss_end = .;
+
    __stack_start = .;
    . += DEFINED (__stack_size) ? __stack_size : _DEFAULT_STACK_SIZE;
    . = ALIGN(0x8);
    __stack_end = .;
 
-    __ccmbss_end = .;
+   __interrupt_stack_start = .;
+   *(.interrupt_stacks)
+   . = ALIGN(0x8);
+   __interrupt_stack_end = .;
+
+   _end = .;
   } > ccm_bs
   __ccmbss_words = (__ccmbss_end - __ccmbss_start) >> 2;
 
@@ -130,12 +138,6 @@ SECTIONS
    . = ALIGN(0x8);    /* Align the stack to 64 bits */
    __bss_end = .;
 
-   __interrupt_stack_start = .;
-   *(.interrupt_stacks)
-   . = ALIGN(0x8);
-   __interrupt_stack_end = .;
-
-   _end = .;
    __heap_start = .;
    __heap_end = ORIGIN(sram_bs) + LENGTH(sram_bs);
   } > sram_bs
