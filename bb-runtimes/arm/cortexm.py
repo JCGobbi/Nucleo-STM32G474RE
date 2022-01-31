@@ -821,8 +821,8 @@ class Stm32CommonArchSupport(ArchSupport):
         self.add_gnat_sources(
 #            'src/s-bbpara__stm32f4.ads',
 #            'arm/stm32/s-stm32.ads',
-            'arm/stm32/start-rom.S',
-            'arm/stm32/start-ram.S',
+#            'arm/stm32/start-rom.S',
+#            'arm/stm32/start-ram.S',
             'arm/stm32/start-common.S')
 #            'arm/stm32/setup_pll.adb',
 #            'arm/stm32/setup_pll.ads')
@@ -956,6 +956,8 @@ class Stm32(ArmV7MTarget):
            self.add_gnat_sources(
                'arm/stm32/stm32g474/s-bbpara.ads',
                'arm/stm32/stm32g474/s-stm32.ads',
+               'arm/stm32/stm32g474/start-rom.S',
+               'arm/stm32/stm32g474/start-ram.S',
                'arm/stm32/stm32g474/setup_pll.adb',
                'arm/stm32/stm32g474/setup_pll.ads',
                'arm/stm32/stm32g474/s-bbbopa.ads')
@@ -965,6 +967,8 @@ class Stm32(ArmV7MTarget):
            self.add_gnat_sources(
                'src/s-bbpara__stm32f4.ads',
                'arm/stm32/s-stm32.ads',
+               'arm/stm32/start-rom.S',
+               'arm/stm32/start-ram.S',
                'arm/stm32/setup_pll.adb',
                'arm/stm32/setup_pll.ads')
            self.add_linker_script('arm/stm32/common-RAM.ld', loader='RAM')

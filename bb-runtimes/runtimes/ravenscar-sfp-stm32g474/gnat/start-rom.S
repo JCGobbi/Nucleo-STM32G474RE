@@ -82,7 +82,16 @@ _start_rom:
 0:	str	r2,[r0],#4
 	subs	r1,r1,#1
 	bne	0b
-
+1:
+	/* Clear .ccmbss */
+	movw	r0,#:lower16:__ccmbss_start
+	movt	r0,#:upper16:__ccmbss_start
+	movw	r1,#:lower16:__ccmbss_words
+	mov	r2,#0
+	cbz	r1,1f
+0:	str	r2,[r0],#4
+	subs	r1,r1,#1
+	bne	0b
 1:
 	bl	_ada_setup_pll
 	bl	main
