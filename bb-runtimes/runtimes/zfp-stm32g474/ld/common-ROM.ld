@@ -125,6 +125,8 @@ SECTIONS
    __interrupt_stack_end = .;
 
    _end = .;
+   __heap_start = .;
+   __heap_end = ORIGIN(ccm_bs) + LENGTH(ccm_bs);
   } > ccm_bs
   __ccmbss_words = (__ccmbss_end - __ccmbss_start) >> 2;
 
