@@ -176,13 +176,9 @@ library project Ada_Drivers_Library is
       for Address  ("flash") use "0x08000000";
       for Size     ("flash") use "512K";
 
-      for Mem_Kind ("sram") use "RAM1";
+      for Mem_Kind ("sram") use "RAM12";
       for Address  ("sram") use "0x20000000";
-      for Size     ("sram") use "80K";
-
-      for Mem_Kind ("sram") use "RAM2";
-      for Address  ("sram") use "0x20014000";
-      for Size     ("sram") use "16K";
+      for Size     ("sram") use "96K";
 
       for Mem_Kind ("ccm") use "CCM";
       for Address  ("ccm") use "0x10000000";
