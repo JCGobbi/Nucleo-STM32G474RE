@@ -39,24 +39,6 @@ with STM32.RCC;       use STM32.RCC;
 
 package body STM32.Device is
 
-   HSE_VALUE : constant := 24_000_000;
-   --  High-Speed external oscillator in Hz
-
-   LSE_VALUE : constant := 32_768;
-   --  Low-Speed external oscillator in Hz
-
-   HSI_VALUE : constant := 16_000_000;
-   --  High-Speed internal oscillator in Hz
-
-   --  HSI48_VALUE : constant := 48_000_000;
-   --  High-Speed internal 48 MHz oscillator in Hz
-
-   LSI_VALUE : constant := 32_000;
-   --  Low-Speed internal oscillator in Hz
-
-   I2SCLK : constant := 12_288_000;
-   --  I2S_CKIN external frequency
-
    HPRE_Presc_Table : constant array (UInt4) of UInt32 :=
      (1, 1, 1, 1, 1, 1, 1, 1, 2, 4, 8, 16, 64, 128, 256, 512);
 
