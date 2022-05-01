@@ -210,7 +210,7 @@ package STM32_SVD.FDCAN is
       Reserved_16_31 at 0 range 16 .. 31;
    end record;
 
-   subtype NBTP_TSEG2_Field is HAL.UInt7;
+   subtype NBTP_NTSEG2_Field is HAL.UInt7;
    subtype NBTP_NTSEG1_Field is HAL.UInt8;
    subtype NBTP_NBRP_Field is HAL.UInt9;
    subtype NBTP_NSJW_Field is HAL.UInt7;
@@ -218,7 +218,7 @@ package STM32_SVD.FDCAN is
    --  FDCAN_NBTP
    type NBTP_Register is record
       --  TSEG2
-      TSEG2        : NBTP_TSEG2_Field := 16#33#;
+      NTSEG2       : NBTP_NTSEG2_Field := 16#33#;
       --  unspecified
       Reserved_7_7 : HAL.Bit := 16#0#;
       --  NTSEG1
@@ -232,7 +232,7 @@ package STM32_SVD.FDCAN is
           Bit_Order => System.Low_Order_First;
 
    for NBTP_Register use record
-      TSEG2        at 0 range 0 .. 6;
+      NTSEG2       at 0 range 0 .. 6;
       Reserved_7_7 at 0 range 7 .. 7;
       NTSEG1       at 0 range 8 .. 15;
       NBRP         at 0 range 16 .. 24;

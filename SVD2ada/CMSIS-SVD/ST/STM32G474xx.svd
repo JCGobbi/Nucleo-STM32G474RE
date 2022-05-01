@@ -55795,8 +55795,8 @@
                <resetValue>0x00000A33</resetValue>
                <fields>
                   <field>
-                     <name>TSEG2</name>
-                     <description>TSEG2</description>
+                     <name>NTSEG2</name>
+                     <description>NTSEG2</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>7</bitWidth>
                   </field>
