@@ -12,7 +12,8 @@
 with HAL;                  use HAL;
 
 with STM32.Device;         use STM32.Device;
-with STM32.Timers.PWM;     use STM32.Timers, STM32.Timers.PWM;
+with STM32.Timers;         use STM32.Timers;
+with STM32.PWM;            use STM32.PWM;
 with STM32.CORDIC.Polling; use STM32.CORDIC;
 
 with STM_Board;            use STM_Board;
@@ -62,8 +63,8 @@ begin
       --  (0x7FFF).
 
       Angle : Q1_31 := -0.5;
-      --  The start angle is -0.5, that corresponds to -Pi/2, so the LED start
-      --  off.
+      --  The start angle is -0.5, that corresponds to -Pi/2, so with sine
+      --  funtion the LED start off.
       Modulus : constant UInt32 := 16#7FFFFFFF#; --  1 - 2**(-31)
       --  For sine function, the first argument is the angle, while the second
       --  argument is the modulus, that in this case doesn't change.
@@ -88,8 +89,7 @@ begin
          --  The input (WDATA) and output (RDATA) data of the CORDIC uses UInt32
          --  to represent the fixed point values. So we need to convert the type
          --  Fraction_32 to UInt32 and vice-versa.
-         Value := Percentage (50.0 * (1.0 +
-                              Float (UInt32_To_Q1_31 (Data_Out (1)))));
+         Value := Percentage (100.0 * (Float (UInt32_To_Q1_31 (Data_Out (1)))));
          Power_Control.Set_Duty_Cycle (Value);
 
          --  Data input to CORDIC must be between -1.0 and 1.0 - 1 / 2**(-31),
@@ -98,9 +98,7 @@ begin
          --  bright when the Angle is 0 and it is ON when the Angle is 0.5 (Pi/2).
          --  When the angle value reaches any of these maximum, it must be
          --  incremented/decremented.
-         if (Angle + Increment > 0.5) or
-           (Angle + Increment < -0.5)
-         then
+         if (Angle + Increment > 0.5) or (Angle + Increment < -0.5) then
             Increment := -Increment;
          end if;
 

@@ -34,144 +34,128 @@
 
 --  Example use, with arbitrary hardware selections:
 
---     Selected_Timer : STM32.Timers.Timer renames Timer_4;
+--     Selected_Timer : STM32.HRTimers.HRTimer_Channel renames HRTimer_A;
 --
 --     Modulator1 : PWM_Modulator;
---     Modulator2 : PWM_Modulator;
 --     ...
---     --  Note that a single timer can drive multiple PWM modulators.
+--     --  Note that a single hrtimer can drive only one PWM modulator.
 --
 --     Frequency : constant Hertz := 30_000;
---
 --     ...
---
---     Configure_PWM_Timer (Selected_Timer'Access, Frequency);
+--     Configure_PWM_HRTimer (Selected_Timer'Access, Frequency);
 --
 --     Modulator1.Attach_PWM_Channel
 --       (Selected_Timer'Access,
---        Output_Channel,
 --        PD13,
 --        GPIO_AF_2_TIM4);
 --     ...
---
 --     Modulator1.Enable_Output;
---     Modulator2.Enable_Output;
 --
 --     Modulator1.Set_Duty_Cycle (Value);
 --     ...
 
-with STM32.GPIO;   use STM32.GPIO;
+with STM32.GPIO;      use STM32.GPIO;
+with STM32.HRTimers;  use STM32.HRTimers;
 
-package STM32.Timers.PWM is
+package STM32.HRPWM is
    pragma Elaborate_Body;
 
    subtype Hertz is UInt32;
 
-   procedure Configure_PWM_Timer
-     (Generator : not null access Timer;
+   procedure Configure_PWM_HRTimer
+     (Generator : not null access HRTimer_Channel;
       Frequency : Hertz)
-     with Post =>
-       Enabled (Generator.all) and
-       (if Advanced_Timer (Generator.all) then Main_Output_Enabled (Generator.all));
+     with Post => Enabled (Generator.all);
    --  Configures the specified timer for the requested frequency. Must
    --  be called once (for a given frequency) for each timer used for the
    --  PWM_Modulator objects. May be called more than once, to change the
-   --  operating frequency. This is a separate procedure, distinct from the
-   --  routines for objects of type PWM_Modulator, because a timer can be
-   --  shared by several modulator objects at the same time.
+   --  operating frequency.
    --
    --  Raises Unknown_Timer if Generator.all is not known to the board.
    --  Raises Invalid_Request if Frequency is too high or too low.
 
-   type PWM_Modulator is tagged limited private;
+   type HRPWM_Modulator is tagged limited private;
    --  An abstraction for PWM modulation using a timer operating at a given
    --  frequency. Essentially a convenience wrapper for the PWM functionality
    --  of the timers.
 
-   procedure Attach_PWM_Channel
-     (This      : in out PWM_Modulator;
-      Generator : not null access Timer;
-      Channel   : Timer_Channel;
-      Point     : GPIO_Point;
-      PWM_AF    : GPIO_Alternate_Function;
-      Polarity  : Timer_Output_Compare_Polarity := High;
-      AF_Speed  : Pin_Output_Speeds := Speed_100MHz)
+   procedure Attach_HRPWM_Channel
+     (This       : in out HRPWM_Modulator;
+      Generator  : not null access HRTimer_Channel;
+      Compare    : HRTimer_Compare_Number;
+      Point      : GPIO_Point;
+      PWM_AF     : GPIO_Alternate_Function;
+      Polarity   : Channel_Output_Polarity := High;
+      Idle_State : Boolean;
+      AF_Speed   : Pin_Output_Speeds := Speed_100MHz)
      with Post => not Output_Enabled (This) and
                   Current_Duty_Cycle (This) = 0;
-   --  Initializes the channel on the timer associated with This modulator,
-   --  and the corresponding GPIO port/pin pair, for PWM output.
-   --
-   --  May be called multiple times for the same PWM_Modulator object, with
-   --  different channels, because the corresponding timer can drive multiple
-   --  channels (assuming such a timer is in use).
+   --  Initializes the timer associated with This modulator, and the
+   --  corresponding GPIO port/pin pair, for PWM output with only the Output_1.
 
-   procedure Attach_PWM_Channel
-     (This                     : in out PWM_Modulator;
-      Generator                : not null access Timer;
-      Channel                  : Timer_Channel;
+   procedure Attach_HRPWM_Channel
+     (This                     : in out HRPWM_Modulator;
+      Generator                : not null access HRTimer_Channel;
+      Compare                  : HRTimer_Compare_Number;
       Point                    : GPIO_Point;
       Complementary_Point      : GPIO_Point;
       PWM_AF                   : GPIO_Alternate_Function;
-      Polarity                 : Timer_Output_Compare_Polarity;
-      Idle_State               : Timer_Capture_Compare_State;
-      Complementary_Polarity   : Timer_Output_Compare_Polarity;
-      Complementary_Idle_State : Timer_Capture_Compare_State;
+      Polarity                 : Channel_Output_Polarity;
+      Idle_State               : Boolean;
+      Complementary_Polarity   : Channel_Output_Polarity;
+      Complementary_Idle_State : Boolean;
       AF_Speed                 : Pin_Output_Speeds := Speed_100MHz)
      with Post => not Output_Enabled (This) and
                   not Complementary_Output_Enabled (This) and
                   Current_Duty_Cycle (This) = 0;
-   --  Initializes the channel on the timer associated with This modulator, and
-   --  the corresponding GPIO port/pin pairs, for PWM output with complementary
+   --  Initializes the timer associated with This modulator, and the
+   --  corresponding GPIO port/pin pairs, for PWM output with complementary
    --  output included.
-   --
-   --  May be called multiple times for the same PWM_Modulator object, with
-   --  different channels, because the corresponding timer can drive multiple
-   --  channels (assuming such a timer is in use).
 
-   procedure Enable_Output (This : in out PWM_Modulator)
+   procedure Enable_Output (This : in out HRPWM_Modulator)
      with Post => Output_Enabled (This);
 
-   procedure Enable_Complementary_Output (This    : in out PWM_Modulator)
+   procedure Enable_Complementary_Output (This : in out HRPWM_Modulator)
      with Post => Complementary_Output_Enabled (This);
 
-   procedure Disable_Output (This : in out PWM_Modulator)
+   procedure Disable_Output (This : in out HRPWM_Modulator)
      with Post => not Output_Enabled (This);
 
-   procedure Disable_Complementary_Output (This : in out PWM_Modulator)
+   procedure Disable_Complementary_Output (This : in out HRPWM_Modulator)
      with Post => not Complementary_Output_Enabled (This);
 
-   function Output_Enabled (This : PWM_Modulator) return Boolean;
+   function Output_Enabled (This : HRPWM_Modulator) return Boolean;
 
    function Complementary_Output_Enabled
-     (This : PWM_Modulator) return Boolean;
+     (This : HRPWM_Modulator) return Boolean;
+
+   procedure Set_Polarity
+     (This     : in HRPWM_Modulator;
+      Polarity : in Channel_Output_Polarity);
+   --  Set the polarity of the output of This modulator.
+
+   procedure Set_Complementary_Polarity
+     (This     : in HRPWM_Modulator;
+      Polarity : in Channel_Output_Polarity);
+   --  Set the polarity of the complimentary output of This modulator.
 
    subtype Percentage is Integer range 0 .. 100;
 
    procedure Set_Duty_Cycle
-     (This  : in out PWM_Modulator;
-      Value : Percentage)
+     (This    : in out HRPWM_Modulator;
+      Value   : Percentage)
      with
        Inline,
        Post => Current_Duty_Cycle (This) = Value;
    --  Sets the pulse width such that the PWM output is active for the
    --  requested percentage.
 
-   function Current_Duty_Cycle (This : PWM_Modulator) return Percentage
+   function Current_Duty_Cycle (This : HRPWM_Modulator) return Percentage
      with Inline;
 
    subtype Microseconds is UInt32;
 
-   procedure Set_Duty_Time
-     (This  : in out PWM_Modulator;
-      Value : Microseconds)
-     with
-       Inline,
-       Pre => (Value <= Microseconds_Per_Period (This)
-               or else raise Invalid_Request with "duty time too high");
-   --  Set the pulse width such that the PWM output is active for the specified
-   --  number of microseconds.
-
-   function Microseconds_Per_Period (This : PWM_Modulator) return Microseconds
+   function Microseconds_Per_Period (This : HRPWM_Modulator) return Microseconds
      with Inline;
    --  Essentially 1_000_000 / PWM Frequency
    --
@@ -179,15 +163,15 @@ package STM32.Timers.PWM is
    --  result will be 33. This can be useful to compute the values passed to
    --  Set_Duty_Time.
 
-   procedure Set_Polarity
-     (This     : in PWM_Modulator;
-      Polarity : in Timer_Output_Compare_Polarity);
-   --  Set the polarity of the output of This modulator.
-
-   procedure Set_Complementary_Polarity
-     (This     : in PWM_Modulator;
-      Polarity : in Timer_Output_Compare_Polarity);
-   --  Set the polarity of the complimentary output of This modulator.
+   procedure Set_Duty_Time
+     (This    : in out HRPWM_Modulator;
+      Value   : Microseconds)
+     with
+       Inline,
+       Pre => (Value <= Microseconds_Per_Period (This)
+               or else raise Invalid_Request with "duty time too high");
+   --  Set the pulse width such that the PWM output is active for the specified
+   --  number of microseconds.
 
    Invalid_Request : exception;
    --  Raised when the requested frequency is too high or too low for the given
@@ -201,10 +185,10 @@ package STM32.Timers.PWM is
 
 private
 
-   type PWM_Modulator is tagged limited record
-      Generator  : access Timer;
+   type HRPWM_Modulator is tagged limited record
+      Generator  : access HRTimer_Channel;
+      Compare    : HRTimer_Compare_Number;
       Duty_Cycle : Percentage := 0;
-      Channel    : Timer_Channel;
    end record;
 
-end STM32.Timers.PWM;
+end STM32.HRPWM;
