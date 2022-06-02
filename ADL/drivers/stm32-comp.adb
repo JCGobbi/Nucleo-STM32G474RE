@@ -1,4 +1,5 @@
 with STM32.SYSCFG;
+with Ada.Real_Time;
 
 package body STM32.COMP is
 
@@ -7,15 +8,18 @@ package body STM32.COMP is
    ------------
 
    procedure Enable (This : in out Comparator) is
-      use STM32.SYSCFG;
+      use Ada.Real_Time;
    begin
       --  Enable clock for the COMP peripheral
-      Enable_SYSCFG_Clock;
+      STM32.SYSCFG.Enable_SYSCFG_Clock;
       --  There is no COMP-dedicated clock enable control bit in the RCC
       --  controller. Reset and clock enable bits are common for COMP and
       --  SYSCFG. See RM0440 pg 781 chapter 24.3.3.
 
       This.CSR.EN := True;
+      --  Delay 5 us for COMP startup time. See DS12288 Rev 5 chapter 5.3.22
+      --  Comparator characteristics.
+      delay until Clock + Microseconds (5);
    end Enable;
 
    -------------
@@ -36,45 +40,45 @@ package body STM32.COMP is
       return This.CSR.EN;
    end Enabled;
 
-   ------------------------------
-   -- Set_Inverting_Input_Port --
-   ------------------------------
+   ----------------------
+   -- Set_I_Input_Port --
+   ----------------------
 
-   procedure Set_Inverting_Input_Port
+   procedure Set_I_Input_Port
      (This  : in out Comparator;
-      Input : Inverting_Input_Port) is
+      Input : I_Input_Port) is
    begin
       This.CSR.INMSEL := Input'Enum_Rep;
-   end Set_Inverting_Input_Port;
+   end Set_I_Input_Port;
 
-   -------------------------------
-   -- Read_Inverting_Input_Port --
-   -------------------------------
+   ----------------------
+   -- Get_I_Input_Port --
+   ----------------------
 
-   function Read_Inverting_Input_Port
-     (This : Comparator) return Inverting_Input_Port
+   function Get_I_Input_Port
+     (This : Comparator) return I_Input_Port
    is
    begin
-      return Inverting_Input_Port'Val (This.CSR.INMSEL);
-   end Read_Inverting_Input_Port;
+      return I_Input_Port'Val (This.CSR.INMSEL);
+   end Get_I_Input_Port;
 
-   ---------------------------------
-   -- Set_NonInverting_Input_Port --
-   ---------------------------------
+   -----------------------
+   -- Set_NI_Input_Port --
+   -----------------------
 
-   procedure Set_NonInverting_Input_Port
+   procedure Set_NI_Input_Port
      (This  : in out Comparator;
-      Input : NonInverting_Input_Port) is
+      Input : NI_Input_Port) is
    begin
       This.CSR.INPSEL := Boolean'Val (Input'Enum_Rep);
-   end Set_NonInverting_Input_Port;
+   end Set_NI_Input_Port;
 
-   ----------------------------------
-   -- Read_NonInverting_Input_Port --
-   ----------------------------------
+   -----------------------
+   -- Get_NI_Input_Port --
+   -----------------------
 
-   function Read_NonInverting_Input_Port
-     (This : Comparator) return NonInverting_Input_Port
+   function Get_NI_Input_Port
+     (This : Comparator) return NI_Input_Port
    is
    begin
       if This.CSR.INPSEL then
@@ -82,7 +86,7 @@ package body STM32.COMP is
       else
          return Option_2;
       end if;
-   end Read_NonInverting_Input_Port;
+   end Get_NI_Input_Port;
 
    -------------------------
    -- Set_Output_Polarity --
@@ -94,18 +98,18 @@ package body STM32.COMP is
       This.CSR.POL := Output = Inverted;
    end Set_Output_Polarity;
 
-   --------------------------
-   -- Read_Output_Polarity --
-   --------------------------
+   -------------------------
+   -- Get_Output_Polarity --
+   -------------------------
 
-   function Read_Output_Polarity (This : Comparator) return Output_Polarity is
+   function Get_Output_Polarity (This : Comparator) return Output_Polarity is
    begin
       if This.CSR.POL then
          return Inverted;
       else
          return Not_Inverted;
       end if;
-   end Read_Output_Polarity;
+   end Get_Output_Polarity;
 
    -------------------------------
    -- Set_Comparator_Hysteresis --
@@ -117,15 +121,15 @@ package body STM32.COMP is
       This.CSR.HYST := Value'Enum_Rep;
    end Set_Comparator_Hysteresis;
 
-   --------------------------------
-   -- Read_Comparator_Hysteresis --
-   --------------------------------
+   -------------------------------
+   -- Get_Comparator_Hysteresis --
+   -------------------------------
 
-   function Read_Comparator_Hysteresis (This : Comparator)
+   function Get_Comparator_Hysteresis (This : Comparator)
                                         return Comparator_Hysteresis is
    begin
       return Comparator_Hysteresis'Val (This.CSR.HYST);
-   end Read_Comparator_Hysteresis;
+   end Get_Comparator_Hysteresis;
 
    -------------------------
    -- Set_Output_Blanking --
@@ -137,62 +141,84 @@ package body STM32.COMP is
       This.CSR.BLANKSEL := Output'Enum_Rep;
    end Set_Output_Blanking;
 
-   --------------------------
-   -- Read_Output_Blanking --
-   --------------------------
+   -------------------------
+   -- Get_Output_Blanking --
+   -------------------------
 
-   function Read_Output_Blanking (This : Comparator) return Output_Blanking is
+   function Get_Output_Blanking (This : Comparator) return Output_Blanking is
    begin
       return Output_Blanking'Val (This.CSR.BLANKSEL);
-   end Read_Output_Blanking;
+   end Get_Output_Blanking;
+
+   --------------------------
+   -- Configure_Comparator --
+   --------------------------
+
+   procedure Configure_Comparator
+     (This  : in out Comparator;
+      Param : Init_Parameters)
+   is
+   begin
+      This.CSR :=
+        (INMSEL   => Param.Input_Minus'Enum_Rep,
+         INPSEL   => Boolean'Val (Param.Input_Plus'Enum_Rep),
+         POL      => Param.Output_Pol = Inverted,
+         HYST     => Param.Hysteresis'Enum_Rep,
+         BLANKSEL => Param.Blanking_Source'Enum_Rep,
+         others   => <>);
+   end Configure_Comparator;
 
    ---------------------------------
    -- Set_Vrefint_Scaler_Resistor --
    ---------------------------------
 
    procedure Set_Vrefint_Scaler_Resistor
-     (This   : in out Comparator;
-      Output : Boolean)
+     (This    : in out Comparator;
+      Enabled : Boolean)
    is
    begin
-      This.CSR.BRGEN := Output;
+      This.CSR.BRGEN := Enabled;
    end Set_Vrefint_Scaler_Resistor;
 
-   ----------------------------------
-   -- Read_Vrefint_Scaler_Resistor --
-   ----------------------------------
+   ---------------------------------
+   -- Get_Vrefint_Scaler_Resistor --
+   ---------------------------------
 
-   function Read_Vrefint_Scaler_Resistor (This  : Comparator) return Boolean is
+   function Get_Vrefint_Scaler_Resistor (This : Comparator) return Boolean is
    begin
       return This.CSR.BRGEN;
-   end Read_Vrefint_Scaler_Resistor;
+   end Get_Vrefint_Scaler_Resistor;
 
    ------------------------
    -- Set_Vrefint_Scaler --
    ------------------------
 
    procedure Set_Vrefint_Scaler
-     (This   : in out Comparator;
-      Output : Boolean)
+     (This    : in out Comparator;
+      Enabled : Boolean)
    is
+      use Ada.Real_Time;
    begin
-      This.CSR.SCALEN := Output;
+      This.CSR.SCALEN := Enabled;
+      --  Delay for COMP scaler bridge voltage stabilization. See DS12288 Rev 5
+      --  chapter 5.3.22 Comparator characteristics.
+      delay until Clock + Microseconds (200);
    end Set_Vrefint_Scaler;
 
-   -------------------------
-   -- Read_Vrefint_Scaler --
-   -------------------------
+   ------------------------
+   -- Get_Vrefint_Scaler --
+   ------------------------
 
-   function Read_Vrefint_Scaler (This  : Comparator) return Boolean is
+   function Get_Vrefint_Scaler (This : Comparator) return Boolean is
    begin
       return This.CSR.SCALEN;
-   end Read_Vrefint_Scaler;
+   end Get_Vrefint_Scaler;
 
-   ----------------------------
-   -- Read_Comparator_Output --
-   ----------------------------
+   ---------------------------
+   -- Get_Comparator_Output --
+   ---------------------------
 
-   function Read_Comparator_Output
+   function Get_Comparator_Output
      (This : Comparator) return Comparator_Output is
    begin
       if This.CSR.VALUE then
@@ -200,7 +226,7 @@ package body STM32.COMP is
       else
          return Low;
       end if;
-   end Read_Comparator_Output;
+   end Get_Comparator_Output;
 
    -------------------------
    -- Set_Lock_Comparator --
@@ -211,13 +237,13 @@ package body STM32.COMP is
       This.CSR.LOCK := True;
    end Set_Lock_Comparator;
 
-   --------------------------
-   -- Read_Lock_Comparator --
-   --------------------------
+   -------------------------
+   -- Get_Lock_Comparator --
+   -------------------------
 
-   function Read_Lock_Comparator (This : Comparator) return Boolean is
+   function Get_Lock_Comparator (This : Comparator) return Boolean is
    begin
       return This.CSR.LOCK;
-   end Read_Lock_Comparator;
+   end Get_Lock_Comparator;
 
 end STM32.COMP;

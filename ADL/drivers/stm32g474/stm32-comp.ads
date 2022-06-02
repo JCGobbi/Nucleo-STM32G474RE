@@ -16,7 +16,7 @@ package STM32.COMP is
 
    function Enabled (This : Comparator) return Boolean;
 
-   type Inverting_Input_Port is
+   type I_Input_Port is
      (One_Quarter_Vrefint,
       One_Half_Vrefint,
       Three_Quarter_Vrefint,
@@ -36,19 +36,19 @@ package STM32.COMP is
    --  See Table 196: COMPx inverting input assignment at pg 781 chapter 24.3.2
    --  RM0440 rev 6.
 
-   procedure Set_Inverting_Input_Port
+   procedure Set_I_Input_Port
      (This  : in out Comparator;
-      Input : Inverting_Input_Port)
-     with Post => Read_Inverting_Input_Port (This) = Input;
+      Input : I_Input_Port)
+     with Post => Get_I_Input_Port (This) = Input;
    --  Select the source connected to the inverting input of the comparator.
    --  See Table 196: COMPx inverting input assignment at pg 781 chapter 24.3.2
    --  RM0440 rev 6.
 
-   function Read_Inverting_Input_Port
-     (This : Comparator) return Inverting_Input_Port;
+   function Get_I_Input_Port
+     (This : Comparator) return I_Input_Port;
    --  Return the source connected to the inverting input of the comparator.
 
-   type NonInverting_Input_Port is
+   type NI_Input_Port is
      (Option_1,
       Option_2);
    --  These bits allows to select the source connected to the non-inverting
@@ -59,16 +59,16 @@ package STM32.COMP is
    --  See Table 195: COMPx non-inverting input assignment at pg 781 chapter
    --  24.3.2 RM0440 rev 6.
 
-   procedure Set_NonInverting_Input_Port
+   procedure Set_NI_Input_Port
      (This  : in out Comparator;
-      Input : NonInverting_Input_Port)
-     with Post => Read_NonInverting_Input_Port (This) = Input;
+      Input : NI_Input_Port)
+     with Post => Get_NI_Input_Port (This) = Input;
    --  Select the source connected to the non-inverting input of the comparator.
    --  See Table 195: COMPx non-inverting input assignment at pg 781 chapter
    --  24.3.2 RM0440 rev 6.
 
-   function Read_NonInverting_Input_Port
-     (This : Comparator) return NonInverting_Input_Port;
+   function Get_NI_Input_Port
+     (This : Comparator) return NI_Input_Port;
    --  Return the source connected to the non-inverting input of the comparator.
 
    type Output_Polarity is
@@ -79,10 +79,10 @@ package STM32.COMP is
    procedure Set_Output_Polarity
      (This  : in out Comparator;
       Output : Output_Polarity)
-     with Post => Read_Output_Polarity (This) = Output;
+     with Post => Get_Output_Polarity (This) = Output;
    --  Used to invert the comparator output.
 
-   function Read_Output_Polarity (This : Comparator) return Output_Polarity;
+   function Get_Output_Polarity (This : Comparator) return Output_Polarity;
    --  Return the comparator output polarity.
 
    type Comparator_Hysteresis is
@@ -99,10 +99,10 @@ package STM32.COMP is
    procedure Set_Comparator_Hysteresis
      (This  : in out Comparator;
       Value : Comparator_Hysteresis)
-     with Post => Read_Comparator_Hysteresis (This) = Value;
+     with Post => Get_Comparator_Hysteresis (This) = Value;
    --  Select the comparator hysteresis value.
 
-   function Read_Comparator_Hysteresis (This : Comparator)
+   function Get_Comparator_Hysteresis (This : Comparator)
      return Comparator_Hysteresis;
    --  Return the comparator hysteresis value.
 
@@ -128,51 +128,63 @@ package STM32.COMP is
    procedure Set_Output_Blanking
      (This  : in out Comparator;
       Output : Output_Blanking)
-     with Post => Read_Output_Blanking (This) = Output;
+     with Post => Get_Output_Blanking (This) = Output;
    --  Select which Timer output controls the comparator output blanking.
 
-   function Read_Output_Blanking (This : Comparator) return Output_Blanking;
+   function Get_Output_Blanking (This : Comparator) return Output_Blanking;
    --  Return which Timer output controls the comparator output blanking.
+
+   type Init_Parameters is record
+      Input_Minus     : I_Input_Port;
+      Input_Plus      : NI_Input_Port;
+      Hysteresis      : Comparator_Hysteresis;
+      Blanking_Source : Output_Blanking;
+      Output_Pol      : Output_Polarity;
+   end record;
+
+   procedure Configure_Comparator
+     (This  : in out Comparator;
+      Param : Init_Parameters);
 
    procedure Set_Vrefint_Scaler_Resistor
      (This   : in out Comparator;
-      Output : Boolean)
-     with Post => Read_Vrefint_Scaler_Resistor (This) = Output;
+      Enabled : Boolean)
+     with Post => Get_Vrefint_Scaler_Resistor (This) = Enabled;
    --  Enables the operation of resistor bridge in the VREFINT scaler. To
    --  disable the resistor bridge, BRGEN bits of all COMP_CxCSR registers must
    --  be set to Disable state. When the resistor bridge is disabled, the 1/4
    --  VREFINT, 1/2 VREFINT, and 3/4 VREFINT inputs of the input selector
    --  receive VREFINT voltage.
 
-   function Read_Vrefint_Scaler_Resistor (This : Comparator) return Boolean;
+   function Get_Vrefint_Scaler_Resistor (This : Comparator) return Boolean;
    --  Return True if VREFINT resistor bridge is enabled.
 
    procedure Set_Vrefint_Scaler
-     (This  : in out Comparator;
-      Output : Boolean)
-     with Post => Read_Vrefint_Scaler (This) = Output;
+     (This    : in out Comparator;
+      Enabled : Boolean)
+     with Post => Get_Vrefint_Scaler (This) = Enabled;
    --  Enables the operation of VREFINT scaler at the inverting input of all
    --  comparator. To disable the VREFINT scaler, SCALEN bits of all COMP_CxCSR
    --  registers must be set to Disable state. When the VREFINT scaler is
    --  disabled, the 1/4 VREFINT, 1/2 VREFINT, 3/4 VREFINT and VREFINT inputs
    --  of the multiplexer should not be selected.
 
-   function Read_Vrefint_Scaler (This : Comparator) return Boolean;
+   function Get_Vrefint_Scaler (This : Comparator) return Boolean;
    --  Return True if VREFINT scaler is enabled.
 
    type Comparator_Output is (Low, High);
 
-   function Read_Comparator_Output (This : Comparator) return Comparator_Output;
+   function Get_Comparator_Output (This : Comparator) return Comparator_Output;
    --  Read the comparator output before the polarity selector and blanking:
    --  Low = non-inverting input is below inverting input,
    --  High = (non-inverting input is above inverting input
 
    procedure Set_Lock_Comparator (This : in out Comparator)
-     with Post => Read_Lock_Comparator (This) = True;
+     with Post => Get_Lock_Comparator (This);
    --  Allows to have COMPx_CSR register as read-only. It can only be cleared
    --  by a system reset.
 
-   function Read_Lock_Comparator (This : Comparator) return Boolean;
+   function Get_Lock_Comparator (This : Comparator) return Boolean;
    --  Return the comparator lock bit state.
 
 private
