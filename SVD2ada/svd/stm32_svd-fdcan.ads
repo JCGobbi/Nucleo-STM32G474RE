@@ -217,7 +217,7 @@ package STM32_SVD.FDCAN is
 
    --  FDCAN_NBTP
    type NBTP_Register is record
-      --  TSEG2
+      --  NTSEG2
       NTSEG2       : NBTP_NTSEG2_Field := 16#33#;
       --  unspecified
       Reserved_7_7 : HAL.Bit := 16#0#;
@@ -781,6 +781,8 @@ package STM32_SVD.FDCAN is
 
    subtype RXGFC_ANFE_Field is HAL.UInt2;
    subtype RXGFC_ANFS_Field is HAL.UInt2;
+   subtype RXGFC_LSS_Field is HAL.UInt5;
+   subtype RXGFC_LSE_Field is HAL.UInt4;
 
    --  Global settings for Message ID filtering. The Global Filter
    --  Configuration controls the filter path for standard and extended
@@ -788,25 +790,46 @@ package STM32_SVD.FDCAN is
    --  Figure707: Extended Message ID filter path.
    type RXGFC_Register is record
       --  RRFE
-      RRFE          : Boolean := False;
+      RRFE           : Boolean := False;
       --  RRFS
-      RRFS          : Boolean := False;
+      RRFS           : Boolean := False;
       --  Write-only. ANFE
-      ANFE          : RXGFC_ANFE_Field := 16#0#;
+      ANFE           : RXGFC_ANFE_Field := 16#0#;
       --  Write-only. ANFS
-      ANFS          : RXGFC_ANFS_Field := 16#0#;
+      ANFS           : RXGFC_ANFS_Field := 16#0#;
       --  unspecified
-      Reserved_6_31 : HAL.UInt26 := 16#0#;
+      Reserved_6_7   : HAL.UInt2 := 16#0#;
+      --  F1OM
+      F1OM           : Boolean := False;
+      --  F1OM
+      F0OM           : Boolean := False;
+      --  unspecified
+      Reserved_10_15 : HAL.UInt6 := 16#0#;
+      --  LSS
+      LSS            : RXGFC_LSS_Field := 16#0#;
+      --  unspecified
+      Reserved_21_23 : HAL.UInt3 := 16#0#;
+      --  LSE
+      LSE            : RXGFC_LSE_Field := 16#0#;
+      --  unspecified
+      Reserved_28_31 : HAL.UInt4 := 16#0#;
    end record
      with Volatile_Full_Access, Object_Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for RXGFC_Register use record
-      RRFE          at 0 range 0 .. 0;
-      RRFS          at 0 range 1 .. 1;
-      ANFE          at 0 range 2 .. 3;
-      ANFS          at 0 range 4 .. 5;
-      Reserved_6_31 at 0 range 6 .. 31;
+      RRFE           at 0 range 0 .. 0;
+      RRFS           at 0 range 1 .. 1;
+      ANFE           at 0 range 2 .. 3;
+      ANFS           at 0 range 4 .. 5;
+      Reserved_6_7   at 0 range 6 .. 7;
+      F1OM           at 0 range 8 .. 8;
+      F0OM           at 0 range 9 .. 9;
+      Reserved_10_15 at 0 range 10 .. 15;
+      LSS            at 0 range 16 .. 20;
+      Reserved_21_23 at 0 range 21 .. 23;
+      LSE            at 0 range 24 .. 27;
+      Reserved_28_31 at 0 range 28 .. 31;
    end record;
 
    subtype XIDAM_EIDM_Field is HAL.UInt29;

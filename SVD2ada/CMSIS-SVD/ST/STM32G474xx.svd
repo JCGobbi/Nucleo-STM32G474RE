@@ -56673,6 +56673,34 @@
                      <bitWidth>2</bitWidth>
                      <access>write-only</access>
                   </field>
+                  <field>
+                     <name>F1OM</name>
+                     <description>F1OM</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>F0OM</name>
+                     <description>F1OM</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>LSS</name>
+                     <description>LSS</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>LSE</name>
+                     <description>LSE</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-write</access>
+                  </field>
                </fields>
             </register>
             <register>
