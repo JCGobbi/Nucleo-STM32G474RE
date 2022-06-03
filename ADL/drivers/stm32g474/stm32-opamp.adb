@@ -144,11 +144,7 @@ package body STM32.OPAMP is
    function Get_I_Sec_Input_Port
      (This : Operational_Amplifier) return I_Sec_Input_Port is
    begin
-      if This.TCMR.VMS_SEL = True then
-         return VINM1_Or_Follower_Mode;
-      else
-         return VINM0_Or_Feedback_Resistor_PGA_Mode;
-      end if;
+      return I_Sec_Input_Port'Val (Boolean'Pos (This.TCMR.VMS_SEL));
    end Get_I_Sec_Input_Port;
 
    ------------------------
@@ -394,6 +390,8 @@ package body STM32.OPAMP is
          end loop;
       end loop;
 
+      Set_User_Trimming (This, Enabled => False);
+      Set_Calibration_Mode (This, Enabled => False);
    end Calibrate;
 
    -------------------------

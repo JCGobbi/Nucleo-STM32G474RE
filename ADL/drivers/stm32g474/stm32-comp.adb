@@ -81,11 +81,7 @@ package body STM32.COMP is
      (This : Comparator) return NI_Input_Port
    is
    begin
-      if This.CSR.INPSEL then
-         return Option_1;
-      else
-         return Option_2;
-      end if;
+      return NI_Input_Port'Val (Boolean'Pos (This.CSR.INPSEL));
    end Get_NI_Input_Port;
 
    -------------------------
@@ -104,11 +100,7 @@ package body STM32.COMP is
 
    function Get_Output_Polarity (This : Comparator) return Output_Polarity is
    begin
-      if This.CSR.POL then
-         return Inverted;
-      else
-         return Not_Inverted;
-      end if;
+      return Output_Polarity'Val (Boolean'Pos (This.CSR.POL));
    end Get_Output_Polarity;
 
    -------------------------------
@@ -221,11 +213,7 @@ package body STM32.COMP is
    function Get_Comparator_Output
      (This : Comparator) return Comparator_Output is
    begin
-      if This.CSR.VALUE then
-         return High;
-      else
-         return Low;
-      end if;
+      return Comparator_Output'Val (Boolean'Pos (This.CSR.VALUE));
    end Get_Comparator_Output;
 
    -------------------------
