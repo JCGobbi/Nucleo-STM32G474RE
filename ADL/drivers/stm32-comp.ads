@@ -188,13 +188,6 @@ package STM32.COMP is
    --  Return the comparator lock bit state.
 
 private
-
-   --  representation for Comparator Control and Status Registers  ----------
-
-   -----------------
-   -- Peripherals --
-   -----------------
-
    --  representation for the whole Comparator type  -----------------
 
    type Comparator is record
