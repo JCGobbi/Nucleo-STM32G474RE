@@ -585,6 +585,10 @@ package STM32.Device is
    function Read_Clock_Source (This : aliased CAN_Controller)
      return CAN_Clock_Source;
 
+   function Get_Clock_Frequency (This : aliased CAN_Controller)
+     return UInt32;
+   --  Returns FDCAN clock frequency, in Hertz.
+
    ---------
    -- I2C --
    ---------
@@ -630,7 +634,7 @@ package STM32.Device is
    function Read_Clock_Source (This : I2C_Port'Class) return I2C_Clock_Source;
 
    function Read_Clock_Source (This : I2C_Port_Id) return I2C_Clock_Source;
-   --  Return I2C Clock Mux source.
+   --  Returns I2C Clock Mux source.
 
    ---------
    -- SPI --
@@ -698,10 +702,10 @@ package STM32.Device is
    --  Set I2S Clock Mux source (the same source for I2S2 .. I2S3).
 
    function Read_Clock_Source (This : I2S_Port'Class) return I2S_Clock_Source;
-   --  Return I2S Clock Mux source.
+   --  Returns I2S Clock Mux source.
 
    function Get_Clock_Frequency (This : I2S_Port) return UInt32;
-   --  Return I2S frequency.
+   --  Returns I2S clock frequency, in Hertz.
 
    ---------
    -- RTC --
