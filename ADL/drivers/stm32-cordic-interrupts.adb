@@ -11,7 +11,7 @@ package body STM32.CORDIC.Interrupts is
       Argument : UInt32_Array;
       Result   : out UInt32_Array)
    is
-      --  Test if data width is 32 bit
+      --  Test if data width is not 32 bit
       pragma Assert (This.CSR.ARGSIZE = True, "Invalid data size");
 
       Operation : constant CORDIC_Function := CORDIC_Function'Val (This.CSR.FUNC);
@@ -49,7 +49,7 @@ package body STM32.CORDIC.Interrupts is
       Argument : UInt16_Array;
       Result   : out UInt16_Array)
    is
-      --  Test if data width is 16 bit
+      --  Test if data width is not 16 bit
       pragma Assert (This.CSR.ARGSIZE = False, "Invalid data size");
 
       Operation : constant CORDIC_Function := CORDIC_Function'Val (This.CSR.FUNC);
@@ -77,7 +77,7 @@ package body STM32.CORDIC.Interrupts is
             Result (1) := UInt16 (Data);
             Result (2) := UInt16 (Shift_Right (Data, 16));
          when Arctangent | Hyperbolic_Arctangent | Natural_Logarithm | Square_Root =>
-            --  One 32 bit result
+            --  One 16 bit result
             Result (1) := UInt16 (Data);
       end case;
    end Calculate_CORDIC_Function;
