@@ -147,7 +147,7 @@ package body Inverter_PWM is
 
    procedure Set_Duty_Cycle (This      : PWM_Phase;
                              Amplitude : Sine_Range;
-                             Gain      : Gain_Range)
+                             Gain      : Inverter_ADC.Gain_Range)
    is
       Pulse : UInt16;
    begin
@@ -228,19 +228,19 @@ package body Inverter_PWM is
                if not Semi_Senoid then --  First half cycle
                   Set_Duty_Cycle (This      => A,
                                   Amplitude => Sine_Amplitude,
-                                  Gain      => Sine_Gain);
+                                  Gain      => Inverter_ADC.Sine_Gain);
                   --  Not necessary because the last value of B amplitude was 0
                   --  Set_Duty_Cycle (This      => B,
                   --                  Amplitude => Sine_Range'Last, --  Value 0
-                  --                  Gain      => Gain_Range'First); --  Value 0
+                  --                  Gain      => Inverter_ADC.Gain_Range'First); --  Value 0
                else --  Second half cycle
                   Set_Duty_Cycle (This      => B,
                                   Amplitude => Sine_Amplitude,
-                                  Gain      => Sine_Gain);
+                                  Gain      => Inverter_ADC.Sine_Gain);
                   --  Not necessary because the last value of A amplitude was 0
                   --  Set_Duty_Cycle (This      => A,
                   --                  Amplitude => Sine_Range'Last, --  Value 0
-                  --                  Gain      => Gain_Range'First); --  Value 0
+                  --                  Gain      => Inverter_ADC.Gain_Range'First); --  Value 0
                end if;
 
                --  We need to test if [Sine_Step - Increment] is lower then

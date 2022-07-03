@@ -6,7 +6,7 @@ with STM32.PWM;    use STM32.PWM;
 with STM32.CORDIC; use STM32.CORDIC;
 
 with STM_Board;    use STM_Board;
-with Inverter_ADC; use Inverter_ADC;
+with Inverter_ADC;
 
 package Inverter_PWM is
 
@@ -102,7 +102,7 @@ package Inverter_PWM is
    procedure Set_Duty_Cycle
       (This      : PWM_Phase;
        Amplitude : Sine_Range;
-       Gain      : Gain_Range);
+       Gain      : Inverter_ADC.Gain_Range);
    --  Sets the duty cycle for the specified phase.
 
    procedure Set_PWM_Gate_Power (Enabled : in Boolean)
