@@ -20,7 +20,7 @@ package body Startup is
       Initialize_GPIO;
 
       --  Select gain = 1.0 to see only sine table sinusoid
-      Sine_Gain := 1.0;
+      Set_Sine_Gain (1.0);
 
       --  Initialize sensors ADC
       Initialize_ADC;
