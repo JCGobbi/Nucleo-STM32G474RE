@@ -1611,7 +1611,7 @@ package body STM32.Timers is
          when Break_2 =>
             case Source is
                when BKIN_Ext_AF_Input =>
-                  This.AF2.BKINE := Enabled;
+                  This.AF2.BK2INE := Enabled;
                   This.AF2.BK2INP := Polarity = High;
                when Comp_1_Output =>
                   This.AF2.BK2CMP1E := Enabled;

@@ -1139,8 +1139,8 @@ package STM32_SVD.TIM is
 
    --  TIM alternate function option register 2
    type AF2_Register is record
-      --  BRK BKIN input enable
-      BKINE          : Boolean := False;
+      --  BRK2 BKIN input enable
+      BK2INE         : Boolean := False;
       --  BRK2 COMP1 enable
       BK2CMP1E       : Boolean := False;
       --  BRK2 COMP2 enable
@@ -1178,7 +1178,7 @@ package STM32_SVD.TIM is
           Bit_Order => System.Low_Order_First;
 
    for AF2_Register use record
-      BKINE          at 0 range 0 .. 0;
+      BK2INE         at 0 range 0 .. 0;
       BK2CMP1E       at 0 range 1 .. 1;
       BK2CMP2E       at 0 range 2 .. 2;
       BK2CMP3E       at 0 range 3 .. 3;

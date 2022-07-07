@@ -1054,7 +1054,8 @@ package STM32.Timers is
    procedure Disable_Master_Slave_Mode (This : in out Timer)
      with Pre => Slave_Mode_Supported (This);
 
-   type Timer_External_Trigger_Polarity is (NonInverted, Inverted);
+   type Timer_External_Trigger_Polarity is (NonInverted, Inverted)
+     with Size => 1;
 
    type Timer_External_Trigger_Prescaler is
      (Off,
@@ -1078,7 +1079,8 @@ package STM32.Timers is
       FDTS16_N8,
       FDTS32_N5,
       FDTS32_N6,
-      FDTS32_N8);
+      FDTS32_N8)
+     with Size => 4;
 
    procedure Configure_External_Trigger
      (This      : in out Timer;
@@ -1101,7 +1103,8 @@ package STM32.Timers is
       Option_11,
       Option_12,
       Option_13,
-      Option_14);
+      Option_14)
+     with Size => 4;
    --  Option Timer1    Timer2   Timer3    Timer4   Timer5   Timer8    Timer20
    --  1      TIM1_ETR  TIM2_ETR TIM3_ETR  TIM4_ETR TIM5_ETR TIM8_ETR  TIM20_ETR
    --  9      adc1_awd1 TIM3_ETR TIM2_ETR  TIM3_ETR TIM2_ETR adc2_awd1 adc3_awd1

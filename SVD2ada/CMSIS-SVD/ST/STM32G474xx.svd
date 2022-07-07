@@ -12779,8 +12779,8 @@
                      <bitWidth>1</bitWidth>
                   </field>
                   <field>
-                     <name>BKINE</name>
-                     <description>BRK BKIN input enable</description>
+                     <name>BK2INE</name>
+                     <description>BRK2 BKIN input enable</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
@@ -14540,8 +14540,8 @@
                      <bitWidth>1</bitWidth>
                   </field>
                   <field>
-                     <name>BKINE</name>
-                     <description>BRK BKIN input enable</description>
+                     <name>BK2INE</name>
+                     <description>BRK2 BKIN input enable</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
