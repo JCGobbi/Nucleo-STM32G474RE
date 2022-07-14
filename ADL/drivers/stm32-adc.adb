@@ -155,15 +155,13 @@ package body STM32.ADC is
    begin
       This.CFGR.CONT := Continuous;
 
-      if Trigger.Enabler /= Trigger_Disabled then
+      if Trigger.Enabler = Trigger_Disabled then
+         This.CFGR.EXTSEL := 0;
+         This.CFGR.EXTEN := 0;
+      else
          This.CFGR.EXTSEL :=
            External_Events_Regular_Group'Enum_Rep (Trigger.Event);
          This.CFGR.EXTEN := External_Trigger'Enum_Rep (Trigger.Enabler);
-         --  ADSTART need to be set (RM0440 pg. 628 chapter 21.4.18).
-         This.CR.ADSTART := True;
-      else
-         This.CFGR.EXTSEL := 0;
-         This.CFGR.EXTEN := 0;
       end if;
 
       for Rank in Conversions'Range loop
@@ -223,14 +221,12 @@ package body STM32.ADC is
       --  RM 13.3.5, pg 390, and "Auto-injection" section on pg 392.
       This.CFGR.JAUTO := AutoInjection;
 
-      if Trigger.Enabler /= Trigger_Disabled then
-         This.JSQR.JEXTEN := External_Trigger'Enum_Rep (Trigger.Enabler);
-         This.JSQR.JEXTSEL := External_Events_Injected_Group'Enum_Rep (Trigger.Event);
-         --  JADSTART need to be set (RM0440 pg. 628 chapter 21.4.18).
-         This.CR.JADSTART := True;
-      else
+      if Trigger.Enabler = Trigger_Disabled then
          This.JSQR.JEXTEN := 0;
          This.JSQR.JEXTSEL := 0;
+      else
+         This.JSQR.JEXTEN := External_Trigger'Enum_Rep (Trigger.Enabler);
+         This.JSQR.JEXTSEL := External_Events_Injected_Group'Enum_Rep (Trigger.Event);
       end if;
 
       for Rank in Conversions'Range loop
@@ -406,10 +402,6 @@ package body STM32.ADC is
 
    procedure Start_Conversion (This : in out Analog_To_Digital_Converter) is
    begin
-      if External_Trigger'Val (This.CFGR.EXTEN) /= Trigger_Disabled then
-         return;
-      end if;
-
       if This'Address = ADC1_Base or --  master channel
          This'Address = ADC3_Base or  --  master channel
          This'Address = ADC5_Base --  independent channel
