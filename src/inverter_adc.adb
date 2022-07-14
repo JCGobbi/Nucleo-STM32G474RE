@@ -42,6 +42,9 @@ package body Inverter_ADC is
          DMA_Mode       => Disabled,
          Sampling_Delay => Sampling_Delay_5_Cycles);  -- arbitrary
 
+      --  Enable the used ADCs to configure conversions.
+      Enable (Sensor_ADC.all);
+
       Configure_Unit
         (Sensor_ADC.all,
          Resolution => ADC_Resolution_12_Bits,
@@ -57,12 +60,13 @@ package body Inverter_ADC is
       --  Either rising or falling edge should work. Note that the Event must
       --  match the timer used!
 
+      --  Each conversion generates an interrupt signalling conversion complete.
       Enable_Interrupts (Sensor_ADC.all,
                          Source => Regular_Channel_Conversion_Complete);
-      --  Each conversion generates an interrupt signalling conversion complete.
 
-      --  Finally, enable the used ADCs
-      Enable (Sensor_ADC.all);
+      --  ADSTART need to be set (RM0440 pg. 628 chapter 21.4.18) for hardware
+      --  trigger operation.
+      Start_Conversion (Sensor_ADC.all);
 
       --  Start the timer that trigger ADC conversions
       Initialize_ADC_Timer;
