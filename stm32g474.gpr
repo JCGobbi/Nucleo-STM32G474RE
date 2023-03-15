@@ -17,11 +17,11 @@ project STM32G474 is
    case Ada_Drivers_Library.RTS is
       when "ravenscar-sfp" =>
          for Runtime ("Ada") use Project'Project_Dir &
-           "ADL/runtimes/ravenscar-sfp-stm32g474";
+           "ADL/runtimes/light-tasking-stm32g474";
          for Source_Dirs use Project'Source_Dirs & ("src/errors/lch_sfp");
       when "ravenscar-full" =>
          for Runtime ("Ada") use Project'Project_Dir &
-           "ADL/runtimes/ravenscar-full-stm32g474";
+           "ADL/runtimes/embedded-stm32g474";
          for Source_Dirs use Project'Source_Dirs & ("src/errors/lch_full");
    end case;
 
