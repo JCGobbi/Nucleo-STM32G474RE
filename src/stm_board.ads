@@ -24,15 +24,17 @@ package STM_Board is
    PWM_Interrupt    : Ada.Interrupts.Interrupt_ID renames TIM1_UP_TIM16_Interrupt;
    PWM_ISR_Priority : constant Interrupt_Priority := Interrupt_Priority'Last - 2;
 
-   PWM_A_Channel : Timer_Channel renames Channel_1;
-   PWM_A_H_Pin   : GPIO_Point renames PA8;
-   PWM_A_L_Pin   : GPIO_Point renames PA7;
-   PWM_A_GPIO_AF : STM32.GPIO_Alternate_Function renames GPIO_AF_TIM1_6;
+   PWM_A_Channel   : Timer_Channel renames Channel_1;
+   PWM_A_H_Pin     : GPIO_Point renames PA8;
+   PWM_A_H_GPIO_AF : STM32.GPIO_Alternate_Function renames GPIO_AF_TIM1_6;
+   PWM_A_L_Pin     : GPIO_Point renames PA7;
+   PWM_A_L_GPIO_AF : STM32.GPIO_Alternate_Function renames GPIO_AF_TIM1_6;
 
-   PWM_B_Channel : Timer_Channel renames Channel_2;
-   PWM_B_H_Pin   : GPIO_Point renames PA9;
-   PWM_B_L_Pin   : GPIO_Point renames PB0;
-   PWM_B_GPIO_AF : STM32.GPIO_Alternate_Function renames GPIO_AF_TIM1_6;
+   PWM_B_Channel   : Timer_Channel renames Channel_2;
+   PWM_B_H_Pin     : GPIO_Point renames PA9;
+   PWM_B_H_GPIO_AF : STM32.GPIO_Alternate_Function renames GPIO_AF_TIM1_6;
+   PWM_B_L_Pin     : GPIO_Point renames PB0;
+   PWM_B_L_GPIO_AF : STM32.GPIO_Alternate_Function renames GPIO_AF_TIM1_6;
 
    PWM_Gate_Power : GPIO_Point renames PA11;
    --  Output for the FET/IGBT gate drivers.
