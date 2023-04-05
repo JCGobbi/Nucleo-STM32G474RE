@@ -93,7 +93,9 @@ package body STM32.ADC is
 
    procedure Disable (This : in out Analog_To_Digital_Converter) is
    begin
-      This.CR.ADDIS := True;
+      if This.CR.ADEN then
+         This.CR.ADDIS := True;
+      end if;
    end Disable;
 
    -------------
@@ -101,14 +103,7 @@ package body STM32.ADC is
    -------------
 
    function Enabled (This : Analog_To_Digital_Converter) return Boolean is
-     (This.CR.ADEN = True);
-
-   --------------
-   -- Disabled --
-   --------------
-
-   function Disabled (This : Analog_To_Digital_Converter) return Boolean is
-     (This.CR.ADEN = False);
+     (This.CR.ADEN);
 
    --------------------
    -- Configure_Unit --
