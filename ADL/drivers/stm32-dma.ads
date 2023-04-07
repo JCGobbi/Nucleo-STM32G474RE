@@ -131,7 +131,7 @@ package STM32.DMA with SPARK_Mode => Off is
          not Enabled (This, Stream)                               and
          Operating_Mode (This, Stream) = Normal_Mode              and
          Current_Items_Number (This, Stream) = 0                  and
-         Selected_Channel (This, Stream) = Channel_1              and
+         Selected_Channel (This, Stream) = No_Selection           and
          Transfer_Direction (This, Stream) = Peripheral_To_Memory and
          not Circular_Mode (This, Stream)                         and
          Memory_Data_Width (This, Stream) = Bytes                 and
@@ -354,14 +354,40 @@ package STM32.DMA with SPARK_Mode => Off is
      with Inline;
 
    type DMA_Channel_Selector is
-     (Channel_0,
-      Channel_1,
-      Channel_2,
-      Channel_3,
-      Channel_4,
-      Channel_5,
-      Channel_6,
-      Channel_7);
+     (No_Selection,
+      DMAMUX_Req_G0, DMAMUX_Req_G1, DMAMUX_Req_G2, DMAMUX_Req_G3,
+      ADC1,
+      DAC1_CH1, DAC1_CH2,
+      TIM6_UP, TIM7_UP,
+      SPI1_RX, SPI1_TX, SPI2_RX, SPI2_TX, SPI3_RX, SPI3_TX,
+      I2C1_RX, I2C1_TX, I2C2_RX, I2C2_TX, I2C3_RX, I2C3_TX, I2C4_RX, I2C4_TX,
+      USART1_RX, USART1_TX, USART2_RX, USART2_TX, USART3_RX, USART3_TX,
+      UART4_RX, UART4_TX, UART5_RX, UART5_TX,
+      LPUART1_RX, LPUART1_TX,
+      ADC2, ADC3, ADC4, ADC5,
+      QUADSPI,
+      DAC2_CH1,
+      TIM1_CH1, TIM1_CH2, TIM1_CH3, TIM1_CH4, TIM1_UP, TIM1_TRIG, TIM1_COM,
+      TIM8_CH1, TIM8_CH2, TIM8_CH3, TIM8_CH4, TIM8_UP, TIM8_TRIG, TIM8_COM,
+      TIM2_CH1, TIM2_CH2, TIM2_CH3, TIM2_CH4, TIM2_UP,
+      TIM3_CH1, TIM3_CH2, TIM3_CH3, TIM3_CH4, TIM3_UP, TIM3_TRIG,
+      TIM4_CH1, TIM4_CH2, TIM4_CH3, TIM4_CH4, TIM4_UP,
+      TIM5_CH1, TIM5_CH2, TIM5_CH3, TIM5_CH4, TIM5_UP, TIM5_TRIG,
+      TIM15_CH1, TIM15_UP, TIM15_TRIG, TIM15_COM,
+      TIM16_CH1, TIM16_UP,
+      TIM17_CH1, TIM17_UP,
+      TIM20_CH1, TIM20_CH2, TIM20_CH3, TIM20_CH4, TIM20_UP,
+      AES_IN, AES_OUT,
+      TIM20_TRIG, TIM20_COM,
+      HRTIM_MASTER,
+      HRTIM_TIMA, HRTIM_TIMB, HRTIM_TIMC, HRTIM_TIMD, HRTIM_TIME, HRTIM_TIMF,
+      DAC3_CH1, DAC3_CH2,
+      DAC4_CH1, DAC4_CH2,
+      SPI4_RX, SPI4_TX,
+      SAI1_A, SAI1_B,
+      FMAC_Read, FMAC_Write,
+      Cordic_Read, Cordic_Write,
+      UCPD1_RX, UCPD1_TX);
 
    function Selected_Channel
      (This : DMA_Controller;  Stream : DMA_Stream_Selector)
@@ -533,6 +559,199 @@ package STM32.DMA with SPARK_Mode => Off is
    --  Memory_Data_Format (M_Data_Size) values for the given stream. We use an
    --  expression function because the semantics are meant to be part of the
    --  spec of the package, visible as a precondition.
+
+   ------------
+   -- DMAMUX --
+   ------------
+
+   procedure Set_DMAMUX_Synchronization
+     (This    : DMA_Controller;
+      Stream  : DMA_Stream_Selector;
+      Enabled : Boolean)
+     with Post => (if Enabled then DMAMUX_Synchronization_Enabled (This, Stream)
+                   else not DMAMUX_Synchronization_Enabled (This, Stream));
+   --  Enable/disable input synchronization.
+
+   function DMAMUX_Synchronization_Enabled
+     (This    : DMA_Controller;
+      Stream  : DMA_Stream_Selector) return Boolean;
+
+   procedure Set_DMAMUX_Event
+     (This    : DMA_Controller;
+      Stream  : DMA_Stream_Selector;
+      Enabled : Boolean)
+     with Post => (if Enabled then DMAMUX_Event_Enabled (This, Stream)
+                   else not DMAMUX_Event_Enabled (This, Stream));
+   --  Enable/disable event generation.
+
+   function DMAMUX_Event_Enabled
+     (This    : DMA_Controller;
+      Stream  : DMA_Stream_Selector) return Boolean;
+
+   type DMAMUX_Synchronization_Selector is
+     (EXTILINE0,
+      EXTILINE1,
+      EXTILINE2,
+      EXTILINE3,
+      EXTILINE4,
+      EXTILINE5,
+      EXTILINE6,
+      EXTILINE7,
+      EXTILINE8,
+      EXTILINE9,
+      EXTILINE10,
+      EXTILINE11,
+      EXTILINE12,
+      EXTILINE13,
+      EXTILINE14,
+      EXTILINE15,
+      DMAMUX1_CH0_Event,
+      DMAMUX1_CH1_Event,
+      DMAMUX1_CH2_Event,
+      DMAMUX1_CH3_Event,
+      LPTIM1_OUT);
+
+   type Input_Polarity is
+     (No_Event,
+      Rising_Edge,
+      Falling_Edge,
+      Rising_And_Falling);
+   --  Defines the edge polarity of the selected synchronization or trigger input.
+
+   type DMA_Request_Number is
+     (Request_1, Request_2, Request_3, Request_4, Request_5, Request_6,
+      Request_7, Request_8, Request_9, Request_10, Request_11, Request_12,
+      Request_13, Request_14, Request_15, Request_16, Request_17, Request_18,
+      Request_19, Request_20, Request_21, Request_22, Request_23, Request_24,
+      Request_25, Request_26, Request_27, Request_28, Request_29, Request_30,
+      Request_31, Request_32);
+   --  Defines the number of DMA requests to forward to the DMA controller after
+   --  a synchronization event, and/or the number of DMA requests before an
+   --  output event is generated. Also defines the number of DMA requests to be
+   --  generated after a trigger event.
+
+   type DMAMUX_Synchronization_Configuration is record
+      Input        : DMAMUX_Synchronization_Selector;
+      Polarity     : Input_Polarity;
+      DMA_Req      : DMA_Request_Number;
+   end record;
+
+   procedure Configure_DMAMUX_Synchronization
+     (This   : DMA_Controller;
+      Stream : DMA_Stream_Selector;
+      Config : DMAMUX_Synchronization_Configuration)
+     with Pre => not DMAMUX_Synchronization_Enabled (This, Stream) and
+                 not DMAMUX_Event_Enabled (This, Stream);
+   --  When a channel is in this synchronization mode, the selected input DMA
+   --  request line is propagated to the multiplexer channel output, once is
+   --  detected a programmable rising/falling edge on the selected input
+   --  synchronization signal, via the SPOL[1:0] field of the DMAMUX_CxCR
+   --  register. See RM0440 Rev 7 chapter 13.4.4 DMAMUX request line multiplexer.
+
+   procedure Set_Synchronization_Overrun_Interrupt
+     (This    : DMA_Controller;
+      Stream  : DMA_Stream_Selector;
+      Enabled : Boolean)
+     with Post => (if Enabled then Synchronization_Overrun_Interrupt_Enabled (This, Stream)
+                   else not Synchronization_Overrun_Interrupt_Enabled (This, Stream));
+   --  The postcondition should not be relied upon completely because it is
+   --  possible, under just the wrong conditions, for the interrupt to be
+   --  disabled immediately, prior to return from this routine
+
+   function Synchronization_Overrun_Interrupt_Enabled
+     (This   : DMA_Controller;
+      Stream : DMA_Stream_Selector)
+      return Boolean
+     with Inline;
+
+   function Synchronization_Overrun_Status
+     (This   : DMA_Controller;
+      Stream : DMA_Stream_Selector)
+      return Boolean;
+
+   procedure Clear_Synchronization_Overrun_Status
+     (This   : DMA_Controller;
+      Stream : DMA_Stream_Selector)
+     with Post => not Synchronization_Overrun_Status (This, Stream);
+
+   type DMAMUX_Req_Gen_Channel is
+     (Channel_1,
+      Channel_2,
+      Channel_3,
+      Channel_4);
+
+   procedure Set_DMAMUX_Request_Generator
+     (Channel : DMAMUX_Req_Gen_Channel;
+      Enabled : Boolean)
+     with Post => (if Enabled then DMAMUX_Request_Generator_Enabled (Channel)
+                   else not DMAMUX_Request_Generator_Enabled (Channel));
+   --  Enable/disable DMA request generator channel.
+
+   function DMAMUX_Request_Generator_Enabled
+     (Channel : DMAMUX_Req_Gen_Channel) return Boolean;
+
+   type DMAMUX_Trigger_Selector is
+     (EXTILINE0,
+      EXTILINE1,
+      EXTILINE2,
+      EXTILINE3,
+      EXTILINE4,
+      EXTILINE5,
+      EXTILINE6,
+      EXTILINE7,
+      EXTILINE8,
+      EXTILINE9,
+      EXTILINE10,
+      EXTILINE11,
+      EXTILINE12,
+      EXTILINE13,
+      EXTILINE14,
+      EXTILINE15,
+      DMAMUX1_CH0_Event,
+      DMAMUX1_CH1_Event,
+      DMAMUX1_CH2_Event,
+      DMAMUX1_CH3_Event,
+      LPTIM1_OUT);
+
+   type DMAMUX_Req_Gen_Configuration is record
+      Input           : DMAMUX_Trigger_Selector;
+      Polarity        : Input_Polarity;
+      DMA_Req         : DMA_Request_Number;
+   end record;
+
+   procedure Configure_DMAMUX_Request_Generator
+     (Channel : DMAMUX_Req_Gen_Channel;
+      Config  : DMAMUX_Req_Gen_Configuration)
+     with Pre => not DMAMUX_Request_Generator_Enabled (Channel);
+   --  The DMAMUX request generator produces DMA requests following trigger
+   --  events on its DMA request trigger inputs. Upon the trigger event, the
+   --  corresponding generator channel starts generating DMA requests on its
+   --  output. Each time the DMAMUX generated request is served by the connected
+   --  DMA controller (a served request is deasserted), a built-in (inside the
+   --  DMAMUX request generator) DMA request counter is decremented. See RM0440
+   --  Rev 7 chapter 13.4.5 DMAMUX request generator.
+
+   procedure Set_Trigger_Overrun_Interrupt
+     (Channel : DMAMUX_Req_Gen_Channel;
+      Enabled : Boolean)
+     with Post => (if Enabled then Trigger_Overrun_Interrupt_Enabled (Channel)
+                   else not Trigger_Overrun_Interrupt_Enabled (Channel));
+   --  The postcondition should not be relied upon completely because it is
+   --  possible, under just the wrong conditions, for the interrupt to be
+   --  disabled immediately, prior to return from this routine
+
+   function Trigger_Overrun_Interrupt_Enabled
+     (Channel : DMAMUX_Req_Gen_Channel)
+      return Boolean
+     with Inline;
+
+   function Trigger_Overrun_Status
+     (Channel : DMAMUX_Req_Gen_Channel)
+      return Boolean;
+
+   procedure Clear_Trigger_Overrun_Status
+     (Channel : DMAMUX_Req_Gen_Channel)
+     with Post => not Trigger_Overrun_Status (Channel);
 
 private
 
