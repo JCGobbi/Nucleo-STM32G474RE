@@ -73,24 +73,24 @@ package STM32.HRTimers is
    --  outputs enabled.
 
    procedure Set_Register_Preload
-     (This   : in out HRTimer_Master;
-      Enable : Boolean);
+     (This    : in out HRTimer_Master;
+      Enabled : Boolean);
    --  Enables the registers preload mechanism and defines whether the write
    --  accesses to the memory mapped registers are done into HRTIM active or
    --  preload registers.
 
    type HRTimer_Prescaler is
-     (Mul_32, --  fHRCK = 32 * fHRTIM
-      Mul_16, --  fHRCK = 16 * fHRTIM
-      Mul_8, --  fHRCK = 8 * fHRTIM
-      Mul_4, --  fHRCK = 4 * fHRTIM
-      Mul_2, --  fHRCK = 2 * fHRTIM
-      Mul_1, --  fHRCK = fHRTIM
-      Div_2, --  fHRCK = fHRTIM / 2
-      Div_4) --  fHRCK = fHRTIM / 4
+     (Div_1, --  fHRCK = 32 * fHRTIM
+      Div_2, --  fHRCK = 16 * fHRTIM
+      Div_4, --  fHRCK = 8 * fHRTIM
+      Div_8, --  fHRCK = 4 * fHRTIM
+      Div_16, --  fHRCK = 2 * fHRTIM
+      Div_32, --  fHRCK = fHRTIM
+      Div_64, --  fHRCK = fHRTIM / 2
+      Div_128) --  fHRCK = fHRTIM / 4
      with Size => 3;
    --  The fHRCK input clock to the prescaler is equal to 32 x fHRTIM, so when
-   --  the prescaler divides by 32, fHRCK = fHRTIM. With fHRTIM = 170 MHz,
+   --  the prescaler ratio is 32 (2#101#), fHRCK = fHRTIM. With fHRTIM = 170 MHz,
    --  fHRCK = 5.44 GHz with resolution 184 ps. See RM0440 rev 6 Chapter 27.3.3
    --  "Clocks".
 
@@ -215,6 +215,16 @@ package STM32.HRTimers is
           Post => Current_Prescaler (This) = HRTimer_Prescaler_Value (Prescaler) and
                   Current_Period (This) = Period;
 
+   procedure Compute_Prescaler_And_Period
+     (This                : HRTimer_Master;
+      Requested_Frequency : UInt32;
+      Prescaler           : out HRTimer_Prescaler;
+      Period              : out UInt32)
+     with Pre => Requested_Frequency > 0;
+   --  Computes the minimum prescaler and thus the maximum resolution for the
+   --  given timer, based on the system clocks and the requested frequency.
+   --  Computes the period required for the requested frequency.
+
    type Counter_Operating_Mode is
      (SingleShot_NonRetriggerable,
       SingleShot_Retriggerable,
@@ -273,7 +283,7 @@ package STM32.HRTimers is
    procedure Set_Compare_Value
      (This    : in out HRTimer_Master;
       Compare : HRTimer_Compare_Number;
-      Value   : in out UInt16)
+      Value   : UInt16)
      with Post => Read_Compare_Value (This, Compare) = Value;
    --  Set the value for Compare registers 1 to 4.
 
@@ -599,6 +609,16 @@ package STM32.HRTimers is
 
    procedure Set_Period (This : in out HRTimer_Channel; Value : UInt16)
      with Post => Current_Period (This) = Value;
+   --  The period values must be within a lower and an upper limit related to
+   --  the high-resolution implementation and listed in table 216 of the RM0440
+   --  chapter 27.3.4.
+   --  Prescaler  CKPSC[2:0] Min      Max
+   --  Div_1      0          0x0060   0xFFDF
+   --  Div_2      1          0x0030   0xFFEF
+   --  Div_4      2          0x0018   0xFFF7
+   --  Div_8      3          0x000C   0xFFFB
+   --  Div_16     4          0x0006   0xFFFD
+   --  ≥ Div_32   ≥ 5        0x0003   0xFFFD
 
    function Current_Period (This : HRTimer_Channel) return UInt16;
 
@@ -800,7 +820,19 @@ package STM32.HRTimers is
       Compare : HRTimer_Compare_Number;
       Value   : UInt16)
      with Post => Current_Compare_Value (This, Compare) = Value;
-   --  Set the value for Compare registers 1 to 4.
+   --  Set the value for Compare registers 1 to 4. A compare value greater than
+   --  the period register value will not generate a compare match event.
+   --  The compare values must be within a lower and an upper limit related to
+   --  the high-resolution implementation and listed in table 216 of the RM0440
+   --  chapter 27.3.4.
+   --  Prescaler  CKPSC[2:0] Min      Max
+   --  Div_1      0          0x0060   0xFFDF
+   --  Div_2      1          0x0030   0xFFEF
+   --  Div_4      2          0x0018   0xFFF7
+   --  Div_8      3          0x000C   0xFFFB
+   --  Div_16     4          0x0006   0xFFFD
+   --  ≥ Div_32   ≥ 5        0x0003   0xFFFD
+
 
    function Current_Compare_Value
      (This    : HRTimer_Channel;
@@ -979,32 +1011,35 @@ package STM32.HRTimers is
       Source : HRTimer_Channel_DMA_Request) return Boolean;
 
    procedure Set_Deadtime (This : in out HRTimer_Channel; Enable : Boolean)
-     with Pre =>
-       (if This'Address = HRTIM_TIMA_Base then
-          not Enabled (This) or No_Outputs_Enabled (This)
-       elsif This'Address = HRTIM_TIMB_Base then
-          not Enabled (This) or No_Outputs_Enabled (This)
-       elsif This'Address = HRTIM_TIMC_Base then
-          not Enabled (This) or No_Outputs_Enabled (This)
-       elsif This'Address = HRTIM_TIMD_Base then
-          not Enabled (This) or No_Outputs_Enabled (This)
-       elsif This'Address = HRTIM_TIME_Base then
-          not Enabled (This) or No_Outputs_Enabled (This)
-       elsif This'Address = HRTIM_TIMF_Base then
-          not Enabled (This) or No_Outputs_Enabled (This)),
-       Post => Enabled_Deadtime (This) = Enable;
+     with Pre  => not Enabled (This) or No_Outputs_Enabled (This),
+          Post => Enabled_Deadtime (This) = Enable;
    --  Enable or disable the deadtime. This parameter cannot be changed once
    --  the timer is operating (TxEN bit set) or if its outputs are enabled
-   --  and set/reset by another timer. See pg.1027 in RM0440 rev. 6.
+   --  and set/reset by another timer. See chapter 27.5.47 in RM0440 rev. 6.
 
    function Enabled_Deadtime (This : HRTimer_Channel) return Boolean;
    --  Return True if the timer deadtime is enabled.
+
+   type HRTimer_Deadtime_Prescaler is
+     (Mul_1,
+      Mul_2,
+      Mul_4,
+      Mul_8,
+      Mul_16,
+      Mul_32,
+      Mul_64,
+      Mul_128);
+   --  The Deadtime Prescaler input frequency is from HRTIM*8 (so the time is
+   --  tHRTIM/8) and determines the time for the Deadtime Generator (DTG).
+   --  tDTG is given by (2**(DTPRSC[2:0])) x (tHRTIM / 8).
+   --  The maximum Deadtime is given by tDTG output * 511 (UInt9) from the
+   --  rising and falling values.
 
    type HRTimer_Deadtime_Sign is (Positive_Sign, Negative_Sign);
 
    procedure Configure_Deadtime
      (This          : in out HRTimer_Channel;
-      Prescaler     : UInt3;
+      Prescaler     : HRTimer_Deadtime_Prescaler;
       Rising_Value  : UInt9;
       Rising_Sign   : HRTimer_Deadtime_Sign := Positive_Sign;
       Falling_Value : UInt9;
@@ -1045,9 +1080,15 @@ package STM32.HRTimers is
 
    function Read_Deadtime_Lock (This : HRTimer_Channel) return Deadtime_Lock;
 
+   type Output_State is (Low, High);
+
+   procedure Set_Channel_Output_State
+     (This  : in out HRTimer_Channel;
+      Out_1 : Output_State;
+      Out_2 : Output_State);
+
    type Output_Event is
-     (Software_Trigger,
-      Timer_A_Resynchronization,
+     (Timer_A_Resynchronization,
       Timer_Period,
       Timer_Compare_1,
       Timer_Compare_2,
@@ -1080,6 +1121,39 @@ package STM32.HRTimers is
       Register_Update);
    --  These events determine the set/reset crossbar of the outputs, so the
    --  output waveform is established.
+
+   for Output_Event use
+     (Timer_A_Resynchronization => 16#01#,
+      Timer_Period              => 16#02#,
+      Timer_Compare_1           => 16#03#,
+      Timer_Compare_2           => 16#04#,
+      Timer_Compare_3           => 16#05#,
+      Timer_Compare_4           => 16#06#,
+      Master_Period             => 16#07#,
+      Master_Compare_1          => 16#08#,
+      Master_Compare_2          => 16#09#,
+      Master_Compare_3          => 16#0A#,
+      Master_Compare_4          => 16#0B#,
+      Timer_Event_1             => 16#0C#,
+      Timer_Event_2             => 16#0D#,
+      Timer_Event_3             => 16#0E#,
+      Timer_Event_4             => 16#0F#,
+      Timer_Event_5             => 16#10#,
+      Timer_Event_6             => 16#11#,
+      Timer_Event_7             => 16#12#,
+      Timer_Event_8             => 16#13#,
+      Timer_Event_9             => 16#14#,
+      External_Event_1          => 16#15#,
+      External_Event_2          => 16#16#,
+      External_Event_3          => 16#17#,
+      External_Event_4          => 16#18#,
+      External_Event_5          => 16#19#,
+      External_Event_6          => 16#1A#,
+      External_Event_7          => 16#1B#,
+      External_Event_8          => 16#1C#,
+      External_Event_9          => 16#1D#,
+      External_Event_10         => 16#1E#,
+      Register_Update           => 16#1F#);
 
    type HRTimer_Channel_Output is (Output_1, Output_2);
 
@@ -1904,8 +1978,9 @@ package STM32.HRTimers is
      (Calibration_Start    : Boolean;
       Periodic_Calibration : Boolean;
       Calibration_Rate     : DLL_Calibration);
-   --  DLL calibration must be done before starting HRTIM master and
-   --  timing units. See RM0440 rev 6 chapter 27.3.24 pg. 953 for the sequence
+   --  DLL calibration must be done before starting HRTIM master and timing
+   --  units. This routine exits only when the calibration is ended and HRTIM is
+   --  ready. See RM0440 rev 6 chapter 27.3.24 pg. 953 for the sequence
    --  of initialization.
 
    procedure Set_Fault_Input
