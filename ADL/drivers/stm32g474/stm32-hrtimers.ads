@@ -1171,6 +1171,18 @@ package STM32.HRTimers is
    --  27.3.7 at pg. 887 in the RM0440 rev 6 for set/reset events priorities
    --  and narrow pulses management.
 
+   type Output_Event_Type is (Reset_Event, Set_Event);
+
+   procedure Set_Channel_Output_Event
+     (This       : in out HRTimer_Channel;
+      Output     : HRTimer_Channel_Output;
+      Event      : Output_Event;
+      Event_Type : Output_Event_Type;
+      Enabled    : Boolean);
+   --  The output waveform is determined by this set/reset crossbar. The event
+   --  sources are ORed and multiple events can be simultaneously selected. See
+   --  chapter 27.3.4 Set/reset crossbar in the RM0440 rev 7.
+
    type External_Event_Number is
      (Event_1,
       Event_2,
