@@ -1939,11 +1939,11 @@ package body STM32.HRTimers is
       end case;
    end Configure_Channel_Output_Event;
 
-   ------------------------------
-   -- Set_Channel_Output_Event --
-   ------------------------------
+   ------------------------------------
+   -- Configure_Channel_Output_Event --
+   ------------------------------------
 
-   procedure Set_Channel_Output_Event
+   procedure Configure_Channel_Output_Event
      (This       : in out HRTimer_Channel;
       Output     : HRTimer_Channel_Output;
       Event      : Output_Event;
@@ -1983,7 +1983,7 @@ package body STM32.HRTimers is
                   end if;
             end case;
       end case;
-   end Set_Channel_Output_Event;
+   end Configure_Channel_Output_Event;
 
    ------------------------------
    -- Configure_External_Event --
@@ -3486,6 +3486,100 @@ package body STM32.HRTimers is
          when ADC_Trigger_10 =>
             HRTimer_Common_Periph.ADCER.ADC10TRG := Source'Enum_Rep;
             HRTimer_Common_Periph.ADCPS2.ADC10PSC := Divisor'Enum_Rep;
+      end case;
+   end Configure_ADC_Trigger;
+
+   ---------------------------
+   -- Configure_ADC_Trigger --
+   ---------------------------
+
+   procedure Configure_ADC_Trigger
+     (Output  : ADC_Trigger_Output;
+      Source  : ADC_Trigger_Source;
+      Enabled : Boolean)
+   is
+   begin
+      case Output is
+         when ADC_Trigger_1 =>
+            if Enabled then
+               HRTimer_Common_Periph.ADC1R :=
+                 HRTimer_Common_Periph.ADC1R or 2 ** Source'Enum_Rep;
+            else
+               HRTimer_Common_Periph.ADC1R :=
+                 HRTimer_Common_Periph.ADC1R and not (2 ** Source'Enum_Rep);
+            end if;
+         when ADC_Trigger_2 =>
+            if Enabled then
+               HRTimer_Common_Periph.ADC2R :=
+                 HRTimer_Common_Periph.ADC2R or 2 ** Source'Enum_Rep;
+            else
+               HRTimer_Common_Periph.ADC2R :=
+                 HRTimer_Common_Periph.ADC2R and not (2 ** Source'Enum_Rep);
+            end if;
+         when ADC_Trigger_3 =>
+            if Enabled then
+               HRTimer_Common_Periph.ADC3R :=
+                 HRTimer_Common_Periph.ADC3R or 2 ** Source'Enum_Rep;
+            else
+               HRTimer_Common_Periph.ADC3R :=
+                 HRTimer_Common_Periph.ADC3R and not (2 ** Source'Enum_Rep);
+            end if;
+         when ADC_Trigger_4 =>
+            if Enabled then
+               HRTimer_Common_Periph.ADC4R :=
+                 HRTimer_Common_Periph.ADC4R or 2 ** Source'Enum_Rep;
+            else
+               HRTimer_Common_Periph.ADC4R :=
+                 HRTimer_Common_Periph.ADC4R and not (2 ** Source'Enum_Rep);
+            end if;
+         when ADC_Trigger_5 =>
+            if Enabled then
+               HRTimer_Common_Periph.ADCER.ADC5TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC5TRG or 2 ** Source'Enum_Rep;
+            else
+               HRTimer_Common_Periph.ADCER.ADC5TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC5TRG and not (2 ** Source'Enum_Rep);
+            end if;
+         when ADC_Trigger_6 =>
+            if Enabled then
+               HRTimer_Common_Periph.ADCER.ADC6TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC6TRG or 2 ** Source'Enum_Rep;
+            else
+               HRTimer_Common_Periph.ADCER.ADC6TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC6TRG and not (2 ** Source'Enum_Rep);
+            end if;
+         when ADC_Trigger_7 =>
+            if Enabled then
+               HRTimer_Common_Periph.ADCER.ADC7TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC7TRG or 2 ** Source'Enum_Rep;
+            else
+               HRTimer_Common_Periph.ADCER.ADC7TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC7TRG and not (2 ** Source'Enum_Rep);
+            end if;
+         when ADC_Trigger_8 =>
+            if Enabled then
+               HRTimer_Common_Periph.ADCER.ADC8TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC8TRG or 2 ** Source'Enum_Rep;
+            else
+               HRTimer_Common_Periph.ADCER.ADC8TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC8TRG and not (2 ** Source'Enum_Rep);
+            end if;
+         when ADC_Trigger_9 =>
+            if Enabled then
+               HRTimer_Common_Periph.ADCER.ADC9TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC9TRG or 2 ** Source'Enum_Rep;
+            else
+               HRTimer_Common_Periph.ADCER.ADC9TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC9TRG and not (2 ** Source'Enum_Rep);
+            end if;
+         when ADC_Trigger_10 =>
+            if Enabled then
+               HRTimer_Common_Periph.ADCER.ADC10TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC10TRG or 2 ** Source'Enum_Rep;
+            else
+               HRTimer_Common_Periph.ADCER.ADC10TRG :=
+                 HRTimer_Common_Periph.ADCER.ADC10TRG and not (2 ** Source'Enum_Rep);
+            end if;
       end case;
    end Configure_ADC_Trigger;
 

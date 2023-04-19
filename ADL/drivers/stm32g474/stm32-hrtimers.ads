@@ -1173,7 +1173,7 @@ package STM32.HRTimers is
 
    type Output_Event_Type is (Reset_Event, Set_Event);
 
-   procedure Set_Channel_Output_Event
+   procedure Configure_Channel_Output_Event
      (This       : in out HRTimer_Channel;
       Output     : HRTimer_Channel_Output;
       Event      : Output_Event;
@@ -1959,12 +1959,20 @@ package STM32.HRTimers is
       Div_32)
      with Size => 5;
    --  A post-scaling divisor allow to reduce the ADC trigger rate by its value.
-   --  See RM0440 rev 6 chapter 27.3.20 pg 941.
+   --  See RM0440 rev 7 chapter 27.3.20.
 
    procedure Configure_ADC_Trigger
      (Output  : ADC_Trigger_Output;
       Source  : ADC_Trigger_Source;
       Divisor : PostScaler_Divisor);
+
+   procedure Configure_ADC_Trigger
+     (Output  : ADC_Trigger_Output;
+      Source  : ADC_Trigger_Source;
+      Enabled : Boolean);
+   --  Multiple triggering is possible within a single switching period by
+   --  selecting several sources simultaneously. See chapter 27.3.20 ADC
+   --  triggers in the RM0440 rev 7.
 
    type ADC_Trigger_Update_Source is
      (Master_Timer,
