@@ -175,7 +175,7 @@ package STM32.HRTimers is
       DMA_Burst_Complete,
       Master_RollOver);
 
-   procedure Configure_Timer_Update
+   procedure Configure_Register_Preload_Update
      (This       : in out HRTimer_Master;
       Repetition : Boolean;
       Burst_DMA  : Burst_DMA_Update_Mode)
@@ -562,7 +562,7 @@ package STM32.HRTimers is
       TimerF_Update,
       Master_Update);
 
-   procedure Set_Timer_Update
+   procedure Configure_Register_Preload_Update
      (This   : in out HRTimer_Channel;
       Event  : HRTimer_Update_Event;
       Enable : Boolean)
