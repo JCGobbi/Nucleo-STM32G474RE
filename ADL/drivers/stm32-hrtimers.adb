@@ -292,13 +292,9 @@ package body STM32.HRTimers is
       Period    : UInt16)
    is
    begin
-      This.MCR.CKPSC := HRTimer_Prescaler'Pos (Prescaler);
-      This.MPER.MPER := Period;
+      Configure_Prescaler (This, Prescaler);
+      Set_Period (This, Period);
    end Configure;
-
-   type HRTimer_Prescaler_Array is array (HRTimer_Prescaler) of UInt16;
-   HRTimer_Prescaler_Value : constant HRTimer_Prescaler_Array :=
-     (1, 2, 4, 8, 16, 32, 64, 128);
 
    ----------------------------------
    -- Compute_Prescaler_and_Period --
@@ -421,7 +417,7 @@ package body STM32.HRTimers is
       DMA_Request : Boolean)
    is
    begin
-      This.MREP.MREP := Repetitions;
+      Set_Repetition_Counter (This, Repetitions);
       This.MDIER.MREPIE := Interrupt;
       This.MDIER.MREPDE := DMA_Request;
    end Configure_Repetition_Counter;
@@ -435,14 +431,11 @@ package body STM32.HRTimers is
       Compare : HRTimer_Compare_Number;
       Value   : UInt16)
    is
-      pragma Unreferenced (This);
-
       --  The minimum value for timer compare is 3 periods of fHRTIM clock,
       --  that is  0x60 if CKPSC[2:0] = 0, 0x30 if CKPSC[2:0] = 1, 0x18 if
       --  CKPSC[2:0] = 2,... See chapter 21.5.8 at pg. 724 in RM0364 rev. 4.
-      Prescaler : constant UInt3 := HRTIM_Master_Periph.MCR.CKPSC;
-      Pre_Value : constant UInt16 := UInt16 (2 ** Natural (Prescaler));
-      Min_Value : constant UInt16 := 16#60# / Pre_Value;
+      Prescaler : constant UInt16 := Current_Prescaler (This)'Enum_Rep;
+      Min_Value : constant UInt16 := 16#60# / Prescaler;
       Final_Value : constant UInt16 := UInt16'Max (Value, Min_Value);
    begin
       case Compare is
@@ -1044,8 +1037,8 @@ package body STM32.HRTimers is
       Period    : UInt16)
    is
    begin
-      This.TIMxCR.CKPSCx := Prescaler'Enum_Rep;
-      This.PERxR.PERx := Period;
+      Configure_Prescaler (This, Prescaler);
+      Set_Period (This, Period);
    end Configure;
 
    ----------------------------------
@@ -1058,9 +1051,8 @@ package body STM32.HRTimers is
       Prescaler           : out HRTimer_Prescaler;
       Period              : out UInt32)
    is
-      Max_Prescaler      : constant HRTimer_Prescaler := HRTimer_Prescaler'Last;
       Max_Period         : constant := 16#FFFF#; --  UInt16'Last
-      Prescaler_Enum     : UInt8; --  Counter for HRTimer_Prescaler'Enum_Rep
+      Prescaler_Enum     : HRTimer_Prescaler := HRTimer_Prescaler'First;
       fHRCK              : UInt32; --  High frequency into HRTIM
       Hardware_Frequency : UInt32; --  fHRTIM
       CK_CNT             : UInt32;
@@ -1079,29 +1071,23 @@ package body STM32.HRTimers is
       --  resolutions is tHRCK = 1 / fHRCK = 184 ps.
       fHRCK := Hardware_Frequency * 32;
 
-      --  We use a numeric prescaler value to calculate the Hardware_Frequency
-      --  division considering that this counter can be greater then the last
-      --  HRTimer_Prescaler'Enum_Rep.
-      Prescaler_Enum := 0;
-
       loop
          --  Compute the Counter's clock
-         CK_CNT := fHRCK / UInt32 (HRTimer_Prescaler_Value
-                                  (HRTimer_Prescaler'Val (Prescaler_Enum)));
+         CK_CNT := fHRCK / Prescaler_Enum'Enum_Rep;
          --  Determine the CK_CNT periods to achieve the requested frequency
-         Period := CK_CNT / fHRCK;
+         Period := CK_CNT / Requested_Frequency;
 
          exit when ((Period <= Max_Period) or
-                      (Prescaler_Enum > Max_Prescaler'Enum_Rep));
+                      (Prescaler_Enum = HRTimer_Prescaler'Last));
 
-         Prescaler_Enum := Prescaler_Enum + 1;
+         Prescaler_Enum := HRTimer_Prescaler'Succ (Prescaler_Enum);
       end loop;
 
-      if Prescaler_Enum > Max_Prescaler'Enum_Rep then
+      if Period > Max_Period then
          raise Invalid_Request with "Frequency too low";
       end if;
 
-      Prescaler := HRTimer_Prescaler'Val (Prescaler_Enum);
+      Prescaler := Prescaler_Enum;
    end Compute_Prescaler_And_Period;
 
    ----------------------
@@ -1127,9 +1113,9 @@ package body STM32.HRTimers is
       Counter_Mode : HRTimer_Counter_Mode)
    is
    begin
-      This.TIMxCR.CKPSCx := HRTimer_Prescaler'Pos (Prescaler);
-      This.PERxR.PERx := Period;
-      This.TIMxCR2.UDM := Counter_Mode = Down;
+      Configure_Prescaler (This, Prescaler);
+      Set_Period (This, Period);
+      Set_Counter_Mode (This, Counter_Mode);
    end Configure;
 
    ------------------------------------
@@ -1230,7 +1216,7 @@ package body STM32.HRTimers is
       DMA_Request : Boolean)
    is
    begin
-      This.REPxR.REPx := Repetitions;
+      Set_Repetition_Counter (This, Repetitions);
       This.TIMxDIER.REPIE := Interrupt;
       This.TIMxDIER.REPDE := DMA_Request;
    end Configure_Repetition_Counter;
@@ -1264,9 +1250,8 @@ package body STM32.HRTimers is
       --  The minimum value for timer compare is 3 periods of fHRTIM clock,
       --  that is  0x60 if CKPSC[2:0] = 0, 0x30 if CKPSC[2:0] = 1, 0x18 if
       --  CKPSC[2:0] = 2,... See chapter 21.5.8 at pg. 724 in RM0364 rev. 4.
-      Prescaler : constant UInt3 := This.TIMxCR.CKPSCx;
-      Presc_Value : constant UInt16 := UInt16 (2 ** Natural (Prescaler));
-      Min_Value : constant UInt16 := 16#60# / Presc_Value;
+      Prescaler : constant UInt16 := Current_Prescaler (This)'Enum_Rep;
+      Min_Value : constant UInt16 := 16#60# / Prescaler;
       Final_Value : constant UInt16 := UInt16'Max (Value, Min_Value);
    begin
       case Compare is
@@ -2125,8 +2110,7 @@ package body STM32.HRTimers is
       Start_PulseWidth  : Chopper_Start_PulseWidth)
    is
    begin
-      This.OUTxR.CHP1 := Output1;
-      This.OUTxR.CHP2 := Output2;
+      Set_Chopper_Mode (This, Output1, Output2);
       This.CHPxR.CHPFRQ := Carrier_Frequency'Enum_Rep;
       This.CHPxR.CHPDTY := Duty_Cycle'Enum_Rep;
       This.CHPxR.STRTPW := Start_PulseWidth'Enum_Rep;
