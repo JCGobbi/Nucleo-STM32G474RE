@@ -83,6 +83,13 @@ package STM32.FMAC is
    --  when operating in circular mode. The flag is set if the number of unread
    --  values in the buffer is less than 2**EMPTY_WM.
 
+   procedure Set_FMAC_Clipping
+     (This   : in out FMAC_Accelerator;
+      Enable : Boolean);
+   --  Values at the output of the accumulator, which exceed the q1.15 range,
+   --  wrap (clipping disabled) or are saturated to the maximum positive or
+   --  negative value (+1 or -1) according to the sign.
+
    procedure Configure_FMAC_Buffer
      (This         : in out FMAC_Accelerator;
       Buffer       : FMAC_Buffer;
@@ -175,11 +182,9 @@ package STM32.FMAC is
 
    --  The input (WDATA) and output (RDATA) data of the FMAC uses UInt16
    --  to represent the fixed point values. So we need to convert the type
-   --  Fraction_16 to UInt16 and vice-versa.
-   function Q1_15_To_UInt16 is new
-     Ada.Unchecked_Conversion (Q1_15, UInt16);
-   function UInt16_To_Q1_15 is new
-     Ada.Unchecked_Conversion (UInt16, Q1_15);
+   --  Q1_15 to UInt16 and vice-versa.
+   function Q1_15_To_UInt16 is new Ada.Unchecked_Conversion (Q1_15, UInt16);
+   function UInt16_To_Q1_15 is new Ada.Unchecked_Conversion (UInt16, Q1_15);
 
    procedure Write_FMAC_Data
      (This : in out FMAC_Accelerator;
@@ -225,13 +230,6 @@ package STM32.FMAC is
    --  If the preload of X1 is not done, this buffer must have zero length.
    --  For IIR, it is recommended to preload the Y buffer with zeros to avoid
    --  unpredictable transient values at the outset.
-
-   procedure Set_FMAC_Clipping
-     (This   : in out FMAC_Accelerator;
-      Enable : Boolean);
-   --  Values at the output of the accumulator, which exceed the q1.15 range,
-   --  wrap (clipping disabled) or are saturated to the maximum positive or
-   --  negative value (+1 or -1) according to the sign.
 
    type FMAC_Status is
      (Y_Buffer_Empty,

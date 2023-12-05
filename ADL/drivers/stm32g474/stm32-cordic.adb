@@ -133,11 +133,10 @@ package body STM32.CORDIC is
       Data_Size : CORDIC_Data_Size)
    is
    begin
-      This.CSR.FUNC := Operation'Enum_Rep;
-      This.CSR.PRECISION := Precision'Enum_Rep;
-      This.CSR.SCALE := Scaling;
-      This.CSR.ARGSIZE := Data_Size = Data_16_Bit;
-      This.CSR.RESSIZE := Data_Size = Data_16_Bit;
+      Set_CORDIC_Function (This, Operation);
+      Set_CORDIC_Precision (This, Precision);
+      Set_CORDIC_Scaling_Factor (This, Scaling);
+      Set_CORDIC_Data_Size (This, Data_Size);
 
       case Operation is
          when Cosine | Sine | Phase | Modulus =>

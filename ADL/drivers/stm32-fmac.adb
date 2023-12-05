@@ -69,6 +69,18 @@ package body STM32.FMAC is
       end case;
    end Set_FMAC_Buffer_Watermark;
 
+   -----------------------
+   -- Set_FMAC_Clipping --
+   -----------------------
+
+   procedure Set_FMAC_Clipping
+     (This   : in out FMAC_Accelerator;
+      Enable : Boolean)
+   is
+   begin
+      This.CR.CLIPEN := Enable;
+   end Set_FMAC_Clipping;
+
    ---------------------------
    -- Configure_FMAC_Buffer --
    ---------------------------
@@ -83,16 +95,16 @@ package body STM32.FMAC is
    begin
       case Buffer is
          when X1 =>
-            This.X1BUFCFG.X1_BASE := Base_Address;
-            This.X1BUFCFG.X1_BUF_SIZE := Size;
-            This.X1BUFCFG.FULL_WM := Watermark'Enum_Rep;
+            Set_FMAC_Buffer_Address (This, X1, Base_Address);
+            Set_FMAC_Buffer_Size (This, X1, Size);
+            Set_FMAC_Buffer_Watermark (This, X1, Watermark);
          when X2 =>
-            This.X2BUFCFG.X2_BASE := Base_Address;
-            This.X2BUFCFG.X2_BUF_SIZE := Size;
+            Set_FMAC_Buffer_Address (This, X2, Base_Address);
+            Set_FMAC_Buffer_Size (This, X2, Size);
          when Y =>
-            This.YBUFCFG.Y_BASE := Base_Address;
-            This.YBUFCFG.Y_BUF_SIZE := Size;
-            This.YBUFCFG.EMPTY_WM := Watermark'Enum_Rep;
+            Set_FMAC_Buffer_Address (This, Y, Base_Address);
+            Set_FMAC_Buffer_Size (This, Y, Size);
+            Set_FMAC_Buffer_Watermark (This, Y, Watermark);
       end case;
    end Configure_FMAC_Buffer;
 
@@ -105,21 +117,21 @@ package body STM32.FMAC is
       Config : FMAC_Buffer_Configuration)
    is
    begin
-      --  Configure X2 buffer for coefficients
-      This.X2BUFCFG.X2_BASE := Config.Coeff_Base_Address;
-      This.X2BUFCFG.X2_BUF_SIZE := Config.Coeff_Buffer_Size;
-
       --  Configure X1 buffer for input values
-      This.X1BUFCFG.X1_BASE := Config.Input_Base_Address;
-      This.X1BUFCFG.X1_BUF_SIZE := Config.Input_Buffer_Size;
-      This.X1BUFCFG.FULL_WM := Config.Input_Buffer_Threshold'Enum_Rep;
+      Set_FMAC_Buffer_Address (This, X1, Config.Input_Base_Address);
+      Set_FMAC_Buffer_Size (This, X1, Config.Input_Buffer_Size);
+      Set_FMAC_Buffer_Watermark (This, X1, Config.Input_Buffer_Threshold);
+
+      --  Configure X2 buffer for coefficients
+      Set_FMAC_Buffer_Address (This, X2, Config.Coeff_Base_Address);
+      Set_FMAC_Buffer_Size (This, X2, Config.Coeff_Buffer_Size);
 
       --  Configure Y buffer for output values
-      This.YBUFCFG.Y_BASE := Config.Output_Base_Address;
-      This.YBUFCFG.Y_BUF_SIZE := Config.Output_Buffer_Size;
-      This.YBUFCFG.EMPTY_WM := Config.Output_Buffer_Threshold'Enum_Rep;
+      Set_FMAC_Buffer_Address (This, Y, Config.Output_Base_Address);
+      Set_FMAC_Buffer_Size (This, Y, Config.Output_Buffer_Size);
+      Set_FMAC_Buffer_Watermark (This, Y, Config.Output_Buffer_Threshold);
 
-      This.CR.CLIPEN := Config.Clipping;
+      Set_FMAC_Clipping (This, Config.Clipping);
    end Initialize_FMAC;
 
    --------------------
@@ -238,35 +250,33 @@ package body STM32.FMAC is
 
       --  Preload X1 buffer
       if Input_Vector'Length /= 0 then
-         This.PARAM.P := Input_Vector'Size;
-         This.PARAM.FUNC := Load_X1_Buffer'Enum_Rep;
-         This.PARAM.START := True;
-
-         for N in Input_Vector'Range loop
-            This.WDATA.WDATA := Q1_15_To_UInt16 (Input_Vector (N));
-         end loop;
+         Configure_FMAC_Parameters (This,
+                                    Operation => Load_X1_Buffer,
+                                    Input_P   => Input_Vector'Length);
+         Set_FMAC_Start (This, True);
+         Write_FMAC_Buffer (This, Input_Vector);
 
          --  Test if START bit is reset
          pragma Assert (This.PARAM.START = True, "Preload X1 not done");
       end if;
 
       --  Preload X2 buffer
-      This.PARAM.P := Coeff_Vector_B'Length;
-
       if Filter = IIR_Filter_Direct_Form_1 then
-         This.PARAM.Q := Coeff_Vector_A'Length;
+         Configure_FMAC_Parameters (This,
+                                    Operation => Load_X2_Buffer,
+                                    Input_P   => Coeff_Vector_B'Length,
+                                    Input_Q   => Coeff_Vector_A'Length);
+      else
+         Configure_FMAC_Parameters (This,
+                                    Operation => Load_X2_Buffer,
+                                    Input_P   => Coeff_Vector_B'Length);
       end if;
 
-      This.PARAM.FUNC := Load_X2_Buffer'Enum_Rep;
-      This.PARAM.START := True;
-      for N in Coeff_Vector_B'Range loop
-         This.WDATA.WDATA := Q1_15_To_UInt16 (Coeff_Vector_B (N));
-      end loop;
+      Set_FMAC_Start (This, True);
+      Write_FMAC_Buffer (This, Coeff_Vector_B);
 
       if Filter = IIR_Filter_Direct_Form_1 then
-         for M in Coeff_Vector_A'Range loop
-            This.WDATA.WDATA := Q1_15_To_UInt16 (Coeff_Vector_A (M));
-         end loop;
+         Write_FMAC_Buffer (This, Coeff_Vector_A);
       end if;
 
       --  Test if START bit is reset
@@ -274,30 +284,16 @@ package body STM32.FMAC is
 
       --  Preload Y buffer
       if Output_Vector'Length /= 0 then
-         This.PARAM.P := Output_Vector'Size;
-         This.PARAM.FUNC := Load_Y_Buffer'Enum_Rep;
-         This.PARAM.START := True;
-
-         for N in Output_Vector'Range loop
-            This.WDATA.WDATA := Q1_15_To_UInt16 (Output_Vector (N));
-         end loop;
+         Configure_FMAC_Parameters (This,
+                                    Operation => Load_Y_Buffer,
+                                    Input_P   => Output_Vector'Length);
+         Set_FMAC_Start (This, True);
+         Write_FMAC_Buffer (This, Output_Vector);
 
          --  Test if START bit is reset
          pragma Assert (This.PARAM.START = True, "Preload Y not done");
       end if;
    end Preload_Buffers;
-
-   -----------------------
-   -- Set_FMAC_Clipping --
-   -----------------------
-
-   procedure Set_FMAC_Clipping
-     (This   : in out FMAC_Accelerator;
-      Enable : Boolean)
-   is
-   begin
-      This.CR.CLIPEN := Enable;
-   end Set_FMAC_Clipping;
 
    ------------
    -- Status --

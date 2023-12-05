@@ -12,7 +12,7 @@ package body STM32.CORDIC.Polling is
       --  Test if data width is 32 bit
       pragma Assert (This.CSR.ARGSIZE = True, "Invalid data size");
 
-      Operation : constant CORDIC_Function := CORDIC_Function'Val (This.CSR.FUNC);
+      Operation : constant CORDIC_Function := Get_CORDIC_Function (This);
    begin
       case Operation is
          when Cosine | Sine | Phase | Modulus =>
@@ -53,7 +53,7 @@ package body STM32.CORDIC.Polling is
       --  Test if data width is 16 bit
       pragma Assert (This.CSR.ARGSIZE = False, "Invalid data size");
 
-      Operation : constant CORDIC_Function := CORDIC_Function'Val (This.CSR.FUNC);
+      Operation : constant CORDIC_Function := Get_CORDIC_Function (This);
       Data : UInt32;
    begin
       case Operation is

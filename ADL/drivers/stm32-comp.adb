@@ -40,9 +40,9 @@ package body STM32.COMP is
       return This.CSR.EN;
    end Enabled;
 
-   -------------------------------
-   -- Set_Iinverting_Input_Port --
-   -------------------------------
+   ------------------------------
+   -- Set_Inverting_Input_Port --
+   ------------------------------
 
    procedure Set_Inverting_Input_Port
      (This  : in out Comparator;
@@ -151,13 +151,11 @@ package body STM32.COMP is
       Param : Init_Parameters)
    is
    begin
-      This.CSR :=
-        (INMSEL   => Param.Input_Minus'Enum_Rep,
-         INPSEL   => Boolean'Val (Param.Input_Plus'Enum_Rep),
-         POL      => Param.Output_Pol = Inverted,
-         HYST     => Param.Hysteresis'Enum_Rep,
-         BLANKSEL => Param.Blanking_Source'Enum_Rep,
-         others   => <>);
+      Set_Inverting_Input_Port (This, Param.Input_Minus);
+      Set_NonInverting_Input_Port (This, Param.Input_Plus);
+      Set_Output_Polarity (This, Param.Output_Pol);
+      Set_Comparator_Hysteresis (This, Param.Hysteresis);
+      Set_Output_Blanking (This, Param.Blanking_Source);
    end Configure_Comparator;
 
    ---------------------------------
