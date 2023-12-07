@@ -9,11 +9,11 @@ package body STM32.FMAC is
       This.CR.RESET := True;
    end Reset_FMAC;
 
-   -----------------------------
-   -- Set_FMAC_Buffer_Address --
-   -----------------------------
+   ------------------------
+   -- Set_Buffer_Address --
+   ------------------------
 
-   procedure Set_FMAC_Buffer_Address
+   procedure Set_Buffer_Address
      (This         : in out FMAC_Accelerator;
       Buffer       : FMAC_Buffer;
       Base_Address : UInt8)
@@ -27,13 +27,13 @@ package body STM32.FMAC is
          when Y =>
             This.YBUFCFG.Y_BASE := Base_Address;
       end case;
-   end Set_FMAC_Buffer_Address;
+   end Set_Buffer_Address;
 
-   --------------------------
-   -- Set_FMAC_Buffer_Size --
-   --------------------------
+   ---------------------
+   -- Set_Buffer_Size --
+   ---------------------
 
-   procedure Set_FMAC_Buffer_Size
+   procedure Set_Buffer_Size
      (This         : in out FMAC_Accelerator;
       Buffer       : FMAC_Buffer;
       Size         : UInt8)
@@ -47,13 +47,13 @@ package body STM32.FMAC is
          when Y =>
             This.YBUFCFG.Y_BUF_SIZE := Size;
       end case;
-   end Set_FMAC_Buffer_Size;
+   end Set_Buffer_Size;
 
-   -------------------------------
-   -- Set_FMAC_Buffer_Watermark --
-   -------------------------------
+   --------------------------
+   -- Set_Buffer_Watermark --
+   --------------------------
 
-   procedure Set_FMAC_Buffer_Watermark
+   procedure Set_Buffer_Watermark
      (This         : in out FMAC_Accelerator;
       Buffer       : FMAC_Buffer;
       Watermark    : FMAC_Watermark := Threshold_1)
@@ -67,25 +67,25 @@ package body STM32.FMAC is
          when Y =>
             This.YBUFCFG.EMPTY_WM := Watermark'Enum_Rep;
       end case;
-   end Set_FMAC_Buffer_Watermark;
+   end Set_Buffer_Watermark;
 
-   -----------------------
-   -- Set_FMAC_Clipping --
-   -----------------------
+   ------------------
+   -- Set_Clipping --
+   ------------------
 
-   procedure Set_FMAC_Clipping
+   procedure Set_Clipping
      (This   : in out FMAC_Accelerator;
       Enable : Boolean)
    is
    begin
       This.CR.CLIPEN := Enable;
-   end Set_FMAC_Clipping;
+   end Set_Clipping;
 
-   ---------------------------
-   -- Configure_FMAC_Buffer --
-   ---------------------------
+   -----------------------------
+   -- Configure_Memory_Buffer --
+   -----------------------------
 
-   procedure Configure_FMAC_Buffer
+   procedure Configure_Memory_Buffer
      (This         : in out FMAC_Accelerator;
       Buffer       : FMAC_Buffer;
       Base_Address : UInt8;
@@ -95,44 +95,44 @@ package body STM32.FMAC is
    begin
       case Buffer is
          when X1 =>
-            Set_FMAC_Buffer_Address (This, X1, Base_Address);
-            Set_FMAC_Buffer_Size (This, X1, Size);
-            Set_FMAC_Buffer_Watermark (This, X1, Watermark);
+            Set_Buffer_Address (This, X1, Base_Address);
+            Set_Buffer_Size (This, X1, Size);
+            Set_Buffer_Watermark (This, X1, Watermark);
          when X2 =>
-            Set_FMAC_Buffer_Address (This, X2, Base_Address);
-            Set_FMAC_Buffer_Size (This, X2, Size);
+            Set_Buffer_Address (This, X2, Base_Address);
+            Set_Buffer_Size (This, X2, Size);
          when Y =>
-            Set_FMAC_Buffer_Address (This, Y, Base_Address);
-            Set_FMAC_Buffer_Size (This, Y, Size);
-            Set_FMAC_Buffer_Watermark (This, Y, Watermark);
+            Set_Buffer_Address (This, Y, Base_Address);
+            Set_Buffer_Size (This, Y, Size);
+            Set_Buffer_Watermark (This, Y, Watermark);
       end case;
-   end Configure_FMAC_Buffer;
+   end Configure_Memory_Buffer;
 
-   ---------------------
-   -- Initialize_FMAC --
-   ---------------------
+   ------------------------------
+   -- Configure_Memory_Buffers --
+   ------------------------------
 
-   procedure Initialize_FMAC
+   procedure Configure_Memory_Buffers
      (This   : in out FMAC_Accelerator;
-      Config : FMAC_Buffer_Configuration)
+      Config : Memory_Buffer_Configuration)
    is
    begin
       --  Configure X1 buffer for input values
-      Set_FMAC_Buffer_Address (This, X1, Config.Input_Base_Address);
-      Set_FMAC_Buffer_Size (This, X1, Config.Input_Buffer_Size);
-      Set_FMAC_Buffer_Watermark (This, X1, Config.Input_Buffer_Threshold);
+      Set_Buffer_Address (This, X1, Config.Input_Base_Address);
+      Set_Buffer_Size (This, X1, Config.Input_Buffer_Size);
+      Set_Buffer_Watermark (This, X1, Config.Input_Buffer_Threshold);
 
       --  Configure X2 buffer for coefficients
-      Set_FMAC_Buffer_Address (This, X2, Config.Coeff_Base_Address);
-      Set_FMAC_Buffer_Size (This, X2, Config.Coeff_Buffer_Size);
+      Set_Buffer_Address (This, X2, Config.Coeff_Base_Address);
+      Set_Buffer_Size (This, X2, Config.Coeff_Buffer_Size);
 
       --  Configure Y buffer for output values
-      Set_FMAC_Buffer_Address (This, Y, Config.Output_Base_Address);
-      Set_FMAC_Buffer_Size (This, Y, Config.Output_Buffer_Size);
-      Set_FMAC_Buffer_Watermark (This, Y, Config.Output_Buffer_Threshold);
+      Set_Buffer_Address (This, Y, Config.Output_Base_Address);
+      Set_Buffer_Size (This, Y, Config.Output_Buffer_Size);
+      Set_Buffer_Watermark (This, Y, Config.Output_Buffer_Threshold);
 
-      Set_FMAC_Clipping (This, Config.Clipping);
-   end Initialize_FMAC;
+      Set_Clipping (This, Config.Clipping);
+   end Configure_Memory_Buffers;
 
    --------------------
    -- Set_FMAC_Start --
@@ -155,16 +155,38 @@ package body STM32.FMAC is
       return This.PARAM.START;
    end FMAC_Started;
 
-   -------------------------------
-   -- Configure_FMAC_Parameters --
-   -------------------------------
+   --------------------
+   -- Write_Function --
+   --------------------
 
-   procedure Configure_FMAC_Parameters
+   procedure Write_Function
+     (This : in out FMAC_Accelerator;
+      Func : FMAC_Function)
+   is
+   begin
+      This.PARAM.FUNC := Func'Enum_Rep;
+   end Write_Function;
+
+   -------------------
+   -- Read_Function --
+   -------------------
+
+   function Read_Function
+     (This : FMAC_Accelerator) return FMAC_Function
+   is
+   begin
+      return FMAC_Function'Val (This.PARAM.FUNC);
+   end Read_Function;
+
+   ----------------------
+   -- Configure_Buffer --
+   ----------------------
+
+   procedure Configure_Buffer
      (This      : in out FMAC_Accelerator;
-      Operation : FMAC_Function;
+      Operation : FMAC_Buffer_Function;
       Input_P   : UInt8;
-      Input_Q   : UInt8 := 0;
-      Input_R   : UInt8 := 0)
+      Input_Q   : UInt8 := 0)
    is
    begin
       This.PARAM.P := Input_P;
@@ -172,53 +194,72 @@ package body STM32.FMAC is
       case Operation is
          when Load_X2_Buffer =>
             This.PARAM.Q := Input_Q;
-         when FIR_Filter_Convolution =>
-            This.PARAM.R := Input_R;
-         when IIR_Filter_Direct_Form_1 =>
-            This.PARAM.Q := Input_Q;
-            This.PARAM.R := Input_R;
          when others => null;
       end case;
 
-      This.PARAM.FUNC := Operation'Enum_Rep;
-   end Configure_FMAC_Parameters;
+      Write_Function (This, Operation);
+   end Configure_Buffer;
 
-   ---------------------
-   -- Write_FMAC_Data --
-   ---------------------
+   ----------------------
+   -- Configure_Filter --
+   ----------------------
 
-   procedure Write_FMAC_Data
+   procedure Configure_Filter
+     (This      : in out FMAC_Accelerator;
+      Operation : FMAC_Filter_Function;
+      Input_P   : UInt8;
+      Input_Q   : UInt8 := 0;
+      Input_R   : UInt8)
+   is
+   begin
+      This.PARAM.P := Input_P;
+      This.PARAM.R := Input_R;
+
+      case Operation is
+         when IIR_Filter_Direct_Form_1 =>
+            This.PARAM.Q := Input_Q;
+         when others => null;
+      end case;
+
+      Write_Function (This, Operation);
+   end Configure_Filter;
+
+   ----------------
+   -- Write_Data --
+   ----------------
+
+   procedure Write_Data
      (This : in out FMAC_Accelerator;
       Data : UInt16)
    is
    begin
       This.WDATA.WDATA := Data;
-   end Write_FMAC_Data;
+   end Write_Data;
 
-   --------------------
-   -- Read_FMAC_Data --
-   --------------------
+   ---------------
+   -- Read_Data --
+   ---------------
 
-   function Read_FMAC_Data
+   function Read_Data
      (This : FMAC_Accelerator) return UInt16
    is
    begin
       return This.RDATA.RDATA;
-   end Read_FMAC_Data;
+   end Read_Data;
 
-   -----------------------
-   -- Write_FMAC_Buffer --
-   -----------------------
+   ------------------
+   -- Write_Buffer --
+   ------------------
 
-   procedure Write_FMAC_Buffer
+   procedure Write_Buffer
      (This   : in out FMAC_Accelerator;
       Vector : Block_Q1_15)
    is
    begin
       for N in Vector'Range loop
-         This.WDATA.WDATA := Q1_15_To_UInt16 (Vector (N));
+         Write_Data (This, Q1_15_To_UInt16 (Vector (N)));
       end loop;
-   end Write_FMAC_Buffer;
+   end Write_Buffer;
 
    ----------------------
    --  Preload_Buffers --
@@ -235,63 +276,62 @@ package body STM32.FMAC is
    begin
       --  Make shure there is no DMA nor interrupt enabled since no flow
       --  control is required.
-      if This.CR.RIEN then
-         This.CR.RIEN := False;
+      if Interrupt_Enabled (This, Read_Interrupt) then
+         Set_Interrupt (This, Read_Interrupt, False);
       end if;
-      if This.CR.WIEN then
-         This.CR.WIEN := False;
+      if Interrupt_Enabled (This, Write_Interrupt) then
+         Set_Interrupt (This, Write_Interrupt, False);
       end if;
-      if This.CR.DMAREN then
-         This.CR.DMAREN := False;
+      if DMA_Enabled (This, Read_DMA) then
+         Set_DMA (This, Read_DMA, False);
       end if;
-      if This.CR.DMAWEN then
-         This.CR.DMAWEN := False;
+      if DMA_Enabled (This, Write_DMA) then
+         Set_DMA (This, Write_DMA, False);
       end if;
 
-      --  Preload X1 buffer
+      --  Preload input values into X1 buffer
       if Input_Vector'Length /= 0 then
-         Configure_FMAC_Parameters (This,
-                                    Operation => Load_X1_Buffer,
-                                    Input_P   => Input_Vector'Length);
+         Configure_Buffer (This,
+                           Operation => Load_X1_Buffer,
+                           Input_P   => Input_Vector'Length);
          Set_FMAC_Start (This, True);
-         Write_FMAC_Buffer (This, Input_Vector);
+         Write_Buffer (This, Input_Vector);
 
          --  Test if START bit is reset
-         pragma Assert (This.PARAM.START = True, "Preload X1 not done");
+         pragma Assert (FMAC_Started (This), "Preload X1 not done");
       end if;
 
-      --  Preload X2 buffer
+      --  Preload coefficients into X2 buffer
       if Filter = IIR_Filter_Direct_Form_1 then
-         Configure_FMAC_Parameters (This,
-                                    Operation => Load_X2_Buffer,
-                                    Input_P   => Coeff_Vector_B'Length,
-                                    Input_Q   => Coeff_Vector_A'Length);
+         Configure_Buffer (This,
+                                Operation => Load_X2_Buffer,
+                                Input_P   => Coeff_Vector_B'Length,
+                                Input_Q   => Coeff_Vector_A'Length);
       else
-         Configure_FMAC_Parameters (This,
-                                    Operation => Load_X2_Buffer,
-                                    Input_P   => Coeff_Vector_B'Length);
+         Configure_Buffer (This,
+                                Operation => Load_X2_Buffer,
+                                Input_P   => Coeff_Vector_B'Length);
       end if;
-
       Set_FMAC_Start (This, True);
-      Write_FMAC_Buffer (This, Coeff_Vector_B);
+      Write_Buffer (This, Coeff_Vector_B);
 
       if Filter = IIR_Filter_Direct_Form_1 then
-         Write_FMAC_Buffer (This, Coeff_Vector_A);
+         Write_Buffer (This, Coeff_Vector_A);
       end if;
 
       --  Test if START bit is reset
-      pragma Assert (This.PARAM.START = True, "Preload X2 not done");
+      pragma Assert (FMAC_Started (This), "Preload X2 not done");
 
-      --  Preload Y buffer
+      --  Preload output values into Y buffer
       if Output_Vector'Length /= 0 then
-         Configure_FMAC_Parameters (This,
-                                    Operation => Load_Y_Buffer,
-                                    Input_P   => Output_Vector'Length);
+         Configure_Buffer (This,
+                           Operation => Load_Y_Buffer,
+                           Input_P   => Output_Vector'Length);
          Set_FMAC_Start (This, True);
-         Write_FMAC_Buffer (This, Output_Vector);
+         Write_Buffer (This, Output_Vector);
 
          --  Test if START bit is reset
-         pragma Assert (This.PARAM.START = True, "Preload Y not done");
+         pragma Assert (FMAC_Started (This), "Preload Y not done");
       end if;
    end Preload_Buffers;
 
@@ -301,7 +341,7 @@ package body STM32.FMAC is
 
    function Status
      (This : FMAC_Accelerator;
-      Flag : FMAC_Status) return Boolean
+      Flag : FMAC_Status_Flag) return Boolean
    is
    begin
       case Flag is
@@ -318,17 +358,40 @@ package body STM32.FMAC is
       end case;
    end Status;
 
+   ------------------
+   -- Clear_Status --
+   ------------------
+
+   procedure Clear_Status
+     (This : in out FMAC_Accelerator;
+      Flag : FMAC_Status_Flag)
+   is
+   begin
+      case Flag is
+         when Y_Buffer_Empty =>
+            This.SR.YEMPTY := False;
+         when X1_Buffer_Full =>
+            This.SR.X1FULL := False;
+         when Overflow_Error =>
+            This.SR.OVFL := False;
+         when Underflow_Error =>
+            This.SR.UNFL := False;
+         when Saturation_Error =>
+            This.SR.SAT := False;
+      end case;
+   end Clear_Status;
+
    -------------------
    -- Set_Interrupt --
    -------------------
 
    procedure Set_Interrupt
      (This      : in out FMAC_Accelerator;
-      Interrupt : FMAC_Interrupt;
+      Source : FMAC_Interrupts;
       Enable    : Boolean)
    is
    begin
-      case Interrupt is
+      case Source is
          when Read_Interrupt =>
             This.CR.RIEN := Enable;
          when Write_Interrupt =>
@@ -347,11 +410,11 @@ package body STM32.FMAC is
    -----------------------
 
    function Interrupt_Enabled
-     (This      : FMAC_Accelerator;
-      Interrupt : FMAC_Interrupt) return Boolean
+     (This   : FMAC_Accelerator;
+      Source : FMAC_Interrupts) return Boolean
    is
    begin
-      case Interrupt is
+      case Source is
          when Read_Interrupt =>
             return This.CR.RIEN;
          when Write_Interrupt =>
@@ -371,11 +434,11 @@ package body STM32.FMAC is
 
    procedure Set_DMA
      (This   : in out FMAC_Accelerator;
-      DMA    : FMAC_DMA;
+      Source : FMAC_DMA;
       Enable : Boolean)
    is
    begin
-      case DMA is
+      case Source is
          when Read_DMA =>
             This.CR.DMAREN := Enable;
          when Write_DMA =>
@@ -389,11 +452,11 @@ package body STM32.FMAC is
 
    function DMA_Enabled
      (This   : FMAC_Accelerator;
-      DMA    : FMAC_DMA)
+      Source : FMAC_DMA)
       return Boolean
    is
    begin
-      case DMA is
+      case Source is
          when Read_DMA =>
             return This.CR.DMAREN;
          when Write_DMA =>
