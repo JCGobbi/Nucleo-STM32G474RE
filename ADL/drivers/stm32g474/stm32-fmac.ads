@@ -179,6 +179,19 @@ package STM32.FMAC is
    --  See RM0440 rev 6 section 18.3.5 for detailed instructions about each
    --  initialization functions (Load X1, X2 and Y buffers).
 
+   procedure Write_Filter_Gain
+     (This : in out FMAC_Accelerator;
+      Gain : UInt8)
+     with Pre => not FMAC_Started (This);
+   --  Write the gain value applied to the accumulator output.
+
+   function Read_Filter_Gain
+     (This : FMAC_Accelerator) return UInt8
+     with Pre => Read_Function (This) in FMAC_Filter_Function;
+   --  Read the gain applied to the accumulator output. It is only valid when a
+   --  filter function is programmed in the FUNC bitfield of the FMAC_PARAM
+   --  register.
+
    procedure Configure_Filter
      (This      : in out FMAC_Accelerator;
       Operation : FMAC_Filter_Function;

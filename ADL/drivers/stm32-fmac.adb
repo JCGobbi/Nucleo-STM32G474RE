@@ -200,6 +200,29 @@ package body STM32.FMAC is
       Write_Function (This, Operation);
    end Configure_Buffer;
 
+   -----------------------
+   -- Write_Filter_Gain --
+   -----------------------
+
+   procedure Write_Filter_Gain
+     (This : in out FMAC_Accelerator;
+      Gain : UInt8)
+   is
+   begin
+      This.PARAM.R := Gain;
+   end Write_Filter_Gain;
+
+   ----------------------
+   -- Read_Filter_Gain --
+   ----------------------
+
+   function Read_Filter_Gain
+     (This : FMAC_Accelerator) return UInt8
+   is
+   begin
+      return This.PARAM.R;
+   end Read_Filter_Gain;
+
    ----------------------
    -- Configure_Filter --
    ----------------------
