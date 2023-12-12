@@ -159,7 +159,8 @@ package STM32.FMAC is
 
    procedure Write_Function
      (This : in out FMAC_Accelerator;
-      Func : FMAC_Function);
+      Func : FMAC_Function)
+     with Post => Read_Function (This) = Func;
 
    function Read_Function
      (This : FMAC_Accelerator) return FMAC_Function;
@@ -171,7 +172,7 @@ package STM32.FMAC is
       Input_Q   : UInt8 := 0) --  Length M of the coefficient vector A
      with Pre => not FMAC_Started (This);
    --  Trigger by writing the appropriate value in the FUNC bitfield of the
-   --  FMAC_PARAM register, with the START bit set. The P, Q and R bitfields
+   --  FMAC_PARAM register, with the START bit set. The P and Q bitfields
    --  must also contain the appropriate parameter values for each function.
    --  For initialization functions (load X1, X2 or Y buffers), the function
    --  completes when N writes have been performed to the FMAC_WDATA register,
@@ -226,8 +227,8 @@ package STM32.FMAC is
    function UInt16_To_Q1_15 is new Ada.Unchecked_Conversion (UInt16, Q1_15);
 
    procedure Write_Data
-     (This : in out FMAC_Accelerator;
-      Data : UInt16);
+     (This  : in out FMAC_Accelerator;
+      Value : UInt16);
    --  When a write access to this register occurs, the write data are
    --  transferred to the address offset indicated by the write pointer. The
    --  pointer address is automatically incremented after each write access.

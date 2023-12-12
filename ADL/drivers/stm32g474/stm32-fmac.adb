@@ -252,11 +252,11 @@ package body STM32.FMAC is
    ----------------
 
    procedure Write_Data
-     (This : in out FMAC_Accelerator;
-      Data : UInt16)
+     (This  : in out FMAC_Accelerator;
+      Value : UInt16)
    is
    begin
-      This.WDATA.WDATA := Data;
+      This.WDATA.WDATA := Value;
    end Write_Data;
 
    ---------------
