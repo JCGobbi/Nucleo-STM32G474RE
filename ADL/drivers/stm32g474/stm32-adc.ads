@@ -459,7 +459,7 @@ package STM32.ADC is
 
    subtype Data_Offset is UInt12;
    type Offset_Channel_Rank is new Natural range 1 .. 4;
-   type Offset_Signal is (Negative, Positive);
+   type Offset_Signal is (Minus, Plus);
 
    procedure Configure_Channel_Offset
      (This       : in out Analog_To_Digital_Converter;

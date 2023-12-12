@@ -370,25 +370,25 @@ package body STM32.ADC is
          when 1 =>
             This.OFR1.OFFSET1_CH := Channel;
             This.OFR1.OFFSET1 := Offset;
-            This.OFR1.OFFSETPOS := Boolean'Val (Signal'Enum_Rep);
+            This.OFR1.OFFSETPOS := Signal = Plus;
             This.OFR1.SATEN := Saturation;
             This.OFR1.OFFSET1_EN := Enabled;
          when 2 =>
             This.OFR2.OFFSET2_CH := Channel;
             This.OFR2.OFFSET2 := Offset;
-            This.OFR2.OFFSETPOS := Boolean'Val (Signal'Enum_Rep);
+            This.OFR2.OFFSETPOS := Signal = Plus;
             This.OFR2.SATEN := Saturation;
             This.OFR2.OFFSET2_EN := Enabled;
          when 3 =>
             This.OFR3.OFFSET3_CH := Channel;
             This.OFR3.OFFSET3 := Offset;
-            This.OFR3.OFFSETPOS := Boolean'Val (Signal'Enum_Rep);
+            This.OFR3.OFFSETPOS := Signal = Plus;
             This.OFR3.SATEN := Saturation;
             This.OFR3.OFFSET3_EN := Enabled;
          when 4 =>
             This.OFR4.OFFSET4_CH := Channel;
             This.OFR4.OFFSET4 := Offset;
-            This.OFR4.OFFSETPOS := Boolean'Val (Signal'Enum_Rep);
+            This.OFR4.OFFSETPOS := Signal = Plus;
             This.OFR4.SATEN := Saturation;
             This.OFR4.OFFSET4_EN := Enabled;
       end case;
@@ -852,9 +852,9 @@ package body STM32.ADC is
       if This'Address = ADC1_Base or
          This'Address = ADC2_Base
       then
-         return Boolean'Val (ADC12_Common_Periph.CCR.MDMA);
+         return ADC12_Common_Periph.CCR.MDMA /= 0;
       else
-         return Boolean'Val (ADC345_Common_Periph.CCR.MDMA);
+         return ADC345_Common_Periph.CCR.MDMA /= 0;
       end if;
    end Multi_DMA_Enabled_After_Last_Transfer;
 
