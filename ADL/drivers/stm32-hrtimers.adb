@@ -431,6 +431,7 @@ package body STM32.HRTimers is
       Compare : HRTimer_Compare_Number;
       Value   : UInt16)
    is
+      pragma Unreferenced (This);
    begin
       case Compare is
          when Compare_1 =>

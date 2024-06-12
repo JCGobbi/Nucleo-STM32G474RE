@@ -825,7 +825,7 @@ package STM32.HRTimers is
    --  Set the value for Compare registers 1 to 4. A compare value greater than
    --  the period register value will not generate a compare match event.
    --  The compare values must be within a lower and an upper limit related to
-   --  the high-resolution implementation and listed in table 216 of the RM0440
+   --  the high-resolution implementation and listed in table 217 of the RM0440
    --  chapter 27.3.4.
    --  Prescaler  CKPSC[2:0] Min      Max
    --  Div_1      0          0x0060   0xFFDF
@@ -837,7 +837,6 @@ package STM32.HRTimers is
    --  The value 0x0000 can be written in CMP1 and CMP3 registers only, to skip
    --  a PWM pulse. See RM 0440 chapter 27.3.4 at title Null duty cycle
    --  exception case.
-
 
    function Current_Compare_Value
      (This    : HRTimer_Channel;
