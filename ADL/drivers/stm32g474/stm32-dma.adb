@@ -860,8 +860,6 @@ package body STM32.DMA is
       --  we must disable the stream before configuring it
       Disable (This, Stream);
 
-      This_Stream.CR.EN := True;
-
       if This'Address = DMA1_Periph'Address then
          case Stream is
             when Stream_1 =>
