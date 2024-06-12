@@ -147,12 +147,6 @@ package body STM32.DMA is
    is
    begin
       Get_Stream (This, Stream).CR.EN := False;
-      --  the STMicro Reference Manual RM0090, Doc Id 018909 Rev 6, pg 319,
-      --  step 1 says we must await the bit actually clearing, to confirm no
-      --  ongoing operation remains active.
-      loop
-         exit when not Enabled (This, Stream);
-      end loop;
    end Disable;
 
    -----------
@@ -856,8 +850,8 @@ package body STM32.DMA is
       --  see HAL_DMA_Init in STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h
       This_Stream : DMA_Stream renames Get_Stream (This, Stream);
    begin
-      --  the STMicro Reference Manual RM0090, Doc Id 018909 Rev 6, pg 319 says
-      --  we must disable the stream before configuring it
+      --  RM0440, chapter 12.6.3 says the configuration register is read-only
+      --  when EN = 1, so we must disable the stream before configuring it.
       Disable (This, Stream);
 
       if This'Address = DMA1_Periph'Address then
