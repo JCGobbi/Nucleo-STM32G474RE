@@ -118,7 +118,7 @@ package body STM32.DAC is
       return HF_Interface_Mode
    is
    begin
-      return HF_Interface_Mode'Val (This.MCR.HFSEL);
+      return HF_Interface_Mode'Enum_Val (This.MCR.HFSEL);
    end Read_Interface_Mode;
 
    ----------------
@@ -333,9 +333,9 @@ package body STM32.DAC is
    begin
       case Channel is
          when Channel_1 =>
-            return Channel_Mode'Val (This.MCR.MODE1);
+            return Channel_Mode'Enum_Val (This.MCR.MODE1);
          when Channel_2 =>
-            return Channel_Mode'Val (This.MCR.MODE2);
+            return Channel_Mode'Enum_Val (This.MCR.MODE2);
       end case;
    end Read_Channel_Mode;
 
@@ -395,9 +395,9 @@ package body STM32.DAC is
    begin
       case Channel is
          when Channel_1 =>
-            return External_Event_Trigger_Selection'Val (This.CR.TSEL1);
+            return External_Event_Trigger_Selection'Enum_Val (This.CR.TSEL1);
          when Channel_2 =>
-            return External_Event_Trigger_Selection'Val (This.CR.TSEL2);
+            return External_Event_Trigger_Selection'Enum_Val (This.CR.TSEL2);
       end case;
    end Trigger_Selection;
 
@@ -721,9 +721,9 @@ package body STM32.DAC is
    begin
       case Channel is
          when Channel_1 =>
-            Kind := Wave_Generation_Selection'Val (This.CR.WAVE1);
+            Kind := Wave_Generation_Selection'Enum_Val (This.CR.WAVE1);
          when Channel_2 =>
-            Kind := Wave_Generation_Selection'Val (This.CR.WAVE2);
+            Kind := Wave_Generation_Selection'Enum_Val (This.CR.WAVE2);
       end case;
       declare
          Result : Wave_Generation (Kind);

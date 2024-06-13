@@ -250,12 +250,12 @@ package body STM32.Device is
       if This'Address = ADC1_Base or
         This'Address = ADC2_Base
       then
-         return ADC_Clock_Source'Val (RCC_Periph.CCIPR.ADC12SEL);
+         return ADC_Clock_Source'Enum_Val (RCC_Periph.CCIPR.ADC12SEL);
       elsif This'Address = ADC3_Base or
         This'Address = ADC4_Base or
         This'Address = ADC5_Base
       then
-         return ADC_Clock_Source'Val (RCC_Periph.CCIPR.ADC345SEL);
+         return ADC_Clock_Source'Enum_Val (RCC_Periph.CCIPR.ADC345SEL);
       else
          raise Unknown_Device;
       end if;
@@ -345,7 +345,7 @@ package body STM32.Device is
    is
    begin
       pragma Assert (This'Address = SAI_Base);
-      return SAI_Clock_Source'Val (RCC_Periph.CCIPR.SAI1SEL);
+      return SAI_Clock_Source'Enum_Val (RCC_Periph.CCIPR.SAI1SEL);
    end Read_Clock_Source;
 
    -------------------------
@@ -361,7 +361,7 @@ package body STM32.Device is
          raise Unknown_Device;
       end if;
 
-      Input_Selector := SAI_Clock_Source'Val (RCC_Periph.CCIPR.SAI1SEL);
+      Input_Selector := SAI_Clock_Source'Enum_Val (RCC_Periph.CCIPR.SAI1SEL);
 
       case Input_Selector is
          when SYSCLK =>
@@ -622,17 +622,17 @@ package body STM32.Device is
    is
    begin
       if This'Address = USART1_Base then
-         return USART_Clock_Source'Val (RCC_Periph.CCIPR.USART1SEL);
+         return USART_Clock_Source'Enum_Val (RCC_Periph.CCIPR.USART1SEL);
       elsif This'Address = USART2_Base then
-         return USART_Clock_Source'Val (RCC_Periph.CCIPR.USART2SEL);
+         return USART_Clock_Source'Enum_Val (RCC_Periph.CCIPR.USART2SEL);
       elsif This'Address = USART3_Base then
-         return USART_Clock_Source'Val (RCC_Periph.CCIPR.USART3SEL);
+         return USART_Clock_Source'Enum_Val (RCC_Periph.CCIPR.USART3SEL);
       elsif This'Address = UART4_Base then
-         return USART_Clock_Source'Val (RCC_Periph.CCIPR.UART4SEL);
+         return USART_Clock_Source'Enum_Val (RCC_Periph.CCIPR.UART4SEL);
       elsif This'Address = UART5_Base then
-         return USART_Clock_Source'Val (RCC_Periph.CCIPR.UART5SEL);
+         return USART_Clock_Source'Enum_Val (RCC_Periph.CCIPR.UART5SEL);
       elsif This'Address = LPUART1_Base then
-         return USART_Clock_Source'Val (RCC_Periph.CCIPR.LPUART1SEL);
+         return USART_Clock_Source'Enum_Val (RCC_Periph.CCIPR.LPUART1SEL);
       else
          raise Unknown_Device;
       end if;
@@ -716,7 +716,7 @@ package body STM32.Device is
          This'Address = FDCAN2_Base or
          This'Address = FDCAN3_Base
       then
-         return CAN_Clock_Source'Val (RCC_Periph.CCIPR.FDCANSEL);
+         return CAN_Clock_Source'Enum_Val (RCC_Periph.CCIPR.FDCANSEL);
       else
          raise Unknown_Device;
       end if;
@@ -730,7 +730,7 @@ package body STM32.Device is
                                  return UInt32
    is
       Source : constant CAN_Clock_Source :=
-        CAN_Clock_Source'Val (RCC_Periph.CCIPR.FDCANSEL);
+        CAN_Clock_Source'Enum_Val (RCC_Periph.CCIPR.FDCANSEL);
    begin
       if This'Address = FDCAN1_Base or
         This'Address = FDCAN2_Base or
@@ -876,13 +876,13 @@ package body STM32.Device is
    begin
       case This is
          when I2C_Id_1 =>
-            return I2C_Clock_Source'Val (RCC_Periph.CCIPR.I2C1SEL);
+            return I2C_Clock_Source'Enum_Val (RCC_Periph.CCIPR.I2C1SEL);
          when I2C_Id_2 =>
-            return I2C_Clock_Source'Val (RCC_Periph.CCIPR.I2C2SEL);
+            return I2C_Clock_Source'Enum_Val (RCC_Periph.CCIPR.I2C2SEL);
          when I2C_Id_3 =>
-            return I2C_Clock_Source'Val (RCC_Periph.CCIPR.I2C3SEL);
+            return I2C_Clock_Source'Enum_Val (RCC_Periph.CCIPR.I2C3SEL);
          when I2C_Id_4 =>
-            return I2C_Clock_Source'Val (RCC_Periph.CCIPR2.I2C4SEL);
+            return I2C_Clock_Source'Enum_Val (RCC_Periph.CCIPR2.I2C4SEL);
       end case;
    end Read_Clock_Source;
 
@@ -959,7 +959,7 @@ package body STM32.Device is
       if This.Periph.all'Address = SPI2_Base or
          This.Periph.all'Address = SPI3_Base
       then
-         return SPI_Clock_Source'Val (RCC_Periph.CCIPR.I2S23SEL);
+         return SPI_Clock_Source'Enum_Val (RCC_Periph.CCIPR.I2S23SEL);
       else
          raise Unknown_Device;
       end if;
@@ -1024,7 +1024,7 @@ package body STM32.Device is
       if This.Periph.all'Address = SPI2_Base or
         This.Periph.all'Address = SPI3_Base
       then
-         return I2S_Clock_Source'Val (RCC_Periph.CCIPR.I2S23SEL);
+         return I2S_Clock_Source'Enum_Val (RCC_Periph.CCIPR.I2S23SEL);
       else
          raise Unknown_Device;
       end if;
@@ -1036,7 +1036,7 @@ package body STM32.Device is
 
    function Get_Clock_Frequency (This : I2S_Port) return UInt32 is
       Source : constant I2S_Clock_Source :=
-        I2S_Clock_Source'Val (RCC_Periph.CCIPR.I2S23SEL);
+        I2S_Clock_Source'Enum_Val (RCC_Periph.CCIPR.I2S23SEL);
    begin
       if This.Periph.all'Address = SPI2_Base or
         This.Periph.all'Address = SPI3_Base
@@ -1088,7 +1088,7 @@ package body STM32.Device is
    is
       pragma Unreferenced (This);
    begin
-      return RTC_Clock_Source'Val (RCC_Periph.BDCR.RTCSEL);
+      return RTC_Clock_Source'Enum_Val (RCC_Periph.BDCR.RTCSEL);
    end Read_Clock_Source;
 
    ------------------
@@ -1255,7 +1255,7 @@ package body STM32.Device is
    begin
       if This'Address = LPTIMER1_Base then
          Source.External := LPTIMER1_Periph.CFGR.CKSEL;
-         Source.Clock := LPTimer_Clock_Source_Enum'Val (RCC_Periph.CCIPR.LPTIM1SEL);
+         Source.Clock := LPTimer_Clock_Source_Enum'Enum_Val (RCC_Periph.CCIPR.LPTIM1SEL);
          return Source;
       else
          raise Unknown_Device;
@@ -1375,7 +1375,7 @@ package body STM32.Device is
       Result : RCC_System_Clocks;
 
       PLLSRC : constant PLL_Clock_Source :=
-        PLL_Clock_Source'Val (RCC_Periph.PLLCFGR.PLLSRC);
+        PLL_Clock_Source'Enum_Val (RCC_Periph.PLLCFGR.PLLSRC);
       --  PLL Source Mux input.
       PLL_Clock_In : UInt32;
 

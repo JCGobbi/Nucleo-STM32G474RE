@@ -59,7 +59,7 @@ package body STM32.COMP is
      (This : Comparator) return Inverting_Input_Port
    is
    begin
-      return Inverting_Input_Port'Val (This.CSR.INMSEL);
+      return Inverting_Input_Port'Enum_Val (This.CSR.INMSEL);
    end Get_Inverting_Input_Port;
 
    ---------------------------------
@@ -81,7 +81,7 @@ package body STM32.COMP is
      (This : Comparator) return NonInverting_Input_Port
    is
    begin
-      return NonInverting_Input_Port'Val (Boolean'Pos (This.CSR.INPSEL));
+      return NonInverting_Input_Port'Enum_Val (Boolean'Pos (This.CSR.INPSEL));
    end Get_NonInverting_Input_Port;
 
    -------------------------
@@ -100,7 +100,7 @@ package body STM32.COMP is
 
    function Get_Output_Polarity (This : Comparator) return Output_Polarity is
    begin
-      return Output_Polarity'Val (Boolean'Pos (This.CSR.POL));
+      return Output_Polarity'Enum_Val (Boolean'Pos (This.CSR.POL));
    end Get_Output_Polarity;
 
    -------------------------------
@@ -120,7 +120,7 @@ package body STM32.COMP is
    function Get_Comparator_Hysteresis (This : Comparator)
                                         return Comparator_Hysteresis is
    begin
-      return Comparator_Hysteresis'Val (This.CSR.HYST);
+      return Comparator_Hysteresis'Enum_Val (This.CSR.HYST);
    end Get_Comparator_Hysteresis;
 
    -------------------------
@@ -139,7 +139,7 @@ package body STM32.COMP is
 
    function Get_Output_Blanking (This : Comparator) return Output_Blanking is
    begin
-      return Output_Blanking'Val (This.CSR.BLANKSEL);
+      return Output_Blanking'Enum_Val (This.CSR.BLANKSEL);
    end Get_Output_Blanking;
 
    --------------------------
@@ -211,7 +211,7 @@ package body STM32.COMP is
    function Get_Comparator_Output
      (This : Comparator) return Comparator_Output is
    begin
-      return Comparator_Output'Val (Boolean'Pos (This.CSR.VALUE));
+      return Comparator_Output'Enum_Val (Boolean'Pos (This.CSR.VALUE));
    end Get_Comparator_Output;
 
    -------------------------

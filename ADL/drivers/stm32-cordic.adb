@@ -21,7 +21,7 @@ package body STM32.CORDIC is
      return CORDIC_Function
    is
    begin
-      return CORDIC_Function'Val (This.CSR.FUNC);
+      return CORDIC_Function'Enum_Val (This.CSR.FUNC);
    end Get_CORDIC_Function;
 
    --------------------------

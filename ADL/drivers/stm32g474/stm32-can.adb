@@ -1782,19 +1782,19 @@ package body STM32.CAN is
    begin
       case Group is
          when Rx_FIFO_0 =>
-            return Interrupt_Line'Val (Boolean'Pos (This.ILS.RXFIFO.Arr (0)));
+            return Interrupt_Line'Enum_Val (Boolean'Pos (This.ILS.RXFIFO.Arr (0)));
          when Rx_FIFO_1 =>
-            return Interrupt_Line'Val (Boolean'Pos (This.ILS.RXFIFO.Arr (1)));
+            return Interrupt_Line'Enum_Val (Boolean'Pos (This.ILS.RXFIFO.Arr (1)));
          when Status_Msg =>
-            return Interrupt_Line'Val (Boolean'Pos (This.ILS.SMSG));
+            return Interrupt_Line'Enum_Val (Boolean'Pos (This.ILS.SMSG));
          when Tx_FIFO_Error =>
-            return Interrupt_Line'Val (Boolean'Pos (This.ILS.TFERR));
+            return Interrupt_Line'Enum_Val (Boolean'Pos (This.ILS.TFERR));
          when Time_RAM =>
-            return Interrupt_Line'Val (Boolean'Pos (This.ILS.MISC));
+            return Interrupt_Line'Enum_Val (Boolean'Pos (This.ILS.MISC));
          when Passive_Log_Error =>
-            return Interrupt_Line'Val (Boolean'Pos (This.ILS.BERR));
+            return Interrupt_Line'Enum_Val (Boolean'Pos (This.ILS.BERR));
          when Protocol_Error =>
-            return Interrupt_Line'Val (Boolean'Pos (This.ILS.PERR));
+            return Interrupt_Line'Enum_Val (Boolean'Pos (This.ILS.PERR));
       end case;
    end Get_Group_Interrupt_Line;
 
@@ -1807,12 +1807,12 @@ package body STM32.CAN is
       Status : out Protocol_Status)
    is
    begin
-      Status.Last_Error_Code := Last_Error_Code_Enum'Val (This.PSR.LEC);
-      Status.Communication_Activity := Communication_Activity_Enum'Val (This.PSR.ACT);
+      Status.Last_Error_Code := Last_Error_Code_Enum'Enum_Val (This.PSR.LEC);
+      Status.Communication_Activity := Communication_Activity_Enum'Enum_Val (This.PSR.ACT);
       Status.Error_Passive := This.PSR.EP;
       Status.Error_Counter_Warning := This.PSR.EW;
       Status.Bus_Off := This.PSR.BO;
-      Status.Data_Last_Error_Code := Last_Error_Code_Enum'Val (This.PSR.DLEC);
+      Status.Data_Last_Error_Code := Last_Error_Code_Enum'Enum_Val (This.PSR.DLEC);
       Status.Rx_ESI_Flag := This.PSR.RESI;
       Status.Rx_BRS_Flag := This.PSR.RBRS;
       Status.Rx_FDF_Flag := This.PSR.REDL;

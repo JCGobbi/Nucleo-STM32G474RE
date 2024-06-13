@@ -119,7 +119,7 @@ package body STM32.ADC is
    function Current_Resolution
      (This : Analog_To_Digital_Converter)
       return ADC_Resolution
-   is (ADC_Resolution'Val (This.CFGR.RES));
+   is (ADC_Resolution'Enum_Val (This.CFGR.RES));
 
    -----------------------
    -- Current_Alignment --
