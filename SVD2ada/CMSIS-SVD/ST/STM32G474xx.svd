@@ -49345,10 +49345,129 @@
                      <access>read-only</access>
                   </field>
                   <field>
-                     <name>DIFSEL_1_18</name>
-                     <description>Differential mode for channels 15 to               1</description>
+                     <name>DIFSEL_1</name>
+                     <description>Differential mode for channels               1</description>
                      <bitOffset>1</bitOffset>
-                     <bitWidth>18</bitWidth>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_2</name>
+                     <description>Differential mode for channels               2</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_3</name>
+                     <description>Differential mode for channels               3</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_4</name>
+                     <description>Differential mode for channels               4</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_5</name>
+                     <description>Differential mode for channels               5</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_6</name>
+                     <description>Differential mode for channels               6</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_7</name>
+                     <description>Differential mode for channels               7</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_8</name>
+                     <description>Differential mode for channels               8</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_9</name>
+                     <description>Differential mode for channels               9</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_10</name>
+                     <description>Differential mode for channels               10</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_11</name>
+                     <description>Differential mode for channels               11</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_12</name>
+                     <description>Differential mode for channels               12</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_13</name>
+                     <description>Differential mode for channels               13</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_14</name>
+                     <description>Differential mode for channels               14</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_15</name>
+                     <description>Differential mode for channels               15</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_16</name>
+                     <description>Differential mode for channels               16</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_17</name>
+                     <description>Differential mode for channels               17</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_18</name>
+                     <description>Differential mode for channels               18</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
                      <access>read-write</access>
                   </field>
                </fields>
@@ -50557,10 +50676,129 @@
                      <access>read-only</access>
                   </field>
                   <field>
-                     <name>DIFSEL_1_18</name>
-                     <description>Differential mode for channels 15 to               1</description>
+                     <name>DIFSEL_1</name>
+                     <description>Differential mode for channels               1</description>
                      <bitOffset>1</bitOffset>
-                     <bitWidth>18</bitWidth>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_2</name>
+                     <description>Differential mode for channels               2</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_3</name>
+                     <description>Differential mode for channels               3</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_4</name>
+                     <description>Differential mode for channels               4</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_5</name>
+                     <description>Differential mode for channels               5</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_6</name>
+                     <description>Differential mode for channels               6</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_7</name>
+                     <description>Differential mode for channels               7</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_8</name>
+                     <description>Differential mode for channels               8</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_9</name>
+                     <description>Differential mode for channels               9</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_10</name>
+                     <description>Differential mode for channels               10</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_11</name>
+                     <description>Differential mode for channels               11</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_12</name>
+                     <description>Differential mode for channels               12</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_13</name>
+                     <description>Differential mode for channels               13</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_14</name>
+                     <description>Differential mode for channels               14</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_15</name>
+                     <description>Differential mode for channels               15</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_16</name>
+                     <description>Differential mode for channels               16</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_17</name>
+                     <description>Differential mode for channels               17</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-write</access>
+                  </field>
+                  <field>
+                     <name>DIFSEL_18</name>
+                     <description>Differential mode for channels               18</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
                      <access>read-write</access>
                   </field>
                </fields>
