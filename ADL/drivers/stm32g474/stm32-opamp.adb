@@ -205,7 +205,7 @@ package body STM32.OPAMP is
    function Get_PGA_Mode_Gain
      (This : Operational_Amplifier) return PGA_Mode_Gain is
    begin
-      return PGA_Mode_Gain'Val (This.CSR.PGA_GAIN);
+      return PGA_Mode_Gain'Enum_Val (This.CSR.PGA_GAIN);
    end Get_PGA_Mode_Gain;
 
    --------------------
