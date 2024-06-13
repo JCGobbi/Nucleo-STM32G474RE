@@ -70,13 +70,22 @@ package body STM32.ADC is
 
    procedure Enable (This : in out Analog_To_Digital_Converter) is
    begin
+      --  After reset, the ADCs are in deep where its supply is internally
+      --  switched off. For normal operation the following bits should be set.
+      --  See RM0440 rev 8 sections 21.4.6 and 21.7.3.
+      This.CR.DEEPPWD := False; --  deep-sleep mode off
+      This.CR.ADVREGEN := True; --  turn on internal voltage regulator
+
+      --  The software procedure to enable the ADC is described in RM0440 rev 8
+      --  Chapter 21.4.9.
       if not This.CR.ADEN then
+         --  Clear the ADRDY bit
+         This.ISR.ADRDY := True;
          This.CR.ADEN := True;
 
          loop
             exit when This.ISR.ADRDY = True;
          end loop;
-
       end if;
    end Enable;
 
