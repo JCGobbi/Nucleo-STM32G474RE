@@ -39,8 +39,7 @@
 --   COPYRIGHT(c) 2014 STMicroelectronics                                   --
 ------------------------------------------------------------------------------
 
-with STM32_SVD.ADC;        use STM32_SVD.ADC;
-                           use STM32_SVD;
+with STM32_SVD.ADC; use STM32_SVD.ADC, STM32_SVD;
 
 package body STM32.ADC is
 
@@ -70,11 +69,16 @@ package body STM32.ADC is
 
    procedure Enable (This : in out Analog_To_Digital_Converter) is
    begin
-      --  After reset, the ADCs are in deep where its supply is internally
+      --  After reset, the ADCs are in deep-sleep where its supply is internally
       --  switched off. For normal operation the following bits should be set.
       --  See RM0440 rev 8 sections 21.4.6 and 21.7.3.
       This.CR.DEEPPWD := False; --  deep-sleep mode off
       This.CR.ADVREGEN := True; --  turn on internal voltage regulator
+
+      --  Wait the ADC voltage regulator startup time of 20 us. See data sheet
+      --  DS12288 rev. 5 chapter 5.3.19 Analog-to-digital converter characteristics
+      --  table 66 ADC Characteristics at symbol tADCVREG_STUP.
+      delay until (Clock + Microseconds (30));
 
       --  The software procedure to enable the ADC is described in RM0440 rev 8
       --  Chapter 21.4.9.
@@ -106,6 +110,125 @@ package body STM32.ADC is
 
    function Enabled (This : Analog_To_Digital_Converter) return Boolean is
      (This.CR.ADEN);
+
+   ---------------
+   -- Calibrate --
+   ---------------
+
+   procedure Calibrate
+     (This       : in out Analog_To_Digital_Converter;
+      Convertion : Input_Convertion_Mode)
+   is
+   begin
+      --  After reset, the ADCs are in deep-sleep where its supply is internally
+      --  switched off. For normal operation the following bits should be set.
+      --  See RM0440 rev 8 sections 21.4.6 and 21.7.3.
+      This.CR.DEEPPWD := False; --  deep-sleep mode off
+      This.CR.ADVREGEN := True; --  turn on internal voltage regulator
+
+      --  Wait the ADC voltage regulator startup time of 20 us. See data sheet
+      --  DS12288 rev. 5 chapter 5.3.19 Analog-to-digital converter characteristics
+      --  table 66 ADC Characteristics at symbol tADCVREG_STUP.
+      delay until (Clock + Microseconds (30));
+
+      if Convertion = Single_Ended then
+         This.CR.ADCALDIF := False;
+      else
+         This.CR.ADCALDIF := True;
+      end if;
+
+      --  Start calibration
+      This.CR.ADCAL := True;
+
+      loop
+         exit when not This.CR.ADCAL;
+      end loop;
+   end Calibrate;
+
+   ----------------------------
+   -- Get_Calibration_Factor --
+   ----------------------------
+
+   function Get_Calibration_Factor
+     (This       : in out Analog_To_Digital_Converter;
+      Convertion : Input_Convertion_Mode) return UInt7
+   is
+   begin
+      if Convertion = Single_Ended then
+         return This.CALFACT.CALFACT_S;
+      else
+         return This.CALFACT.CALFACT_D;
+      end if;
+   end Get_Calibration_Factor;
+
+   ----------------------------
+   -- Set_Calibration_Factor --
+   ----------------------------
+
+   procedure Set_Calibration_Factor
+     (This       : in out Analog_To_Digital_Converter;
+      Convertion : Input_Convertion_Mode;
+      Value      : UInt7)
+   is
+   begin
+      if Convertion = Single_Ended then
+         This.CALFACT.CALFACT_S := Value;
+      else
+         This.CALFACT.CALFACT_D := Value;
+      end if;
+   end Set_Calibration_Factor;
+
+   --------------------------
+   -- Set_Input_Convertion --
+   --------------------------
+
+   procedure Set_Input_Convertion
+     (This       : in out Analog_To_Digital_Converter;
+      Channel    : Analog_Input_Channel;
+      Convertion : Input_Convertion_Mode)
+   is
+   begin
+      case Channel is
+         when 0 =>
+            null; --  This channel is read-only
+         when 1 =>
+            This.DIFSEL.DIFSEL_1 := Boolean'Val (Convertion'Enum_Rep);
+         when 2 =>
+            This.DIFSEL.DIFSEL_2 := Boolean'Val (Convertion'Enum_Rep);
+         when 3 =>
+            This.DIFSEL.DIFSEL_3 := Boolean'Val (Convertion'Enum_Rep);
+         when 4 =>
+            This.DIFSEL.DIFSEL_4 := Boolean'Val (Convertion'Enum_Rep);
+         when 5 =>
+            This.DIFSEL.DIFSEL_5 := Boolean'Val (Convertion'Enum_Rep);
+         when 6 =>
+            This.DIFSEL.DIFSEL_6 := Boolean'Val (Convertion'Enum_Rep);
+         when 7 =>
+            This.DIFSEL.DIFSEL_7 := Boolean'Val (Convertion'Enum_Rep);
+         when 8 =>
+            This.DIFSEL.DIFSEL_8 := Boolean'Val (Convertion'Enum_Rep);
+         when 9 =>
+            This.DIFSEL.DIFSEL_9 := Boolean'Val (Convertion'Enum_Rep);
+         when 10 =>
+            This.DIFSEL.DIFSEL_10 := Boolean'Val (Convertion'Enum_Rep);
+         when 11 =>
+            This.DIFSEL.DIFSEL_11 := Boolean'Val (Convertion'Enum_Rep);
+         when 12 =>
+            This.DIFSEL.DIFSEL_12 := Boolean'Val (Convertion'Enum_Rep);
+         when 13 =>
+            This.DIFSEL.DIFSEL_13 := Boolean'Val (Convertion'Enum_Rep);
+         when 14 =>
+            This.DIFSEL.DIFSEL_14 := Boolean'Val (Convertion'Enum_Rep);
+         when 15 =>
+            This.DIFSEL.DIFSEL_15 := Boolean'Val (Convertion'Enum_Rep);
+         when 16 =>
+            This.DIFSEL.DIFSEL_16 := Boolean'Val (Convertion'Enum_Rep);
+         when 17 =>
+            This.DIFSEL.DIFSEL_17 := Boolean'Val (Convertion'Enum_Rep);
+         when 18 =>
+            This.DIFSEL.DIFSEL_18 := Boolean'Val (Convertion'Enum_Rep);
+      end case;
+   end Set_Input_Convertion;
 
    --------------------
    -- Configure_Unit --
