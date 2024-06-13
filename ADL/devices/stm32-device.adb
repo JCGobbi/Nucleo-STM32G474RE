@@ -1369,7 +1369,7 @@ package body STM32.Device is
    function System_Clock_Frequencies return RCC_System_Clocks
    is
       Source : constant SYSCLK_Clock_Source :=
-        SYSCLK_Clock_Source'Val (RCC_Periph.CFGR.SWS);
+        SYSCLK_Clock_Source'Enum_Val (RCC_Periph.CFGR.SWS);
       --  Get System_Clock_Mux selection
 
       Result : RCC_System_Clocks;
