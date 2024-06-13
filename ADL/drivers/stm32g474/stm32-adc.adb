@@ -527,12 +527,12 @@ package body STM32.ADC is
       then
          This.CR.ADSTART := True;
       elsif This'Address = ADC2_Base then --  slave channel
-         if Multi_ADC_Mode_Selections'Val (ADC12_Common_Periph.CCR.DUAL) = Independent
+         if Multi_ADC_Mode_Selections'Enum_Val (ADC12_Common_Periph.CCR.DUAL) = Independent
          then
             This.CR.ADSTART := True;
          end if;
       elsif This'Address = ADC4_Base then --  slave channel
-         if Multi_ADC_Mode_Selections'Val (ADC345_Common_Periph.CCR.DUAL) = Independent
+         if Multi_ADC_Mode_Selections'Enum_Val (ADC345_Common_Periph.CCR.DUAL) = Independent
          then
             This.CR.ADSTART := True;
          end if;

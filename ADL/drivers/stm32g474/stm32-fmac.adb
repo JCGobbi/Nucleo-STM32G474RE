@@ -175,7 +175,7 @@ package body STM32.FMAC is
      (This : FMAC_Accelerator) return FMAC_Function
    is
    begin
-      return FMAC_Function'Val (This.PARAM.FUNC);
+      return FMAC_Function'Enum_Val (This.PARAM.FUNC);
    end Read_Function;
 
    ----------------------
