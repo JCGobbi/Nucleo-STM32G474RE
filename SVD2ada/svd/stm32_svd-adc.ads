@@ -898,14 +898,46 @@ package STM32_SVD.ADC is
       Reserved_19_31 at 0 range 19 .. 31;
    end record;
 
-   subtype DIFSEL_DIFSEL_1_18_Field is HAL.UInt18;
-
    --  Differential Mode Selection Register 2
    type DIFSEL_Register is record
       --  Read-only. Differential mode for channels 0
       DIFSEL_0       : Boolean := False;
-      --  Differential mode for channels 15 to 1
-      DIFSEL_1_18    : DIFSEL_DIFSEL_1_18_Field := 16#0#;
+      --  Differential mode for channels 1
+      DIFSEL_1       : Boolean := False;
+      --  Differential mode for channels 2
+      DIFSEL_2       : Boolean := False;
+      --  Differential mode for channels 3
+      DIFSEL_3       : Boolean := False;
+      --  Differential mode for channels 4
+      DIFSEL_4       : Boolean := False;
+      --  Differential mode for channels 5
+      DIFSEL_5       : Boolean := False;
+      --  Differential mode for channels 6
+      DIFSEL_6       : Boolean := False;
+      --  Differential mode for channels 7
+      DIFSEL_7       : Boolean := False;
+      --  Differential mode for channels 8
+      DIFSEL_8       : Boolean := False;
+      --  Differential mode for channels 9
+      DIFSEL_9       : Boolean := False;
+      --  Differential mode for channels 10
+      DIFSEL_10      : Boolean := False;
+      --  Differential mode for channels 11
+      DIFSEL_11      : Boolean := False;
+      --  Differential mode for channels 12
+      DIFSEL_12      : Boolean := False;
+      --  Differential mode for channels 13
+      DIFSEL_13      : Boolean := False;
+      --  Differential mode for channels 14
+      DIFSEL_14      : Boolean := False;
+      --  Differential mode for channels 15
+      DIFSEL_15      : Boolean := False;
+      --  Differential mode for channels 16
+      DIFSEL_16      : Boolean := False;
+      --  Differential mode for channels 17
+      DIFSEL_17      : Boolean := False;
+      --  Differential mode for channels 18
+      DIFSEL_18      : Boolean := False;
       --  unspecified
       Reserved_19_31 : HAL.UInt13 := 16#0#;
    end record
@@ -914,7 +946,24 @@ package STM32_SVD.ADC is
 
    for DIFSEL_Register use record
       DIFSEL_0       at 0 range 0 .. 0;
-      DIFSEL_1_18    at 0 range 1 .. 18;
+      DIFSEL_1       at 0 range 1 .. 1;
+      DIFSEL_2       at 0 range 2 .. 2;
+      DIFSEL_3       at 0 range 3 .. 3;
+      DIFSEL_4       at 0 range 4 .. 4;
+      DIFSEL_5       at 0 range 5 .. 5;
+      DIFSEL_6       at 0 range 6 .. 6;
+      DIFSEL_7       at 0 range 7 .. 7;
+      DIFSEL_8       at 0 range 8 .. 8;
+      DIFSEL_9       at 0 range 9 .. 9;
+      DIFSEL_10      at 0 range 10 .. 10;
+      DIFSEL_11      at 0 range 11 .. 11;
+      DIFSEL_12      at 0 range 12 .. 12;
+      DIFSEL_13      at 0 range 13 .. 13;
+      DIFSEL_14      at 0 range 14 .. 14;
+      DIFSEL_15      at 0 range 15 .. 15;
+      DIFSEL_16      at 0 range 16 .. 16;
+      DIFSEL_17      at 0 range 17 .. 17;
+      DIFSEL_18      at 0 range 18 .. 18;
       Reserved_19_31 at 0 range 19 .. 31;
    end record;
 
