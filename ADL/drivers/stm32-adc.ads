@@ -131,14 +131,16 @@ package STM32.ADC is
 
    function Get_Calibration_Factor
      (This       : in out Analog_To_Digital_Converter;
-      Convertion : Input_Convertion_Mode) return UInt7;
+      Convertion : Input_Convertion_Mode) return UInt7
+     with Pre => Enabled (This);
    --  Read the internal analog calibration factor.
 
    procedure Set_Calibration_Factor
      (This       : in out Analog_To_Digital_Converter;
       Convertion : Input_Convertion_Mode;
       Value      : UInt7)
-     with Pre => not Conversion_Started (This) and
+     with Pre => Enabled (This) and
+                 not Conversion_Started (This) and
                  not Injected_Conversion_Started (This),
           Post => Get_Calibration_Factor (This, Convertion) = Value;
    --  The internal analog calibration is lost each time the power of the ADC is
@@ -148,7 +150,7 @@ package STM32.ADC is
    --  recalibrating, supposing that the software has previously saved the
    --  calibration factor delivered during the previous calibration.
 
-   procedure Set_Input_Convertion
+   procedure Set_Convertion_Mode
      (This       : in out Analog_To_Digital_Converter;
       Channel    : Analog_Input_Channel;
       Convertion : Input_Convertion_Mode)

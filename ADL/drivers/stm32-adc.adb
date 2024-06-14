@@ -69,13 +69,13 @@ package body STM32.ADC is
 
    procedure Enable (This : in out Analog_To_Digital_Converter) is
    begin
-      --  After reset, the ADCs are in deep-sleep where its supply is internally
-      --  switched off. For normal operation the following bits should be set.
-      --  See RM0440 rev 8 sections 21.4.6 and 21.7.3.
+      --  After reset, the ADCs are in deep power-down where its supply is
+      --  internally switched off. For normal operation the following bits
+      --  should be set. See RM0440 rev 8 sections 21.4.6 and 21.7.3.
       This.CR.DEEPPWD := False; --  deep-sleep mode off
       This.CR.ADVREGEN := True; --  turn on internal voltage regulator
 
-      --  Wait the ADC voltage regulator startup time of 20 us. See data sheet
+      --  Wait the ADC voltage regulator startup time of 30 us. See data sheet
       --  DS12288 rev. 5 chapter 5.3.19 Analog-to-digital converter characteristics
       --  table 66 ADC Characteristics at symbol tADCVREG_STUP.
       delay until (Clock + Microseconds (30));
@@ -120,13 +120,13 @@ package body STM32.ADC is
       Convertion : Input_Convertion_Mode)
    is
    begin
-      --  After reset, the ADCs are in deep-sleep where its supply is internally
-      --  switched off. For normal operation the following bits should be set.
-      --  See RM0440 rev 8 sections 21.4.6 and 21.7.3.
+      --  After reset, the ADCs are in deep power-down where its supply is
+      --  internally switched off. For normal operation the following bits
+      --  should be set. See RM0440 rev 8 sections 21.4.6 and 21.7.3.
       This.CR.DEEPPWD := False; --  deep-sleep mode off
       This.CR.ADVREGEN := True; --  turn on internal voltage regulator
 
-      --  Wait the ADC voltage regulator startup time of 20 us. See data sheet
+      --  Wait the ADC voltage regulator startup time of 30 us. See data sheet
       --  DS12288 rev. 5 chapter 5.3.19 Analog-to-digital converter characteristics
       --  table 66 ADC Characteristics at symbol tADCVREG_STUP.
       delay until (Clock + Microseconds (30));
@@ -178,11 +178,11 @@ package body STM32.ADC is
       end if;
    end Set_Calibration_Factor;
 
-   --------------------------
-   -- Set_Input_Convertion --
-   --------------------------
+   -------------------------
+   -- Set_Convertion_Mode --
+   -------------------------
 
-   procedure Set_Input_Convertion
+   procedure Set_Convertion_Mode
      (This       : in out Analog_To_Digital_Converter;
       Channel    : Analog_Input_Channel;
       Convertion : Input_Convertion_Mode)
@@ -228,7 +228,7 @@ package body STM32.ADC is
          when 18 =>
             This.DIFSEL.DIFSEL_18 := Boolean'Val (Convertion'Enum_Rep);
       end case;
-   end Set_Input_Convertion;
+   end Set_Convertion_Mode;
 
    --------------------
    -- Configure_Unit --
