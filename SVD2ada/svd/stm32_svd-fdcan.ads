@@ -322,15 +322,15 @@ package STM32_SVD.FDCAN is
    end record;
 
    subtype ECR_TEC_Field is HAL.UInt8;
-   subtype ECR_TREC_Field is HAL.UInt7;
+   subtype ECR_REC_Field is HAL.UInt7;
    subtype ECR_CEL_Field is HAL.UInt8;
 
    --  FDCAN Error Counter Register
    type ECR_Register is record
       --  Read-only. TEC
       TEC            : ECR_TEC_Field;
-      --  Read-only. TREC
-      TREC           : ECR_TREC_Field;
+      --  Read-only. REC
+      REC            : ECR_REC_Field;
       --  Read-only. RP
       RP             : Boolean;
       --  Read-only. CEL
@@ -343,7 +343,7 @@ package STM32_SVD.FDCAN is
 
    for ECR_Register use record
       TEC            at 0 range 0 .. 7;
-      TREC           at 0 range 8 .. 14;
+      REC            at 0 range 8 .. 14;
       RP             at 0 range 15 .. 15;
       CEL            at 0 range 16 .. 23;
       Reserved_24_31 at 0 range 24 .. 31;
@@ -436,16 +436,12 @@ package STM32_SVD.FDCAN is
    type IR_Register is record
       --  RF0N
       RF0N           : Boolean := False;
-      --  RF0W
-      RF0W           : Boolean := False;
       --  RF0F
       RF0F           : Boolean := False;
       --  RF0L
       RF0L           : Boolean := False;
       --  RF1N
       RF1N           : Boolean := False;
-      --  RF1W
-      RF1W           : Boolean := False;
       --  RF1F
       RF1F           : Boolean := False;
       --  RF1L
@@ -460,8 +456,6 @@ package STM32_SVD.FDCAN is
       TFE            : Boolean := False;
       --  TEFN
       TEFN           : Boolean := False;
-      --  TEFW
-      TEFW           : Boolean := False;
       --  TEFF
       TEFF           : Boolean := False;
       --  TEFL
@@ -472,10 +466,6 @@ package STM32_SVD.FDCAN is
       MRAF           : Boolean := False;
       --  TOO
       TOO            : Boolean := False;
-      --  DRX
-      DRX            : Boolean := False;
-      --  unspecified
-      Reserved_20_21 : HAL.UInt2 := 16#0#;
       --  ELO
       ELO            : Boolean := False;
       --  EP
@@ -493,42 +483,37 @@ package STM32_SVD.FDCAN is
       --  ARA
       ARA            : Boolean := False;
       --  unspecified
-      Reserved_30_31 : HAL.UInt2 := 16#0#;
+      Reserved_24_31 : HAL.UInt8 := 16#0#;
    end record
      with Volatile_Full_Access, Object_Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for IR_Register use record
       RF0N           at 0 range 0 .. 0;
-      RF0W           at 0 range 1 .. 1;
-      RF0F           at 0 range 2 .. 2;
-      RF0L           at 0 range 3 .. 3;
-      RF1N           at 0 range 4 .. 4;
-      RF1W           at 0 range 5 .. 5;
-      RF1F           at 0 range 6 .. 6;
-      RF1L           at 0 range 7 .. 7;
-      HPM            at 0 range 8 .. 8;
-      TC             at 0 range 9 .. 9;
-      TCF            at 0 range 10 .. 10;
-      TFE            at 0 range 11 .. 11;
-      TEFN           at 0 range 12 .. 12;
-      TEFW           at 0 range 13 .. 13;
-      TEFF           at 0 range 14 .. 14;
-      TEFL           at 0 range 15 .. 15;
-      TSW            at 0 range 16 .. 16;
-      MRAF           at 0 range 17 .. 17;
-      TOO            at 0 range 18 .. 18;
-      DRX            at 0 range 19 .. 19;
-      Reserved_20_21 at 0 range 20 .. 21;
-      ELO            at 0 range 22 .. 22;
-      EP             at 0 range 23 .. 23;
-      EW             at 0 range 24 .. 24;
-      BO             at 0 range 25 .. 25;
-      WDI            at 0 range 26 .. 26;
-      PEA            at 0 range 27 .. 27;
-      PED            at 0 range 28 .. 28;
-      ARA            at 0 range 29 .. 29;
-      Reserved_30_31 at 0 range 30 .. 31;
+      RF0F           at 0 range 1 .. 1;
+      RF0L           at 0 range 2 .. 2;
+      RF1N           at 0 range 3 .. 3;
+      RF1F           at 0 range 4 .. 4;
+      RF1L           at 0 range 5 .. 5;
+      HPM            at 0 range 6 .. 6;
+      TC             at 0 range 7 .. 7;
+      TCF            at 0 range 8 .. 8;
+      TFE            at 0 range 9 .. 9;
+      TEFN           at 0 range 10 .. 10;
+      TEFF           at 0 range 11 .. 11;
+      TEFL           at 0 range 12 .. 12;
+      TSW            at 0 range 13 .. 13;
+      MRAF           at 0 range 14 .. 14;
+      TOO            at 0 range 15 .. 15;
+      ELO            at 0 range 16 .. 16;
+      EP             at 0 range 17 .. 17;
+      EW             at 0 range 18 .. 18;
+      BO             at 0 range 19 .. 19;
+      WDI            at 0 range 20 .. 20;
+      PEA            at 0 range 21 .. 21;
+      PED            at 0 range 22 .. 22;
+      ARA            at 0 range 23 .. 23;
+      Reserved_24_31 at 0 range 24 .. 31;
    end record;
 
    --  The settings in the Interrupt Enable register determine which status
@@ -536,16 +521,12 @@ package STM32_SVD.FDCAN is
    type IE_Register is record
       --  RF0NE
       RF0NE          : Boolean := False;
-      --  RF0WE
-      RF0WE          : Boolean := False;
       --  RF0FE
       RF0FE          : Boolean := False;
       --  RF0LE
       RF0LE          : Boolean := False;
       --  RF1NE
       RF1NE          : Boolean := False;
-      --  RF1WE
-      RF1WE          : Boolean := False;
       --  RF1FE
       RF1FE          : Boolean := False;
       --  RF1LE
@@ -560,8 +541,6 @@ package STM32_SVD.FDCAN is
       TFEE           : Boolean := False;
       --  TEFNE
       TEFNE          : Boolean := False;
-      --  TEFWE
-      TEFWE          : Boolean := False;
       --  TEFFE
       TEFFE          : Boolean := False;
       --  TEFLE
@@ -572,12 +551,6 @@ package STM32_SVD.FDCAN is
       MRAFE          : Boolean := False;
       --  TOOE
       TOOE           : Boolean := False;
-      --  DRX
-      DRX            : Boolean := False;
-      --  BECE
-      BECE           : Boolean := False;
-      --  BEUE
-      BEUE           : Boolean := False;
       --  ELOE
       ELOE           : Boolean := False;
       --  EPE
@@ -595,43 +568,61 @@ package STM32_SVD.FDCAN is
       --  ARAE
       ARAE           : Boolean := False;
       --  unspecified
-      Reserved_30_31 : HAL.UInt2 := 16#0#;
+      Reserved_24_31 : HAL.UInt8 := 16#0#;
    end record
      with Volatile_Full_Access, Object_Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for IE_Register use record
       RF0NE          at 0 range 0 .. 0;
-      RF0WE          at 0 range 1 .. 1;
-      RF0FE          at 0 range 2 .. 2;
-      RF0LE          at 0 range 3 .. 3;
-      RF1NE          at 0 range 4 .. 4;
-      RF1WE          at 0 range 5 .. 5;
-      RF1FE          at 0 range 6 .. 6;
-      RF1LE          at 0 range 7 .. 7;
-      HPME           at 0 range 8 .. 8;
-      TCE            at 0 range 9 .. 9;
-      TCFE           at 0 range 10 .. 10;
-      TFEE           at 0 range 11 .. 11;
-      TEFNE          at 0 range 12 .. 12;
-      TEFWE          at 0 range 13 .. 13;
-      TEFFE          at 0 range 14 .. 14;
-      TEFLE          at 0 range 15 .. 15;
-      TSWE           at 0 range 16 .. 16;
-      MRAFE          at 0 range 17 .. 17;
-      TOOE           at 0 range 18 .. 18;
-      DRX            at 0 range 19 .. 19;
-      BECE           at 0 range 20 .. 20;
-      BEUE           at 0 range 21 .. 21;
-      ELOE           at 0 range 22 .. 22;
-      EPE            at 0 range 23 .. 23;
-      EWE            at 0 range 24 .. 24;
-      BOE            at 0 range 25 .. 25;
-      WDIE           at 0 range 26 .. 26;
-      PEAE           at 0 range 27 .. 27;
-      PEDE           at 0 range 28 .. 28;
-      ARAE           at 0 range 29 .. 29;
-      Reserved_30_31 at 0 range 30 .. 31;
+      RF0FE          at 0 range 1 .. 1;
+      RF0LE          at 0 range 2 .. 2;
+      RF1NE          at 0 range 3 .. 3;
+      RF1FE          at 0 range 4 .. 4;
+      RF1LE          at 0 range 5 .. 5;
+      HPME           at 0 range 6 .. 6;
+      TCE            at 0 range 7 .. 7;
+      TCFE           at 0 range 8 .. 8;
+      TFEE           at 0 range 9 .. 9;
+      TEFNE          at 0 range 10 .. 10;
+      TEFFE          at 0 range 11 .. 11;
+      TEFLE          at 0 range 12 .. 12;
+      TSWE           at 0 range 13 .. 13;
+      MRAFE          at 0 range 14 .. 14;
+      TOOE           at 0 range 15 .. 15;
+      ELOE           at 0 range 16 .. 16;
+      EPE            at 0 range 17 .. 17;
+      EWE            at 0 range 18 .. 18;
+      BOE            at 0 range 19 .. 19;
+      WDIE           at 0 range 20 .. 20;
+      PEAE           at 0 range 21 .. 21;
+      PEDE           at 0 range 22 .. 22;
+      ARAE           at 0 range 23 .. 23;
+      Reserved_24_31 at 0 range 24 .. 31;
+   end record;
+
+   --  ILS_RXFIFO array
+   type ILS_RXFIFO_Field_Array is array (0 .. 1) of Boolean
+     with Component_Size => 1, Size => 2;
+
+   --  Type definition for ILS_RXFIFO
+   type ILS_RXFIFO_Field
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  RXFIFO as a value
+            Val : HAL.UInt2;
+         when True =>
+            --  RXFIFO as an array
+            Arr : ILS_RXFIFO_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 2;
+
+   for ILS_RXFIFO_Field use record
+      Val at 0 range 0 .. 1;
+      Arr at 0 range 0 .. 1;
    end record;
 
    --  The Interrupt Line Select register assigns an interrupt generated by a
@@ -639,104 +630,32 @@ package STM32_SVD.FDCAN is
    --  module interrupt lines. For interrupt generation the respective
    --  interrupt line has to be enabled via ILE[EINT0] and ILE[EINT1].
    type ILS_Register is record
-      --  RF0NL
-      RF0NL          : Boolean := False;
-      --  RF0WL
-      RF0WL          : Boolean := False;
-      --  RF0FL
-      RF0FL          : Boolean := False;
-      --  RF0LL
-      RF0LL          : Boolean := False;
-      --  RF1NL
-      RF1NL          : Boolean := False;
-      --  RF1WL
-      RF1WL          : Boolean := False;
-      --  RF1FL
-      RF1FL          : Boolean := False;
-      --  RF1LL
-      RF1LL          : Boolean := False;
-      --  HPML
-      HPML           : Boolean := False;
-      --  TCL
-      TCL            : Boolean := False;
-      --  TCFL
-      TCFL           : Boolean := False;
-      --  TFEL
-      TFEL           : Boolean := False;
-      --  TEFNL
-      TEFNL          : Boolean := False;
-      --  TEFWL
-      TEFWL          : Boolean := False;
-      --  TEFFL
-      TEFFL          : Boolean := False;
-      --  TEFLL
-      TEFLL          : Boolean := False;
-      --  TSWL
-      TSWL           : Boolean := False;
-      --  MRAFL
-      MRAFL          : Boolean := False;
-      --  TOOL
-      TOOL           : Boolean := False;
-      --  DRXL
-      DRXL           : Boolean := False;
-      --  BECL
-      BECL           : Boolean := False;
-      --  BEUL
-      BEUL           : Boolean := False;
-      --  ELOL
-      ELOL           : Boolean := False;
-      --  EPL
-      EPL            : Boolean := False;
-      --  EWL
-      EWL            : Boolean := False;
-      --  BOL
-      BOL            : Boolean := False;
-      --  WDIL
-      WDIL           : Boolean := False;
-      --  PEAL
-      PEAL           : Boolean := False;
-      --  PEDL
-      PEDL           : Boolean := False;
-      --  ARAL
-      ARAL           : Boolean := False;
+      --  RXFIFO0
+      RXFIFO        : ILS_RXFIFO_Field := (As_Array => False, Val => 16#0#);
+      --  SMSG
+      SMSG          : Boolean := False;
+      --  TFERR
+      TFERR         : Boolean := False;
+      --  MISC
+      MISC          : Boolean := False;
+      --  BERR
+      BERR          : Boolean := False;
+      --  PERR
+      PERR          : Boolean := False;
       --  unspecified
-      Reserved_30_31 : HAL.UInt2 := 16#0#;
+      Reserved_7_31 : HAL.UInt25 := 16#0#;
    end record
      with Volatile_Full_Access, Object_Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for ILS_Register use record
-      RF0NL          at 0 range 0 .. 0;
-      RF0WL          at 0 range 1 .. 1;
-      RF0FL          at 0 range 2 .. 2;
-      RF0LL          at 0 range 3 .. 3;
-      RF1NL          at 0 range 4 .. 4;
-      RF1WL          at 0 range 5 .. 5;
-      RF1FL          at 0 range 6 .. 6;
-      RF1LL          at 0 range 7 .. 7;
-      HPML           at 0 range 8 .. 8;
-      TCL            at 0 range 9 .. 9;
-      TCFL           at 0 range 10 .. 10;
-      TFEL           at 0 range 11 .. 11;
-      TEFNL          at 0 range 12 .. 12;
-      TEFWL          at 0 range 13 .. 13;
-      TEFFL          at 0 range 14 .. 14;
-      TEFLL          at 0 range 15 .. 15;
-      TSWL           at 0 range 16 .. 16;
-      MRAFL          at 0 range 17 .. 17;
-      TOOL           at 0 range 18 .. 18;
-      DRXL           at 0 range 19 .. 19;
-      BECL           at 0 range 20 .. 20;
-      BEUL           at 0 range 21 .. 21;
-      ELOL           at 0 range 22 .. 22;
-      EPL            at 0 range 23 .. 23;
-      EWL            at 0 range 24 .. 24;
-      BOL            at 0 range 25 .. 25;
-      WDIL           at 0 range 26 .. 26;
-      PEAL           at 0 range 27 .. 27;
-      PEDL           at 0 range 28 .. 28;
-      ARAL           at 0 range 29 .. 29;
-      Reserved_30_31 at 0 range 30 .. 31;
+      RXFIFO        at 0 range 0 .. 1;
+      SMSG          at 0 range 2 .. 2;
+      TFERR         at 0 range 3 .. 3;
+      MISC          at 0 range 4 .. 4;
+      BERR          at 0 range 5 .. 5;
+      PERR          at 0 range 6 .. 6;
+      Reserved_7_31 at 0 range 7 .. 31;
    end record;
 
    --  ILE_EINT array
@@ -849,9 +768,9 @@ package STM32_SVD.FDCAN is
       Reserved_29_31 at 0 range 29 .. 31;
    end record;
 
-   subtype HPMS_BIDX_Field is HAL.UInt6;
+   subtype HPMS_BIDX_Field is HAL.UInt3;
    subtype HPMS_MSI_Field is HAL.UInt2;
-   subtype HPMS_FIDX_Field is HAL.UInt7;
+   subtype HPMS_FIDX_Field is HAL.UInt5;
 
    --  This register is updated every time a Message ID filter element
    --  configured to generate a priority event match. This can be used to
@@ -860,10 +779,14 @@ package STM32_SVD.FDCAN is
    type HPMS_Register is record
       --  Read-only. BIDX
       BIDX           : HPMS_BIDX_Field;
+      --  unspecified
+      Reserved_3_5   : HAL.UInt3;
       --  Read-only. MSI
       MSI            : HPMS_MSI_Field;
       --  Read-only. FIDX
       FIDX           : HPMS_FIDX_Field;
+      --  unspecified
+      Reserved_13_14 : HAL.UInt2;
       --  Read-only. FLST
       FLST           : Boolean;
       --  unspecified
@@ -873,31 +796,33 @@ package STM32_SVD.FDCAN is
           Bit_Order => System.Low_Order_First;
 
    for HPMS_Register use record
-      BIDX           at 0 range 0 .. 5;
+      BIDX           at 0 range 0 .. 2;
+      Reserved_3_5   at 0 range 3 .. 5;
       MSI            at 0 range 6 .. 7;
-      FIDX           at 0 range 8 .. 14;
+      FIDX           at 0 range 8 .. 12;
+      Reserved_13_14 at 0 range 13 .. 14;
       FLST           at 0 range 15 .. 15;
       Reserved_16_31 at 0 range 16 .. 31;
    end record;
 
-   subtype RXF0S_F0FL_Field is HAL.UInt7;
-   subtype RXF0S_F0GI_Field is HAL.UInt6;
-   subtype RXF0S_F0PI_Field is HAL.UInt6;
+   subtype RXF0S_F0FL_Field is HAL.UInt4;
+   subtype RXF0S_F0GI_Field is HAL.UInt2;
+   subtype RXF0S_F0PI_Field is HAL.UInt2;
 
    --  FDCAN Rx FIFO 0 Status Register
    type RXF0S_Register is record
       --  F0FL
       F0FL           : RXF0S_F0FL_Field := 16#0#;
       --  unspecified
-      Reserved_7_7   : HAL.Bit := 16#0#;
+      Reserved_4_7   : HAL.UInt4 := 16#0#;
       --  F0GI
       F0GI           : RXF0S_F0GI_Field := 16#0#;
       --  unspecified
-      Reserved_14_15 : HAL.UInt2 := 16#0#;
+      Reserved_10_15 : HAL.UInt6 := 16#0#;
       --  F0PI
       F0PI           : RXF0S_F0PI_Field := 16#0#;
       --  unspecified
-      Reserved_22_23 : HAL.UInt2 := 16#0#;
+      Reserved_18_23 : HAL.UInt6 := 16#0#;
       --  F0F
       F0F            : Boolean := False;
       --  RF0L
@@ -909,111 +834,95 @@ package STM32_SVD.FDCAN is
           Bit_Order => System.Low_Order_First;
 
    for RXF0S_Register use record
-      F0FL           at 0 range 0 .. 6;
-      Reserved_7_7   at 0 range 7 .. 7;
-      F0GI           at 0 range 8 .. 13;
-      Reserved_14_15 at 0 range 14 .. 15;
-      F0PI           at 0 range 16 .. 21;
-      Reserved_22_23 at 0 range 22 .. 23;
+      F0FL           at 0 range 0 .. 3;
+      Reserved_4_7   at 0 range 4 .. 7;
+      F0GI           at 0 range 8 .. 9;
+      Reserved_10_15 at 0 range 10 .. 15;
+      F0PI           at 0 range 16 .. 17;
+      Reserved_18_23 at 0 range 18 .. 23;
       F0F            at 0 range 24 .. 24;
       RF0L           at 0 range 25 .. 25;
       Reserved_26_31 at 0 range 26 .. 31;
    end record;
 
-   subtype RXF0A_F0AI_Field is HAL.UInt6;
+   subtype RXF0A_F0AI_Field is HAL.UInt3;
 
    --  CAN Rx FIFO 0 Acknowledge Register
    type RXF0A_Register is record
       --  F0AI
       F0AI          : RXF0A_F0AI_Field := 16#0#;
       --  unspecified
-      Reserved_6_31 : HAL.UInt26 := 16#0#;
+      Reserved_3_31 : HAL.UInt29 := 16#0#;
    end record
      with Volatile_Full_Access, Object_Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for RXF0A_Register use record
-      F0AI          at 0 range 0 .. 5;
-      Reserved_6_31 at 0 range 6 .. 31;
+      F0AI          at 0 range 0 .. 2;
+      Reserved_3_31 at 0 range 3 .. 31;
    end record;
 
-   subtype RXF1S_F1FL_Field is HAL.UInt7;
-   subtype RXF1S_F1GI_Field is HAL.UInt6;
-   subtype RXF1S_F1PI_Field is HAL.UInt6;
-   subtype RXF1S_DMS_Field is HAL.UInt2;
+   subtype RXF1S_F1FL_Field is HAL.UInt3;
+   subtype RXF1S_F1GI_Field is HAL.UInt2;
+   subtype RXF1S_F1PI_Field is HAL.UInt2;
 
    --  FDCAN Rx FIFO 1 Status Register
    type RXF1S_Register is record
       --  Read-only. F1FL
       F1FL           : RXF1S_F1FL_Field;
       --  unspecified
-      Reserved_7_7   : HAL.Bit;
+      Reserved_3_7   : HAL.UInt5;
       --  Read-only. F1GI
       F1GI           : RXF1S_F1GI_Field;
       --  unspecified
-      Reserved_14_15 : HAL.UInt2;
+      Reserved_10_15 : HAL.UInt6;
       --  Read-only. F1PI
       F1PI           : RXF1S_F1PI_Field;
       --  unspecified
-      Reserved_22_23 : HAL.UInt2;
+      Reserved_18_23 : HAL.UInt6;
       --  Read-only. F1F
       F1F            : Boolean;
       --  Read-only. RF1L
       RF1L           : Boolean;
       --  unspecified
-      Reserved_26_29 : HAL.UInt4;
-      --  Read-only. DMS
-      DMS            : RXF1S_DMS_Field;
+      Reserved_26_31 : HAL.UInt6;
    end record
      with Volatile_Full_Access, Object_Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for RXF1S_Register use record
-      F1FL           at 0 range 0 .. 6;
-      Reserved_7_7   at 0 range 7 .. 7;
-      F1GI           at 0 range 8 .. 13;
-      Reserved_14_15 at 0 range 14 .. 15;
-      F1PI           at 0 range 16 .. 21;
-      Reserved_22_23 at 0 range 22 .. 23;
+      F1FL           at 0 range 0 .. 2;
+      Reserved_3_7   at 0 range 3 .. 7;
+      F1GI           at 0 range 8 .. 9;
+      Reserved_10_15 at 0 range 10 .. 15;
+      F1PI           at 0 range 16 .. 17;
+      Reserved_18_23 at 0 range 18 .. 23;
       F1F            at 0 range 24 .. 24;
       RF1L           at 0 range 25 .. 25;
-      Reserved_26_29 at 0 range 26 .. 29;
-      DMS            at 0 range 30 .. 31;
+      Reserved_26_31 at 0 range 26 .. 31;
    end record;
 
-   subtype RXF1A_F1AI_Field is HAL.UInt6;
+   subtype RXF1A_F1AI_Field is HAL.UInt3;
 
    --  FDCAN Rx FIFO 1 Acknowledge Register
    type RXF1A_Register is record
       --  F1AI
       F1AI          : RXF1A_F1AI_Field := 16#0#;
       --  unspecified
-      Reserved_6_31 : HAL.UInt26 := 16#0#;
+      Reserved_3_31 : HAL.UInt29 := 16#0#;
    end record
      with Volatile_Full_Access, Object_Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for RXF1A_Register use record
-      F1AI          at 0 range 0 .. 5;
-      Reserved_6_31 at 0 range 6 .. 31;
+      F1AI          at 0 range 0 .. 2;
+      Reserved_3_31 at 0 range 3 .. 31;
    end record;
-
-   subtype TXBC_TBSA_Field is HAL.UInt14;
-   subtype TXBC_NDTB_Field is HAL.UInt6;
-   subtype TXBC_TFQS_Field is HAL.UInt6;
 
    --  FDCAN Tx Buffer Configuration Register
    type TXBC_Register is record
       --  unspecified
-      Reserved_0_1   : HAL.UInt2 := 16#0#;
-      --  TBSA
-      TBSA           : TXBC_TBSA_Field := 16#0#;
-      --  NDTB
-      NDTB           : TXBC_NDTB_Field := 16#0#;
-      --  unspecified
-      Reserved_22_23 : HAL.UInt2 := 16#0#;
-      --  TFQS
-      TFQS           : TXBC_TFQS_Field := 16#0#;
+      Reserved_0_29  : HAL.UInt30 := 16#0#;
       --  TFQM
       TFQM           : Boolean := False;
       --  unspecified
@@ -1023,18 +932,14 @@ package STM32_SVD.FDCAN is
           Bit_Order => System.Low_Order_First;
 
    for TXBC_Register use record
-      Reserved_0_1   at 0 range 0 .. 1;
-      TBSA           at 0 range 2 .. 15;
-      NDTB           at 0 range 16 .. 21;
-      Reserved_22_23 at 0 range 22 .. 23;
-      TFQS           at 0 range 24 .. 29;
+      Reserved_0_29  at 0 range 0 .. 29;
       TFQM           at 0 range 30 .. 30;
       Reserved_31_31 at 0 range 31 .. 31;
    end record;
 
-   subtype TXFQS_TFFL_Field is HAL.UInt6;
-   subtype TXFQS_TFGI_Field is HAL.UInt5;
-   subtype TXFQS_TFQPI_Field is HAL.UInt5;
+   subtype TXFQS_TFFL_Field is HAL.UInt3;
+   subtype TXFQS_TFGI_Field is HAL.UInt2;
+   subtype TXFQS_TFQPI_Field is HAL.UInt2;
 
    --  The Tx FIFO/Queue status is related to the pending Tx requests listed in
    --  register TXBRP. Therefore the effect of Add/Cancellation requests may be
@@ -1043,13 +948,15 @@ package STM32_SVD.FDCAN is
       --  Read-only. TFFL
       TFFL           : TXFQS_TFFL_Field;
       --  unspecified
-      Reserved_6_7   : HAL.UInt2;
+      Reserved_3_7   : HAL.UInt5;
       --  Read-only. TFGI
       TFGI           : TXFQS_TFGI_Field;
       --  unspecified
-      Reserved_13_15 : HAL.UInt3;
+      Reserved_10_15 : HAL.UInt6;
       --  Read-only. TFQPI
       TFQPI          : TXFQS_TFQPI_Field;
+      --  unspecified
+      Reserved_18_20 : HAL.UInt3;
       --  Read-only. TFQF
       TFQF           : Boolean;
       --  unspecified
@@ -1059,33 +966,307 @@ package STM32_SVD.FDCAN is
           Bit_Order => System.Low_Order_First;
 
    for TXFQS_Register use record
-      TFFL           at 0 range 0 .. 5;
-      Reserved_6_7   at 0 range 6 .. 7;
-      TFGI           at 0 range 8 .. 12;
-      Reserved_13_15 at 0 range 13 .. 15;
-      TFQPI          at 0 range 16 .. 20;
+      TFFL           at 0 range 0 .. 2;
+      Reserved_3_7   at 0 range 3 .. 7;
+      TFGI           at 0 range 8 .. 9;
+      Reserved_10_15 at 0 range 10 .. 15;
+      TFQPI          at 0 range 16 .. 17;
+      Reserved_18_20 at 0 range 18 .. 20;
       TFQF           at 0 range 21 .. 21;
       Reserved_22_31 at 0 range 22 .. 31;
    end record;
 
-   subtype TXEFS_EFFL_Field is HAL.UInt6;
-   subtype TXEFS_EFGI_Field is HAL.UInt5;
-   subtype TXEFS_EFPI_Field is HAL.UInt5;
+   --  TXBRP_TRP array
+   type TXBRP_TRP_Field_Array is array (0 .. 2) of Boolean
+     with Component_Size => 1, Size => 3;
+
+   --  Type definition for TXBRP_TRP
+   type TXBRP_TRP_Field
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  TRP as a value
+            Val : HAL.UInt3;
+         when True =>
+            --  TRP as an array
+            Arr : TXBRP_TRP_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 3;
+
+   for TXBRP_TRP_Field use record
+      Val at 0 range 0 .. 2;
+      Arr at 0 range 0 .. 2;
+   end record;
+
+   --  FDCAN Tx Buffer Request Pending Register
+   type TXBRP_Register is record
+      --  Read-only. TRP0
+      TRP           : TXBRP_TRP_Field;
+      --  unspecified
+      Reserved_3_31 : HAL.UInt29;
+   end record
+     with Volatile_Full_Access, Object_Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for TXBRP_Register use record
+      TRP           at 0 range 0 .. 2;
+      Reserved_3_31 at 0 range 3 .. 31;
+   end record;
+
+   --  TXBAR_AR array
+   type TXBAR_AR_Field_Array is array (0 .. 2) of Boolean
+     with Component_Size => 1, Size => 3;
+
+   --  Type definition for TXBAR_AR
+   type TXBAR_AR_Field
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  AR as a value
+            Val : HAL.UInt3;
+         when True =>
+            --  AR as an array
+            Arr : TXBAR_AR_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 3;
+
+   for TXBAR_AR_Field use record
+      Val at 0 range 0 .. 2;
+      Arr at 0 range 0 .. 2;
+   end record;
+
+   --  FDCAN Tx Buffer Add Request Register
+   type TXBAR_Register is record
+      --  AR0
+      AR            : TXBAR_AR_Field := (As_Array => False, Val => 16#0#);
+      --  unspecified
+      Reserved_3_31 : HAL.UInt29 := 16#0#;
+   end record
+     with Volatile_Full_Access, Object_Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for TXBAR_Register use record
+      AR            at 0 range 0 .. 2;
+      Reserved_3_31 at 0 range 3 .. 31;
+   end record;
+
+   --  TXBCR_CR array
+   type TXBCR_CR_Field_Array is array (0 .. 2) of Boolean
+     with Component_Size => 1, Size => 3;
+
+   --  Type definition for TXBCR_CR
+   type TXBCR_CR_Field
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  CR as a value
+            Val : HAL.UInt3;
+         when True =>
+            --  CR as an array
+            Arr : TXBCR_CR_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 3;
+
+   for TXBCR_CR_Field use record
+      Val at 0 range 0 .. 2;
+      Arr at 0 range 0 .. 2;
+   end record;
+
+   --  FDCAN Tx Buffer Cancellation Request Register
+   type TXBCR_Register is record
+      --  TRP0
+      CR            : TXBCR_CR_Field := (As_Array => False, Val => 16#0#);
+      --  unspecified
+      Reserved_3_31 : HAL.UInt29 := 16#0#;
+   end record
+     with Volatile_Full_Access, Object_Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for TXBCR_Register use record
+      CR            at 0 range 0 .. 2;
+      Reserved_3_31 at 0 range 3 .. 31;
+   end record;
+
+   --  TXBTO_TO array
+   type TXBTO_TO_Field_Array is array (0 .. 2) of Boolean
+     with Component_Size => 1, Size => 3;
+
+   --  Type definition for TXBTO_TO
+   type TXBTO_TO_Field
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  TO as a value
+            Val : HAL.UInt3;
+         when True =>
+            --  TO as an array
+            Arr : TXBTO_TO_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 3;
+
+   for TXBTO_TO_Field use record
+      Val at 0 range 0 .. 2;
+      Arr at 0 range 0 .. 2;
+   end record;
+
+   --  FDCAN Tx Buffer Transmission Occurred Register
+   type TXBTO_Register is record
+      --  Read-only. TRP0
+      TO            : TXBTO_TO_Field;
+      --  unspecified
+      Reserved_3_31 : HAL.UInt29;
+   end record
+     with Volatile_Full_Access, Object_Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for TXBTO_Register use record
+      TO            at 0 range 0 .. 2;
+      Reserved_3_31 at 0 range 3 .. 31;
+   end record;
+
+   --  TXBCF_CF array
+   type TXBCF_CF_Field_Array is array (0 .. 2) of Boolean
+     with Component_Size => 1, Size => 3;
+
+   --  Type definition for TXBCF_CF
+   type TXBCF_CF_Field
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  CF as a value
+            Val : HAL.UInt3;
+         when True =>
+            --  CF as an array
+            Arr : TXBCF_CF_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 3;
+
+   for TXBCF_CF_Field use record
+      Val at 0 range 0 .. 2;
+      Arr at 0 range 0 .. 2;
+   end record;
+
+   --  FDCAN Tx Buffer Cancellation Finished Register
+   type TXBCF_Register is record
+      --  Read-only. TRP0
+      CF            : TXBCF_CF_Field;
+      --  unspecified
+      Reserved_3_31 : HAL.UInt29;
+   end record
+     with Volatile_Full_Access, Object_Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for TXBCF_Register use record
+      CF            at 0 range 0 .. 2;
+      Reserved_3_31 at 0 range 3 .. 31;
+   end record;
+
+   --  TXBTIE_TIE array
+   type TXBTIE_TIE_Field_Array is array (0 .. 2) of Boolean
+     with Component_Size => 1, Size => 3;
+
+   --  Type definition for TXBTIE_TIE
+   type TXBTIE_TIE_Field
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  TIE as a value
+            Val : HAL.UInt3;
+         when True =>
+            --  TIE as an array
+            Arr : TXBTIE_TIE_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 3;
+
+   for TXBTIE_TIE_Field use record
+      Val at 0 range 0 .. 2;
+      Arr at 0 range 0 .. 2;
+   end record;
+
+   --  FDCAN Tx Buffer Transmission Interrupt Enable Register
+   type TXBTIE_Register is record
+      --  TRP0
+      TIE           : TXBTIE_TIE_Field := (As_Array => False, Val => 16#0#);
+      --  unspecified
+      Reserved_3_31 : HAL.UInt29 := 16#0#;
+   end record
+     with Volatile_Full_Access, Object_Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for TXBTIE_Register use record
+      TIE           at 0 range 0 .. 2;
+      Reserved_3_31 at 0 range 3 .. 31;
+   end record;
+
+   --  TXBCIE_CFIE array
+   type TXBCIE_CFIE_Field_Array is array (0 .. 2) of Boolean
+     with Component_Size => 1, Size => 3;
+
+   --  Type definition for TXBCIE_CFIE
+   type TXBCIE_CFIE_Field
+     (As_Array : Boolean := False)
+   is record
+      case As_Array is
+         when False =>
+            --  CFIE as a value
+            Val : HAL.UInt3;
+         when True =>
+            --  CFIE as an array
+            Arr : TXBCIE_CFIE_Field_Array;
+      end case;
+   end record
+     with Unchecked_Union, Size => 3;
+
+   for TXBCIE_CFIE_Field use record
+      Val at 0 range 0 .. 2;
+      Arr at 0 range 0 .. 2;
+   end record;
+
+   --  FDCAN Tx Buffer Cancellation Finished Interrupt Enable Register
+   type TXBCIE_Register is record
+      --  TRP0
+      CFIE          : TXBCIE_CFIE_Field := (As_Array => False, Val => 16#0#);
+      --  unspecified
+      Reserved_3_31 : HAL.UInt29 := 16#0#;
+   end record
+     with Volatile_Full_Access, Object_Size => 32,
+          Bit_Order => System.Low_Order_First;
+
+   for TXBCIE_Register use record
+      CFIE          at 0 range 0 .. 2;
+      Reserved_3_31 at 0 range 3 .. 31;
+   end record;
+
+   subtype TXEFS_EFFL_Field is HAL.UInt3;
+   subtype TXEFS_EFGI_Field is HAL.UInt2;
+   subtype TXEFS_EFPI_Field is HAL.UInt2;
 
    --  FDCAN Tx Event FIFO Status Register
    type TXEFS_Register is record
       --  Read-only. EFFL
       EFFL           : TXEFS_EFFL_Field;
       --  unspecified
-      Reserved_6_7   : HAL.UInt2;
+      Reserved_3_7   : HAL.UInt5;
       --  Read-only. EFGI
       EFGI           : TXEFS_EFGI_Field;
       --  unspecified
-      Reserved_13_15 : HAL.UInt3;
+      Reserved_10_15 : HAL.UInt6;
       --  Read-only. EFPI
       EFPI           : TXEFS_EFPI_Field;
       --  unspecified
-      Reserved_21_23 : HAL.UInt3;
+      Reserved_18_23 : HAL.UInt6;
       --  Read-only. EFF
       EFF            : Boolean;
       --  Read-only. TEFL
@@ -1097,32 +1278,32 @@ package STM32_SVD.FDCAN is
           Bit_Order => System.Low_Order_First;
 
    for TXEFS_Register use record
-      EFFL           at 0 range 0 .. 5;
-      Reserved_6_7   at 0 range 6 .. 7;
-      EFGI           at 0 range 8 .. 12;
-      Reserved_13_15 at 0 range 13 .. 15;
-      EFPI           at 0 range 16 .. 20;
-      Reserved_21_23 at 0 range 21 .. 23;
+      EFFL           at 0 range 0 .. 2;
+      Reserved_3_7   at 0 range 3 .. 7;
+      EFGI           at 0 range 8 .. 9;
+      Reserved_10_15 at 0 range 10 .. 15;
+      EFPI           at 0 range 16 .. 17;
+      Reserved_18_23 at 0 range 18 .. 23;
       EFF            at 0 range 24 .. 24;
       TEFL           at 0 range 25 .. 25;
       Reserved_26_31 at 0 range 26 .. 31;
    end record;
 
-   subtype TXEFA_EFAI_Field is HAL.UInt5;
+   subtype TXEFA_EFAI_Field is HAL.UInt2;
 
    --  FDCAN Tx Event FIFO Acknowledge Register
    type TXEFA_Register is record
       --  EFAI
       EFAI          : TXEFA_EFAI_Field := 16#0#;
       --  unspecified
-      Reserved_5_31 : HAL.UInt27 := 16#0#;
+      Reserved_2_31 : HAL.UInt30 := 16#0#;
    end record
      with Volatile_Full_Access, Object_Size => 32,
           Bit_Order => System.Low_Order_First;
 
    for TXEFA_Register use record
-      EFAI          at 0 range 0 .. 4;
-      Reserved_5_31 at 0 range 5 .. 31;
+      EFAI          at 0 range 0 .. 1;
+      Reserved_2_31 at 0 range 2 .. 31;
    end record;
 
    subtype CKDIV_PDIV_Field is HAL.UInt4;
@@ -1245,19 +1426,19 @@ package STM32_SVD.FDCAN is
       --  may be delayed due to a running Tx scan (TXBRP not yet updated).
       TXFQS  : aliased TXFQS_Register;
       --  FDCAN Tx Buffer Request Pending Register
-      TXBRP  : aliased HAL.UInt32;
+      TXBRP  : aliased TXBRP_Register;
       --  FDCAN Tx Buffer Add Request Register
-      TXBAR  : aliased HAL.UInt32;
+      TXBAR  : aliased TXBAR_Register;
       --  FDCAN Tx Buffer Cancellation Request Register
-      TXBCR  : aliased HAL.UInt32;
+      TXBCR  : aliased TXBCR_Register;
       --  FDCAN Tx Buffer Transmission Occurred Register
-      TXBTO  : aliased HAL.UInt32;
+      TXBTO  : aliased TXBTO_Register;
       --  FDCAN Tx Buffer Cancellation Finished Register
-      TXBCF  : aliased HAL.UInt32;
+      TXBCF  : aliased TXBCF_Register;
       --  FDCAN Tx Buffer Transmission Interrupt Enable Register
-      TXBTIE : aliased HAL.UInt32;
+      TXBTIE : aliased TXBTIE_Register;
       --  FDCAN Tx Buffer Cancellation Finished Interrupt Enable Register
-      TXBCIE : aliased HAL.UInt32;
+      TXBCIE : aliased TXBCIE_Register;
       --  FDCAN Tx Event FIFO Status Register
       TXEFS  : aliased TXEFS_Register;
       --  FDCAN Tx Event FIFO Acknowledge Register

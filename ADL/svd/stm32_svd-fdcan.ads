@@ -329,7 +329,7 @@ package STM32_SVD.FDCAN is
    type ECR_Register is record
       --  Read-only. TEC
       TEC            : ECR_TEC_Field;
-      --  Read-only. TREC
+      --  Read-only. REC
       REC            : ECR_REC_Field;
       --  Read-only. RP
       RP             : Boolean;
@@ -1041,7 +1041,7 @@ package STM32_SVD.FDCAN is
 
    --  FDCAN Tx Buffer Add Request Register
    type TXBAR_Register is record
-      --  TRP0
+      --  AR0
       AR            : TXBAR_AR_Field := (As_Array => False, Val => 16#0#);
       --  unspecified
       Reserved_3_31 : HAL.UInt29 := 16#0#;
