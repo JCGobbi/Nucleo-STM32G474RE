@@ -26635,8 +26635,8 @@
             <usage>registers</usage>
          </addressBlock>
          <interrupt>
-            <name>HRTIM_Master_IRQn</name>
-            <description>HRTIM_Master_IRQn</description>
+            <name>HRTIM_Master</name>
+            <description>HRTIM_Master</description>
             <value>67</value>
          </interrupt>
          <registers>
@@ -27110,8 +27110,8 @@
             <usage>registers</usage>
          </addressBlock>
          <interrupt>
-            <name>HRTIM_TIMA_IRQn</name>
-            <description>HRTIM_TIMA_IRQn</description>
+            <name>HRTIM_TIMA</name>
+            <description>HRTIM_TIMA</description>
             <value>68</value>
          </interrupt>
          <registers>
@@ -29805,8 +29805,8 @@
             <usage>registers</usage>
          </addressBlock>
          <interrupt>
-            <name>HRTIM_TIMB_IRQn</name>
-            <description>HRTIM_TIMB_IRQn</description>
+            <name>HRTIM_TIMB</name>
+            <description>HRTIM_TIMB</description>
             <value>69</value>
          </interrupt>
          <registers>
@@ -32500,8 +32500,8 @@
             <usage>registers</usage>
          </addressBlock>
          <interrupt>
-            <name>HRTIM_TIMC_IRQn</name>
-            <description>HRTIM_TIMC_IRQn</description>
+            <name>HRTIM_TIMC</name>
+            <description>HRTIM_TIMC</description>
             <value>70</value>
          </interrupt>
          <registers>
@@ -35195,8 +35195,8 @@
             <usage>registers</usage>
          </addressBlock>
          <interrupt>
-            <name>HRTIM_TIMD_IRQn</name>
-            <description>HRTIM_TIMD_IRQn</description>
+            <name>HRTIM_TIMD</name>
+            <description>HRTIM_TIMD</description>
             <value>71</value>
          </interrupt>
          <registers>
@@ -40580,13 +40580,13 @@
             <usage>registers</usage>
          </addressBlock>
          <interrupt>
-            <name>HRTIM_TIME_IRQn</name>
-            <description>HRTIM_TIME_IRQn</description>
+            <name>HRTIM_TIME</name>
+            <description>HRTIM_TIME</description>
             <value>72</value>
          </interrupt>
          <interrupt>
-            <name>HRTIM_TIMF_IRQn</name>
-            <description>HRTIM_TIMF_IRQn</description>
+            <name>HRTIM_TIMF</name>
+            <description>HRTIM_TIMF</description>
             <value>74</value>
          </interrupt>
          <registers>
@@ -43280,8 +43280,8 @@
             <usage>registers</usage>
          </addressBlock>
          <interrupt>
-            <name>HRTIM_TIM_FLT_IRQn</name>
-            <description>HRTIM_TIM_FLT_IRQn</description>
+            <name>HRTIM_TIM_FLT</name>
+            <description>HRTIM_TIM_FLT</description>
             <value>73</value>
          </interrupt>
          <registers>
