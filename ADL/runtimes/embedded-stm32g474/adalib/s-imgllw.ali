@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/embedded-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/embedded-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -31,11 +31,11 @@ W system%s		system.ads		system.ali
 W system.image_w%s
 W system.unsigned_types%s  s-unstyp.ads		s-unstyp.ali
 
-D system.ads		20230313182405 5ad4ef55 system%s
-D s-imagew.ads		20230313182405 9d2dd267 system.image_w%s
-D s-imagew.adb		20230313182405 4bb19478 system.image_w%b
-D s-imgllw.ads		20230313182405 bf9c9c15 system.img_llw%s
-D s-unstyp.ads		20230313182405 fa2a7f59 system.unsigned_types%s
+D system.ads		20240726122919 5ad4ef55 system%s
+D s-imagew.ads		20240726122919 9d2dd267 system.image_w%s
+D s-imagew.adb		20240726122919 4bb19478 system.image_w%b
+D s-imgllw.ads		20240726122919 bf9c9c15 system.img_llw%s
+D s-unstyp.ads		20240726122919 fa2a7f59 system.unsigned_types%s
 G a e
 G c Z s s [set_image_width_integer system__img_llw__impl 45 14 44_4]
 G c Z s s [set_image_width_unsigned system__img_llw__impl 59 14 44_4]

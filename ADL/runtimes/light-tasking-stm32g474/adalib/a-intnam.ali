@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/light-tasking-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/light-tasking-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -22,54 +22,54 @@ P DB ZX
 RN
 RV NO_IMPLEMENTATION_PRAGMAS
 
-U ada.interrupts.names%s  a-intnam.ads		38dd302c NE OL PK
+U ada.interrupts.names%s  a-intnam.ads		ba7dc1c0 NE OL PK
 W ada.interrupts%s	a-interr.adb		a-interr.ali
 
-D ada.ads		20230313182405 76789da1 ada%s
-D a-interr.ads		20230313182405 bdf68b51 ada.interrupts%s
-D a-intnam.ads		20230313182405 852bbb7d ada.interrupts.names%s
-D a-taside.ads		20230313182405 c0a7c8d8 ada.task_identification%s
-D a-unccon.ads		20230313182405 0e9b276f ada.unchecked_conversion%s
-D interfac.ads		20230313182405 edec285f interfaces%s
-D i-stm32.ads		20230313182405 5bbe95b1 interfaces.stm32%s
-D i-stm32-pwr.ads	20230313182405 8637904f interfaces.stm32.pwr%s
-D system.ads		20230313182405 8fcf39fb system%s
-D s-bb.ads		20230313182405 09e072ae system.bb%s
-D s-bbbopa.ads		20230313182405 8d50ff83 system.bb.board_parameters%s
-D s-bbbosu.ads		20230313182405 0f820a2a system.bb.board_support%s
-D s-bbcppr.ads		20230313182405 c529bbcc system.bb.cpu_primitives%s
-D s-bbinte.ads		20230313182405 cf617f22 system.bb.interrupts%s
-D s-bbmcpa.ads		20230313182405 42270bc8 system.bb.mcu_parameters%s
-D s-bbpara.ads		20230313182405 b472069f system.bb.parameters%s
-D s-bbthre.ads		20230313182405 5f49caa9 system.bb.threads%s
-D s-bbthqu.ads		20230313182405 cd23d79e system.bb.threads.queues%s
-D s-bbtime.ads		20230313182405 ad086247 system.bb.time%s
-D s-interr.ads		20230313182405 d74bd991 system.interrupts%s
-D s-multip.ads		20230313182405 f33e0e35 system.multiprocessors%s
-D s-osinte.ads		20230313182405 229b14dd system.os_interface%s
-D s-parame.ads		20230313182405 8e90778f system.parameters%s
-D s-secsta.ads		20230313182405 56a2861c system.secondary_stack%s
-D s-stm32.ads		20230313182405 173e9a8f system.stm32%s
-D s-stoele.ads		20230313182405 6d8e1ff4 system.storage_elements%s
-D s-tasinf.ads		20230313182405 801abd01 system.task_info%s
-D s-taspri.ads		20230313182405 37f162b4 system.task_primitives%s
-D s-taskin.ads		20230313182405 b64e8f82 system.tasking%s
-D s-unstyp.ads		20230313182405 fa2a7f59 system.unsigned_types%s
+D ada.ads		20240726122919 76789da1 ada%s
+D a-interr.ads		20240726122919 bdf68b51 ada.interrupts%s
+D a-intnam.ads		20240726122919 078b4a91 ada.interrupts.names%s
+D a-taside.ads		20240726122919 c0a7c8d8 ada.task_identification%s
+D a-unccon.ads		20240726122919 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20240726122919 edec285f interfaces%s
+D i-stm32.ads		20240726122919 5bbe95b1 interfaces.stm32%s
+D i-stm32-pwr.ads	20240726122919 8637904f interfaces.stm32.pwr%s
+D system.ads		20240726122919 8fcf39fb system%s
+D s-bb.ads		20240726122919 09e072ae system.bb%s
+D s-bbbopa.ads		20240726122919 8d50ff83 system.bb.board_parameters%s
+D s-bbbosu.ads		20240726122919 0f820a2a system.bb.board_support%s
+D s-bbcppr.ads		20240726122919 c529bbcc system.bb.cpu_primitives%s
+D s-bbinte.ads		20240726122919 cf617f22 system.bb.interrupts%s
+D s-bbmcpa.ads		20240726122919 42270bc8 system.bb.mcu_parameters%s
+D s-bbpara.ads		20240726122919 b472069f system.bb.parameters%s
+D s-bbthre.ads		20240726122919 5f49caa9 system.bb.threads%s
+D s-bbthqu.ads		20240726122919 cd23d79e system.bb.threads.queues%s
+D s-bbtime.ads		20240726122919 ad086247 system.bb.time%s
+D s-interr.ads		20240726122919 d74bd991 system.interrupts%s
+D s-multip.ads		20240726122919 f33e0e35 system.multiprocessors%s
+D s-osinte.ads		20240726122919 229b14dd system.os_interface%s
+D s-parame.ads		20240726122919 8e90778f system.parameters%s
+D s-secsta.ads		20240726122919 56a2861c system.secondary_stack%s
+D s-stm32.ads		20240726122919 173e9a8f system.stm32%s
+D s-stoele.ads		20240726122919 6d8e1ff4 system.storage_elements%s
+D s-tasinf.ads		20240726122919 801abd01 system.task_info%s
+D s-taspri.ads		20240726122919 37f162b4 system.task_primitives%s
+D s-taskin.ads		20240726122919 b64e8f82 system.tasking%s
+D s-unstyp.ads		20240726122919 fa2a7f59 system.unsigned_types%s
 G a e
 X 1 ada.ads
 16K9*Ada 20e8 3|10r9 326r5
 X 2 a-interr.ads
 40K13*Interrupts 1|16k9 2|100e19 3|10r13 326r9
-42I9*Interrupt_ID<20|57I9> 3|21r45 24r45 27r45 30r45 33r45 36r45 39r45 42r45
-. 45r45 48r45 51r45 54r45 57r45 60r45 63r45 66r45 69r45 72r45 75r45 78r45
-. 81r45 84r45 87r45 90r45 93r45 96r45 99r45 102r45 105r45 108r45 111r45 114r45
-. 117r45 120r45 123r45 126r45 129r45 132r45 135r45 138r45 141r45 144r45 147r45
-. 150r45 153r45 156r45 159r45 162r45 165r45 168r45 171r45 174r45 177r45 180r45
-. 183r45 186r45 189r45 192r45 195r45 198r45 201r45 204r45 207r45 210r45 213r45
-. 216r45 219r45 222r45 225r45 228r45 231r45 234r45 237r45 240r45 243r45 246r45
-. 249r45 252r45 255r45 258r45 261r45 264r45 267r45 270r45 273r45 276r45 279r45
-. 282r45 285r45 288r45 291r45 294r45 297r45 300r45 303r45 306r45 309r45 312r45
-. 315r45 318r45 321r45 324r45
+42I9*Interrupt_ID<20|57I9> 3|21r43 24r43 27r43 30r43 33r43 36r43 39r43 42r43
+. 45r43 48r43 51r43 54r43 57r43 60r43 63r43 66r43 69r43 72r43 75r43 78r43
+. 81r43 84r43 87r43 90r43 93r43 96r43 99r43 102r43 105r43 108r43 111r43 114r43
+. 117r43 120r43 123r43 126r43 129r43 132r43 135r43 138r43 141r43 144r43 147r43
+. 150r43 153r43 156r43 159r43 162r43 165r43 168r43 171r43 174r43 177r43 180r43
+. 183r43 186r43 189r43 192r43 195r43 198r43 201r43 204r43 207r43 210r43 213r43
+. 216r43 219r43 222r43 225r43 228r43 231r43 234r43 237r43 240r43 243r43 246r43
+. 249r43 252r43 255r43 258r43 261r43 264r43 267r43 270r43 273r43 276r43 279r43
+. 282r43 285r43 288r43 291r43 294r43 297r43 300r43 303r43 306r43 309r43 312r43
+. 315r43 318r43 321r43 324r43
 X 3 a-intnam.ads
 10K24*Names 2|40k13 3|326l20 326e25
 21i4*Sys_Tick_Interrupt{2|42I9}
@@ -140,14 +140,14 @@ X 3 a-intnam.ads
 216i4*COMP1_2_3_Interrupt{2|42I9}
 219i4*COMP4_5_6_Interrupt{2|42I9}
 222i4*COMP7_Interrupt{2|42I9}
-225i4*HRTIM_Master_IRQn_Interrupt{2|42I9}
-228i4*HRTIM_TIMA_IRQn_Interrupt{2|42I9}
-231i4*HRTIM_TIMB_IRQn_Interrupt{2|42I9}
-234i4*HRTIM_TIMC_IRQn_Interrupt{2|42I9}
-237i4*HRTIM_TIMD_IRQn_Interrupt{2|42I9}
-240i4*HRTIM_TIME_IRQn_Interrupt{2|42I9}
-243i4*HRTIM_TIM_FLT_IRQn_Interrupt{2|42I9}
-246i4*HRTIM_TIMF_IRQn_Interrupt{2|42I9}
+225i4*HRTIM_Master_Interrupt{2|42I9}
+228i4*HRTIM_TIMA_Interrupt{2|42I9}
+231i4*HRTIM_TIMB_Interrupt{2|42I9}
+234i4*HRTIM_TIMC_Interrupt{2|42I9}
+237i4*HRTIM_TIMD_Interrupt{2|42I9}
+240i4*HRTIM_TIME_Interrupt{2|42I9}
+243i4*HRTIM_TIM_FLT_Interrupt{2|42I9}
+246i4*HRTIM_TIMF_Interrupt{2|42I9}
 249i4*CRS_Interrupt{2|42I9}
 252i4*SAI_Interrupt{2|42I9}
 255i4*TIM20_BRK_Interrupt{2|42I9}

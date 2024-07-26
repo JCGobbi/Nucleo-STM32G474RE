@@ -96,14 +96,14 @@ __vectors:
 	.word __gnat_irq_trap        /* 80 COMP1_2_3 */
 	.word __gnat_irq_trap        /* 81 COMP4_5_6 */
 	.word __gnat_irq_trap        /* 82 COMP7 */
-	.word __gnat_irq_trap        /* 83 HRTIM_Master_IRQn */
-	.word __gnat_irq_trap        /* 84 HRTIM_TIMA_IRQn */
-	.word __gnat_irq_trap        /* 85 HRTIM_TIMB_IRQn */
-	.word __gnat_irq_trap        /* 86 HRTIM_TIMC_IRQn */
-	.word __gnat_irq_trap        /* 87 HRTIM_TIMD_IRQn */
-	.word __gnat_irq_trap        /* 88 HRTIM_TIME_IRQn */
-	.word __gnat_irq_trap        /* 89 HRTIM_TIM_FLT_IRQn */
-	.word __gnat_irq_trap        /* 90 HRTIM_TIMF_IRQn */
+	.word __gnat_irq_trap        /* 83 HRTIM_Master */
+	.word __gnat_irq_trap        /* 84 HRTIM_TIMA */
+	.word __gnat_irq_trap        /* 85 HRTIM_TIMB */
+	.word __gnat_irq_trap        /* 86 HRTIM_TIMC */
+	.word __gnat_irq_trap        /* 87 HRTIM_TIMD */
+	.word __gnat_irq_trap        /* 88 HRTIM_TIME */
+	.word __gnat_irq_trap        /* 89 HRTIM_TIM_FLT */
+	.word __gnat_irq_trap        /* 90 HRTIM_TIMF */
 	.word __gnat_irq_trap        /* 91 CRS */
 	.word __gnat_irq_trap        /* 92 SAI */
 	.word __gnat_irq_trap        /* 93 TIM20_BRK */

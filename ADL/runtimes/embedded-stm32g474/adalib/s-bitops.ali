@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/embedded-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/embedded-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -35,16 +35,16 @@ W system.unsigned_types%s  s-unstyp.ads		s-unstyp.ali
 U system.bit_ops%s	s-bitops.ads		97274369 NE OL PK
 W system%s		system.ads		system.ali
 
-D ada.ads		20230313182405 76789da1 ada%s
-D a-except.ads		20230313182405 2a7d8d70 ada.exceptions%s
-D a-unccon.ads		20230313182405 0e9b276f ada.unchecked_conversion%s
-D system.ads		20230313182405 5ad4ef55 system%s
-D s-bitops.ads		20230313182405 cdf3ac3c system.bit_ops%s
-D s-bitops.adb		20230313182405 858b7f3c system.bit_ops%b
-D s-parame.ads		20230313182405 8e90778f system.parameters%s
-D s-stalib.ads		20230313182405 1c9580f6 system.standard_library%s
-D s-traent.ads		20230313182405 c81cbf8c system.traceback_entries%s
-D s-unstyp.ads		20230313182405 fa2a7f59 system.unsigned_types%s
+D ada.ads		20240726122919 76789da1 ada%s
+D a-except.ads		20240726122919 2a7d8d70 ada.exceptions%s
+D a-unccon.ads		20240726122919 0e9b276f ada.unchecked_conversion%s
+D system.ads		20240726122919 5ad4ef55 system%s
+D s-bitops.ads		20240726122919 cdf3ac3c system.bit_ops%s
+D s-bitops.adb		20240726122919 858b7f3c system.bit_ops%b
+D s-parame.ads		20240726122919 8e90778f system.parameters%s
+D s-stalib.ads		20240726122919 1c9580f6 system.standard_library%s
+D s-traent.ads		20240726122919 c81cbf8c system.traceback_entries%s
+D s-unstyp.ads		20240726122919 fa2a7f59 system.unsigned_types%s
 G a e
 G c Z s b [bit_and system__bit_ops 42 14 none]
 G c Z s b [bit_eq system__bit_ops 53 13 none]

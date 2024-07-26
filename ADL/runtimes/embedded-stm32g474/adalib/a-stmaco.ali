@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/embedded-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/embedded-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -31,14 +31,14 @@ W ada.characters.latin_1%s  a-chlat1.ads	a-chlat1.ali
 W ada.strings.maps%s	a-strmap.adb		a-strmap.ali
 Z system.unsigned_types%s  s-unstyp.ads		s-unstyp.ali
 
-D ada.ads		20230313182405 76789da1 ada%s
-D a-charac.ads		20230313182405 2d3ec45b ada.characters%s
-D a-chlat1.ads		20230313182405 e0d72e76 ada.characters.latin_1%s
-D a-string.ads		20230313182405 90ac6797 ada.strings%s
-D a-strmap.ads		20230313182405 233229cd ada.strings.maps%s
-D a-stmaco.ads		20230313182405 4b1f2a0b ada.strings.maps.constants%s
-D system.ads		20230313182405 5ad4ef55 system%s
-D s-unstyp.ads		20230313182405 fa2a7f59 system.unsigned_types%s
+D ada.ads		20240726122919 76789da1 ada%s
+D a-charac.ads		20240726122919 2d3ec45b ada.characters%s
+D a-chlat1.ads		20240726122919 e0d72e76 ada.characters.latin_1%s
+D a-string.ads		20240726122919 90ac6797 ada.strings%s
+D a-strmap.ads		20240726122919 233229cd ada.strings.maps%s
+D a-stmaco.ads		20240726122919 4b1f2a0b ada.strings.maps.constants%s
+D system.ads		20240726122919 5ad4ef55 system%s
+D s-unstyp.ads		20240726122919 fa2a7f59 system.unsigned_types%s
 G a e
 X 1 ada.ads
 16K9*Ada 20e8 6|36r6 38r9 64r22 915r5

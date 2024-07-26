@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/embedded-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/embedded-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -40,29 +40,29 @@ Z system.val_util%s	s-valuti.adb		s-valuti.ali
 W system.value_d%s
 Z system.value_r%s
 
-D ada.ads		20230313182405 76789da1 ada%s
-D a-except.ads		20230313182405 2a7d8d70 ada.exceptions%s
-D a-numeri.ads		20230313182405 84bea7a3 ada.numerics%s
-D a-nubinu.ads		20230313182405 93f1f3d1 ada.numerics.big_numbers%s
-D a-nbnbig.ads		20230313182405 511b9bab ada.numerics.big_numbers.big_integers_ghost%s
-D a-unccon.ads		20230313182405 0e9b276f ada.unchecked_conversion%s
-D interfac.ads		20230313182405 edec285f interfaces%s
-D system.ads		20230313182405 5ad4ef55 system%s
-D s-arit64.ads		20230313182405 90488c35 system.arith_64%s
-D s-casuti.ads		20230313182405 cf13d755 system.case_util%s
-D s-exnlli.ads		20230313182405 e78a4272 system.exn_lli%s
-D s-exponn.ads		20230313182405 f246e95f system.exponn%s
-D s-exponn.adb		20230313182405 0779c922 system.exponn%b
-D s-parame.ads		20230313182405 8e90778f system.parameters%s
-D s-stalib.ads		20230313182405 1c9580f6 system.standard_library%s
-D s-traent.ads		20230313182405 c81cbf8c system.traceback_entries%s
-D s-unstyp.ads		20230313182405 fa2a7f59 system.unsigned_types%s
-D s-vade64.ads		20230313182405 fff134eb system.val_decimal_64%s
-D s-valuti.ads		20230313182405 4d0d41f3 system.val_util%s
-D s-valued.ads		20230313182405 a94e9aba system.value_d%s
-D s-valued.adb		20230313182405 930ee941 system.value_d%b
-D s-valuer.ads		20230313182405 2aeea103 system.value_r%s
-D s-valuer.adb		20230313182405 9a1af0f2 system.value_r%b
+D ada.ads		20240726122919 76789da1 ada%s
+D a-except.ads		20240726122919 2a7d8d70 ada.exceptions%s
+D a-numeri.ads		20240726122919 84bea7a3 ada.numerics%s
+D a-nubinu.ads		20240726122919 93f1f3d1 ada.numerics.big_numbers%s
+D a-nbnbig.ads		20240726122919 511b9bab ada.numerics.big_numbers.big_integers_ghost%s
+D a-unccon.ads		20240726122919 0e9b276f ada.unchecked_conversion%s
+D interfac.ads		20240726122919 edec285f interfaces%s
+D system.ads		20240726122919 5ad4ef55 system%s
+D s-arit64.ads		20240726122919 90488c35 system.arith_64%s
+D s-casuti.ads		20240726122919 cf13d755 system.case_util%s
+D s-exnlli.ads		20240726122919 e78a4272 system.exn_lli%s
+D s-exponn.ads		20240726122919 f246e95f system.exponn%s
+D s-exponn.adb		20240726122919 0779c922 system.exponn%b
+D s-parame.ads		20240726122919 8e90778f system.parameters%s
+D s-stalib.ads		20240726122919 1c9580f6 system.standard_library%s
+D s-traent.ads		20240726122919 c81cbf8c system.traceback_entries%s
+D s-unstyp.ads		20240726122919 fa2a7f59 system.unsigned_types%s
+D s-vade64.ads		20240726122919 fff134eb system.val_decimal_64%s
+D s-valuti.ads		20240726122919 4d0d41f3 system.val_util%s
+D s-valued.ads		20240726122919 a94e9aba system.value_d%s
+D s-valued.adb		20240726122919 930ee941 system.value_d%b
+D s-valuer.ads		20240726122919 2aeea103 system.value_r%s
+D s-valuer.adb		20240726122919 9a1af0f2 system.value_r%b
 G a e
 G c Z s s [scan_decimal system__val_decimal_64__impl 50 13 46_4]
 G c Z s s [value_decimal system__val_decimal_64__impl 82 13 46_4]

@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/light-tasking-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/light-tasking-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -32,12 +32,12 @@ W system.val_util%s	s-valuti.adb		s-valuti.ali
 U system.val_char%s	s-valcha.ads		3e18c10a NE OL PR PK
 W system%s		system.ads		system.ali
 
-D system.ads		20230313182405 8fcf39fb system%s
-D s-casuti.ads		20230313182405 cf13d755 system.case_util%s
-D s-imgcha.ads		20230313182405 9c3458e7 system.img_char%s
-D s-valcha.ads		20230313182405 b1d7f8f1 system.val_char%s
-D s-valcha.adb		20230313182405 e7d0b9ad system.val_char%b
-D s-valuti.ads		20230313182405 4d0d41f3 system.val_util%s
+D system.ads		20240726122919 8fcf39fb system%s
+D s-casuti.ads		20240726122919 cf13d755 system.case_util%s
+D s-imgcha.ads		20240726122919 9c3458e7 system.img_char%s
+D s-valcha.ads		20240726122919 b1d7f8f1 system.val_char%s
+D s-valcha.adb		20240726122919 e7d0b9ad system.val_char%b
+D s-valuti.ads		20240726122919 4d0d41f3 system.val_util%s
 G a e
 G c Z s b [value_character system__val_char 35 13 none]
 X 1 system.ads

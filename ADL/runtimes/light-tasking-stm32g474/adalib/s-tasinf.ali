@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/light-tasking-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/light-tasking-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -28,9 +28,9 @@ W system%s		system.ads		system.ali
 U system.task_info%s	s-tasinf.ads		0fd584fa EB NE OL PR PK
 W system%s		system.ads		system.ali
 
-D system.ads		20230313182405 8fcf39fb system%s
-D s-tasinf.ads		20230313182405 801abd01 system.task_info%s
-D s-tasinf.adb		20230313182405 60e65af9 system.task_info%b
+D system.ads		20240726122919 8fcf39fb system%s
+D s-tasinf.ads		20240726122919 801abd01 system.task_info%s
+D s-tasinf.adb		20240726122919 60e65af9 system.task_info%b
 G a e
 X 1 system.ads
 60K9*System 174e11 2|42r9 93r5 3|40r14 41r5

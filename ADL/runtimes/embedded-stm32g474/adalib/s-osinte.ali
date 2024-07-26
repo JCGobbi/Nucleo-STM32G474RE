@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/embedded-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/embedded-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -37,25 +37,25 @@ W system.bb.time%s	s-bbtime.adb		s-bbtime.ali
 W system.multiprocessors%s  s-multip.adb	s-multip.ali
 W system.storage_elements%s  s-stoele.adb	s-stoele.ali
 
-D interfac.ads		20230313182405 edec285f interfaces%s
-D i-stm32.ads		20230313182405 5bbe95b1 interfaces.stm32%s
-D i-stm32-pwr.ads	20230313182405 8637904f interfaces.stm32.pwr%s
-D system.ads		20230313182405 5ad4ef55 system%s
-D s-bb.ads		20230313182405 09e072ae system.bb%s
-D s-bbbopa.ads		20230313182405 8d50ff83 system.bb.board_parameters%s
-D s-bbbosu.ads		20230313182405 0f820a2a system.bb.board_support%s
-D s-bbcppr.ads		20230313182405 c529bbcc system.bb.cpu_primitives%s
-D s-bbinte.ads		20230313182405 cf617f22 system.bb.interrupts%s
-D s-bbmcpa.ads		20230313182405 42270bc8 system.bb.mcu_parameters%s
-D s-bbpara.ads		20230313182405 b472069f system.bb.parameters%s
-D s-bbthre.ads		20230313182405 5f49caa9 system.bb.threads%s
-D s-bbthqu.ads		20230313182405 cd23d79e system.bb.threads.queues%s
-D s-bbtime.ads		20230313182405 ad086247 system.bb.time%s
-D s-multip.ads		20230313182405 f33e0e35 system.multiprocessors%s
-D s-osinte.ads		20230313182405 229b14dd system.os_interface%s
-D s-stm32.ads		20230313182405 173e9a8f system.stm32%s
-D s-stoele.ads		20230313182405 6d8e1ff4 system.storage_elements%s
-D s-unstyp.ads		20230313182405 fa2a7f59 system.unsigned_types%s
+D interfac.ads		20240726122919 edec285f interfaces%s
+D i-stm32.ads		20240726122919 5bbe95b1 interfaces.stm32%s
+D i-stm32-pwr.ads	20240726122919 8637904f interfaces.stm32.pwr%s
+D system.ads		20240726122919 5ad4ef55 system%s
+D s-bb.ads		20240726122919 09e072ae system.bb%s
+D s-bbbopa.ads		20240726122919 8d50ff83 system.bb.board_parameters%s
+D s-bbbosu.ads		20240726122919 0f820a2a system.bb.board_support%s
+D s-bbcppr.ads		20240726122919 c529bbcc system.bb.cpu_primitives%s
+D s-bbinte.ads		20240726122919 cf617f22 system.bb.interrupts%s
+D s-bbmcpa.ads		20240726122919 42270bc8 system.bb.mcu_parameters%s
+D s-bbpara.ads		20240726122919 b472069f system.bb.parameters%s
+D s-bbthre.ads		20240726122919 5f49caa9 system.bb.threads%s
+D s-bbthqu.ads		20240726122919 cd23d79e system.bb.threads.queues%s
+D s-bbtime.ads		20240726122919 ad086247 system.bb.time%s
+D s-multip.ads		20240726122919 f33e0e35 system.multiprocessors%s
+D s-osinte.ads		20240726122919 229b14dd system.os_interface%s
+D s-stm32.ads		20240726122919 173e9a8f system.stm32%s
+D s-stoele.ads		20240726122919 6d8e1ff4 system.storage_elements%s
+D s-unstyp.ads		20240726122919 fa2a7f59 system.unsigned_types%s
 G a e
 X 4 system.ads
 50K9*System 164e11 16|42r6 43r6 45r6 46r6 47r6 48r6 49r6 51r9 58r31 61r28

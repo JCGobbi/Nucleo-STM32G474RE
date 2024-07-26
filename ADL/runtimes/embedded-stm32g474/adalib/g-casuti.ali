@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/embedded-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/embedded-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -27,10 +27,10 @@ W gnat%s		gnat.ads		gnat.ali
 W system%s		system.ads		system.ali
 W system.case_util%s	s-casuti.adb		s-casuti.ali
 
-D gnat.ads		20230313182405 b5988c27 gnat%s
-D g-casuti.ads		20230313182405 83c53f24 gnat.case_util%s
-D system.ads		20230313182405 5ad4ef55 system%s
-D s-casuti.ads		20230313182405 cf13d755 system.case_util%s
+D gnat.ads		20240726122919 b5988c27 gnat%s
+D g-casuti.ads		20240726122919 83c53f24 gnat.case_util%s
+D system.ads		20240726122919 5ad4ef55 system%s
+D s-casuti.ads		20240726122919 cf13d755 system.case_util%s
 G a e
 X 1 gnat.ads
 37K9*GNAT 60e9 2|43r9

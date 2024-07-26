@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/light-tasking-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/light-tasking-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -35,24 +35,24 @@ W ada.strings.maps%s	a-strmap.adb		a-strmap.ali
 W ada.strings.search%s	a-strsea.adb		a-strsea.ali
 W ada.strings.superbounded%s  a-strsup.adb	a-strsup.ali
 
-D ada.ads		20230313182405 76789da1 ada%s
-D a-charac.ads		20230313182405 2d3ec45b ada.characters%s
-D a-chlat1.ads		20230313182405 e0d72e76 ada.characters.latin_1%s
-D a-except.ads		20230313182405 5b5f0f2f ada.exceptions%s
-D a-except.adb		20230313182405 4da5c77f ada.exceptions%b
-D a-string.ads		20230313182405 90ac6797 ada.strings%s
-D a-strbou.ads		20230313182405 376eca2a ada.strings.bounded%s
-D a-strbou.adb		20230313182405 4a759692 ada.strings.bounded%b
-D a-strmap.ads		20230313182405 233229cd ada.strings.maps%s
-D a-strmap.adb		20230313182405 47169003 ada.strings.maps%b
-D a-strsea.ads		20230313182405 6f718bb4 ada.strings.search%s
-D a-strsup.ads		20230313182405 07a33570 ada.strings.superbounded%s
-D system.ads		20230313182405 8fcf39fb system%s
-D s-bitops.ads		20230313182405 cdf3ac3c system.bit_ops%s
-D s-parame.ads		20230313182405 8e90778f system.parameters%s
-D s-secsta.ads		20230313182405 56a2861c system.secondary_stack%s
-D s-stoele.ads		20230313182405 6d8e1ff4 system.storage_elements%s
-D s-unstyp.ads		20230313182405 fa2a7f59 system.unsigned_types%s
+D ada.ads		20240726122919 76789da1 ada%s
+D a-charac.ads		20240726122919 2d3ec45b ada.characters%s
+D a-chlat1.ads		20240726122919 e0d72e76 ada.characters.latin_1%s
+D a-except.ads		20240726122919 5b5f0f2f ada.exceptions%s
+D a-except.adb		20240726122919 4da5c77f ada.exceptions%b
+D a-string.ads		20240726122919 90ac6797 ada.strings%s
+D a-strbou.ads		20240726122919 376eca2a ada.strings.bounded%s
+D a-strbou.adb		20240726122919 4a759692 ada.strings.bounded%b
+D a-strmap.ads		20240726122919 233229cd ada.strings.maps%s
+D a-strmap.adb		20240726122919 47169003 ada.strings.maps%b
+D a-strsea.ads		20240726122919 6f718bb4 ada.strings.search%s
+D a-strsup.ads		20240726122919 07a33570 ada.strings.superbounded%s
+D system.ads		20240726122919 8fcf39fb system%s
+D s-bitops.ads		20240726122919 cdf3ac3c system.bit_ops%s
+D s-parame.ads		20240726122919 8e90778f system.parameters%s
+D s-secsta.ads		20240726122919 56a2861c system.secondary_stack%s
+D s-stoele.ads		20240726122919 6d8e1ff4 system.storage_elements%s
+D s-unstyp.ads		20240726122919 fa2a7f59 system.unsigned_types%s
 G a e
 X 1 ada.ads
 16K9*Ada 20e8 7|46r6 46r33 47r6 48r6 50r9 1318r18 1329r18 2993r5 8|32r14

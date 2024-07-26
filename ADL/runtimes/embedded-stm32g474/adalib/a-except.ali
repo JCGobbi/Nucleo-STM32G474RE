@@ -3,7 +3,7 @@ A -nostdinc
 A -O2
 A -O1
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/embedded-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/embedded-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -72,37 +72,37 @@ W system.parameters%s	s-parame.adb		s-parame.ali
 W system.standard_library%s  s-stalib.adb	s-stalib.ali
 W system.traceback_entries%s  s-traent.adb	s-traent.ali
 
-D ada.ads		20230313182405 76789da1 ada%s
-D a-except.ads		20230313182405 2a7d8d70 ada.exceptions%s
-D a-except.adb		20230313182405 3a26ae1b ada.exceptions%b
-D a-excach.adb		20230313182405 62ad7f12 ada.exceptions.call_chain
-D a-exexda.adb		20230313182405 53e3aa5e ada.exceptions.exception_data
-D a-exexpr.adb		20230313182405 064253d0 ada.exceptions.exception_propagation
-D a-exextr.adb		20230313182405 de7b2b4f ada.exceptions.exception_traces
-D a-elchha.ads		20230313182405 47bffbf4 ada.exceptions.last_chance_handler%s
-D a-exstat.adb		20230313182405 7aba93ab ada.exceptions.stream_attributes
-D a-exctra.ads		20230313182405 0966bad0 ada.exceptions.traceback%s
-D a-unccon.ads		20230313182405 0e9b276f ada.unchecked_conversion%s
-D a-uncdea.ads		20230313182405 c3a8ac65 ada.unchecked_deallocation%s
-D system.ads		20230313182405 5ad4ef55 system%s
-D s-exctab.ads		20230313182405 91bef6ef system.exception_table%s
-D s-except.ads		20230313182405 32a5bf32 system.exceptions%s
-D s-excmac.ads		20230313182405 f366dacb system.exceptions.machine%s
-D s-excdeb.ads		20230313182405 2c9bd8a5 system.exceptions_debug%s
-D s-imagei.ads		20230313182405 0d3f86a7 system.image_i%s
-D s-imgint.ads		20230313182405 bdb6f5ec system.img_int%s
-D s-parame.ads		20230313182405 8e90778f system.parameters%s
-D s-secsta.ads		20230313182405 56a2861c system.secondary_stack%s
-D s-soflin.ads		20230313182405 09900c20 system.soft_links%s
-D s-stalib.ads		20230313182405 1c9580f6 system.standard_library%s
-D s-stoele.ads		20230313182405 6d8e1ff4 system.storage_elements%s
-D s-stoele.adb		20230313182405 8f5a9db6 system.storage_elements%b
-D s-traceb.ads		20230313182405 bd2311fe system.traceback%s
-D s-trasym.ads		20230313182405 bd1dac90 system.traceback.symbolic%s
-D s-traent.ads		20230313182405 c81cbf8c system.traceback_entries%s
-D s-traent.adb		20230313182405 9777db0a system.traceback_entries%b
-D s-wchcon.ads		20230313182405 d9032363 system.wch_con%s
-D s-wchstw.ads		20230313182405 2d112c01 system.wch_stw%s
+D ada.ads		20240726122919 76789da1 ada%s
+D a-except.ads		20240726122919 2a7d8d70 ada.exceptions%s
+D a-except.adb		20240726122919 3a26ae1b ada.exceptions%b
+D a-excach.adb		20240726122919 62ad7f12 ada.exceptions.call_chain
+D a-exexda.adb		20240726122919 53e3aa5e ada.exceptions.exception_data
+D a-exexpr.adb		20240726122919 064253d0 ada.exceptions.exception_propagation
+D a-exextr.adb		20240726122919 de7b2b4f ada.exceptions.exception_traces
+D a-elchha.ads		20240726122919 47bffbf4 ada.exceptions.last_chance_handler%s
+D a-exstat.adb		20240726122919 7aba93ab ada.exceptions.stream_attributes
+D a-exctra.ads		20240726122919 0966bad0 ada.exceptions.traceback%s
+D a-unccon.ads		20240726122919 0e9b276f ada.unchecked_conversion%s
+D a-uncdea.ads		20240726122919 c3a8ac65 ada.unchecked_deallocation%s
+D system.ads		20240726122919 5ad4ef55 system%s
+D s-exctab.ads		20240726122919 91bef6ef system.exception_table%s
+D s-except.ads		20240726122919 32a5bf32 system.exceptions%s
+D s-excmac.ads		20240726122919 f366dacb system.exceptions.machine%s
+D s-excdeb.ads		20240726122919 2c9bd8a5 system.exceptions_debug%s
+D s-imagei.ads		20240726122919 0d3f86a7 system.image_i%s
+D s-imgint.ads		20240726122919 bdb6f5ec system.img_int%s
+D s-parame.ads		20240726122919 8e90778f system.parameters%s
+D s-secsta.ads		20240726122919 56a2861c system.secondary_stack%s
+D s-soflin.ads		20240726122919 09900c20 system.soft_links%s
+D s-stalib.ads		20240726122919 1c9580f6 system.standard_library%s
+D s-stoele.ads		20240726122919 6d8e1ff4 system.storage_elements%s
+D s-stoele.adb		20240726122919 8f5a9db6 system.storage_elements%b
+D s-traceb.ads		20240726122919 bd2311fe system.traceback%s
+D s-trasym.ads		20240726122919 bd1dac90 system.traceback.symbolic%s
+D s-traent.ads		20240726122919 c81cbf8c system.traceback_entries%s
+D s-traent.adb		20240726122919 9777db0a system.traceback_entries%b
+D s-wchcon.ads		20240726122919 d9032363 system.wch_con%s
+D s-wchstw.ads		20240726122919 2d112c01 system.wch_stw%s
 G a e
 G c Z s b [exception_name ada__exceptions 60 13 none]
 G c Z s b [exception_name ada__exceptions 62 13 none]

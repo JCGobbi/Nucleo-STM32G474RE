@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/embedded-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/embedded-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -32,12 +32,12 @@ W system.text_io%s	s-textio.adb		s-textio.ali
 U system.io%s		s-io.ads		c496181a BN NE OL PR PK
 W system%s		system.ads		system.ali
 
-D system.ads		20230313182405 5ad4ef55 system%s
-D s-imagei.ads		20230313182405 0d3f86a7 system.image_i%s
-D s-imgint.ads		20230313182405 bdb6f5ec system.img_int%s
-D s-io.ads		20230313182405 9e42f74f system.io%s
-D s-io.adb		20230313182405 dc9c2aea system.io%b
-D s-textio.ads		20230313182405 22178fc9 system.text_io%s
+D system.ads		20240726122919 5ad4ef55 system%s
+D s-imagei.ads		20240726122919 0d3f86a7 system.image_i%s
+D s-imgint.ads		20240726122919 bdb6f5ec system.img_int%s
+D s-io.ads		20240726122919 9e42f74f system.io%s
+D s-io.adb		20240726122919 dc9c2aea system.io%b
+D s-textio.ads		20240726122919 22178fc9 system.text_io%s
 G a e
 G c Z s b [put system__io 40 14 none]
 G c Z s b [put system__io 42 14 none]

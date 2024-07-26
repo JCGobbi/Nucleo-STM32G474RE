@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/embedded-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/embedded-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -33,11 +33,11 @@ W system.semihosting%s	s-semiho.adb		s-semiho.ali
 U ada.text_io%s		a-textio.ads		89b0d893 NE OL PK
 W ada%s			ada.ads			ada.ali
 
-D ada.ads		20230313182405 76789da1 ada%s
-D a-textio.ads		20230313182405 ffc84532 ada.text_io%s
-D a-textio.adb		20230313182405 c9f9fcd2 ada.text_io%b
-D system.ads		20230313182405 5ad4ef55 system%s
-D s-semiho.ads		20230313182405 bee239dc system.semihosting%s
+D ada.ads		20240726122919 76789da1 ada%s
+D a-textio.ads		20240726122919 ffc84532 ada.text_io%s
+D a-textio.adb		20240726122919 c9f9fcd2 ada.text_io%b
+D system.ads		20240726122919 5ad4ef55 system%s
+D s-semiho.ads		20240726122919 bee239dc system.semihosting%s
 G a e
 G c Z s b [get ada__text_io 37 14 none]
 G c Z s b [put ada__text_io 40 14 none]

@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/embedded-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/embedded-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -42,25 +42,25 @@ W ada%s			ada.ads			ada.ali
 W ada.characters%s	a-charac.ads		a-charac.ali
 W ada.characters.latin_1%s  a-chlat1.ads	a-chlat1.ali
 
-D ada.ads		20230313182405 76789da1 ada%s
-D a-charac.ads		20230313182405 2d3ec45b ada.characters%s
-D a-chahan.ads		20230313182405 bbd5c0b9 ada.characters.handling%s
-D a-chahan.adb		20230313182405 96cadc18 ada.characters.handling%b
-D a-chlat1.ads		20230313182405 e0d72e76 ada.characters.latin_1%s
-D a-except.ads		20230313182405 2a7d8d70 ada.exceptions%s
-D a-string.ads		20230313182405 90ac6797 ada.strings%s
-D a-strmap.ads		20230313182405 233229cd ada.strings.maps%s
-D a-strmap.adb		20230313182405 47169003 ada.strings.maps%b
-D a-stmaco.ads		20230313182405 4b1f2a0b ada.strings.maps.constants%s
-D a-unccon.ads		20230313182405 0e9b276f ada.unchecked_conversion%s
-D system.ads		20230313182405 5ad4ef55 system%s
-D s-bitops.ads		20230313182405 cdf3ac3c system.bit_ops%s
-D s-parame.ads		20230313182405 8e90778f system.parameters%s
-D s-secsta.ads		20230313182405 56a2861c system.secondary_stack%s
-D s-stalib.ads		20230313182405 1c9580f6 system.standard_library%s
-D s-stoele.ads		20230313182405 6d8e1ff4 system.storage_elements%s
-D s-traent.ads		20230313182405 c81cbf8c system.traceback_entries%s
-D s-unstyp.ads		20230313182405 fa2a7f59 system.unsigned_types%s
+D ada.ads		20240726122919 76789da1 ada%s
+D a-charac.ads		20240726122919 2d3ec45b ada.characters%s
+D a-chahan.ads		20240726122919 bbd5c0b9 ada.characters.handling%s
+D a-chahan.adb		20240726122919 96cadc18 ada.characters.handling%b
+D a-chlat1.ads		20240726122919 e0d72e76 ada.characters.latin_1%s
+D a-except.ads		20240726122919 2a7d8d70 ada.exceptions%s
+D a-string.ads		20240726122919 90ac6797 ada.strings%s
+D a-strmap.ads		20240726122919 233229cd ada.strings.maps%s
+D a-strmap.adb		20240726122919 47169003 ada.strings.maps%b
+D a-stmaco.ads		20240726122919 4b1f2a0b ada.strings.maps.constants%s
+D a-unccon.ads		20240726122919 0e9b276f ada.unchecked_conversion%s
+D system.ads		20240726122919 5ad4ef55 system%s
+D s-bitops.ads		20240726122919 cdf3ac3c system.bit_ops%s
+D s-parame.ads		20240726122919 8e90778f system.parameters%s
+D s-secsta.ads		20240726122919 56a2861c system.secondary_stack%s
+D s-stalib.ads		20240726122919 1c9580f6 system.standard_library%s
+D s-stoele.ads		20240726122919 6d8e1ff4 system.storage_elements%s
+D s-traent.ads		20240726122919 c81cbf8c system.traceback_entries%s
+D s-unstyp.ads		20240726122919 fa2a7f59 system.unsigned_types%s
 G a e
 G c Z s b [is_control ada__characters__handling 61 13 none]
 G c Z s b [is_graphic ada__characters__handling 68 13 none]

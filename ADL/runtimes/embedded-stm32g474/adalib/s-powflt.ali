@@ -2,7 +2,7 @@ V "GNAT Lib v12"
 A -nostdinc
 A -O2
 A -gnatA
-A --RTS=/home/julio/Workspace/bb-runtimes-gnat-fsf-12/runtimes/embedded-stm32g474/
+A --RTS=/run/media/julio/Dados/Workspace/GitHub/Nucleo-STM32G474RE/bb-runtimes/runtimes/embedded-stm32g474/
 A -mlittle-endian
 A -mfloat-abi=hard
 A -mcpu=cortex-m4
@@ -26,8 +26,8 @@ RV NO_IMPLEMENTATION_PRAGMAS
 U system.powten_flt%s	s-powflt.ads		822bf510 NE OL PU PK
 W system%s		system.ads		system.ali
 
-D system.ads		20230313182405 5ad4ef55 system%s
-D s-powflt.ads		20230313182405 d8ff1a45 system.powten_flt%s
+D system.ads		20240726122919 5ad4ef55 system%s
+D s-powflt.ads		20240726122919 d8ff1a45 system.powten_flt%s
 G a e
 X 1 system.ads
 50K9*System 164e11 2|34r9 67r5
