@@ -190,10 +190,10 @@ package STM32.LPTimers is
       Option_4)
      with Size => 2;
    --  Option       Input 1        Input 2
-   --  1            COMP2          COMP1
-   --  2            COMP4          COMP3
-   --  3            COMP6          COMP5
-   --  4            COMP6          COMP7
+   --  1            COMP1          COMP2
+   --  2            COMP3          COMP4
+   --  3            COMP5          COMP6
+   --  4            COMP7          COMP6
    --  See RM0440 rev 6 Chapter 32.4.2 "LPTIM input and trigger mapping".
 
    type LPTimer_Input_Clock is record
