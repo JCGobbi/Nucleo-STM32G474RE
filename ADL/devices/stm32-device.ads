@@ -944,8 +944,8 @@ private
    GPIO_AF_I2C4_5      : constant GPIO_Alternate_Function := 5;
    GPIO_AF_UART4_5     : constant GPIO_Alternate_Function := 5;
    GPIO_AF_UART5_5     : constant GPIO_Alternate_Function := 5;
-   GPIO_AF_TIM8_5      : constant GPIO_Alternate_Function := 6;
-   GPIO_AF_INFRARED_5  : constant GPIO_Alternate_Function := 6;
+   GPIO_AF_TIM8_5      : constant GPIO_Alternate_Function := 5;
+   GPIO_AF_INFRARED_5  : constant GPIO_Alternate_Function := 5;
    GPIO_AF_SPI2_6      : constant GPIO_Alternate_Function := 6;
    GPIO_AF_SPI3_6      : constant GPIO_Alternate_Function := 6;
    GPIO_AF_I2S2_6      : constant GPIO_Alternate_Function := 6;
