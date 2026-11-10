@@ -187,7 +187,7 @@ package STM32_SVD.USART is
       --  TX pin active level inversion
       TXINV          : Boolean := False;
       --  Binary data inversion
-      TAINV          : Boolean := False;
+      DATAINV        : Boolean := False;
       --  Most significant bit first
       MSBFIRST       : Boolean := False;
       --  unspecified
@@ -207,7 +207,7 @@ package STM32_SVD.USART is
       SWAP           at 0 range 15 .. 15;
       RXINV          at 0 range 16 .. 16;
       TXINV          at 0 range 17 .. 17;
-      TAINV          at 0 range 18 .. 18;
+      DATAINV        at 0 range 18 .. 18;
       MSBFIRST       at 0 range 19 .. 19;
       Reserved_20_23 at 0 range 20 .. 23;
       ADD            at 0 range 24 .. 31;
@@ -662,7 +662,7 @@ package STM32_SVD.USART is
       --  TX pin active level inversion
       TXINV        : Boolean := False;
       --  Binary data inversion
-      TAINV        : Boolean := False;
+      DATAINV      : Boolean := False;
       --  Most significant bit first
       MSBFIRST     : Boolean := False;
       --  Auto baud rate enable
@@ -694,7 +694,7 @@ package STM32_SVD.USART is
       SWAP         at 0 range 15 .. 15;
       RXINV        at 0 range 16 .. 16;
       TXINV        at 0 range 17 .. 17;
-      TAINV        at 0 range 18 .. 18;
+      DATAINV      at 0 range 18 .. 18;
       MSBFIRST     at 0 range 19 .. 19;
       ABREN        at 0 range 20 .. 20;
       ABRMOD       at 0 range 21 .. 22;
